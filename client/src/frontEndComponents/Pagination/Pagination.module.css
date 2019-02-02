@@ -1,0 +1,31 @@
+.Pages {
+  text-align: center;
+}
+
+.Page {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: #888;
+}
+
+.Page:hover,
+.Arrow:hover {
+  border: 1px solid #ccc;
+}
+
+.Selected {
+  display: inline-block;
+  padding: 5px;
+  font-weight: 500;
+}
+
+.Arrow {
+  font-weight: 700;
+  color: #aaa;
+  font-size: 1.25rem;
+  padding: 0 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}

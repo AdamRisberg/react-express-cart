@@ -1,0 +1,83 @@
+.Button {
+  font-weight: 400;
+  cursor: pointer;
+  padding: 6px 15px;
+  margin-top: 10px;
+  border-color: #aaa;
+}
+
+.Button:hover { font-weight: 500; }
+
+.Submit {
+  background-color: #fc6;
+  float: right;
+}
+
+.Submit:hover {
+  background-color: #fd7;
+  border-color: #fd7;
+}
+
+.Cancel { background-color: #fff; }
+
+.Cancel:hover {
+  background-color: #c00;
+  border-color: #c00;
+  color: #fff;
+}
+
+.Default { background-color: transparent; }
+
+.Default:hover {
+  background-color: #fd7;
+  border-color: #fd7;
+}
+
+.Continue { background-color: #fff; }
+
+.Continue:hover {
+  background-color: #fe9;
+  border-color: #fe9;
+}
+
+.Submit:disabled,
+.Cancel:disabled,
+.Default:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+  display: flex;
+}
+
+.Small {
+  font-size: .9rem;
+  margin-right: 10px;
+}
+
+.Medium { font-size: 1rem; }
+
+.Large { font-size: 1.25rem; }
+
+.Wide,
+.WideLarge {
+  width: 100%;
+  padding: 10px 20px;
+}
+
+.WideLarge {
+  margin-top: 25px;
+  font-size: 1.25rem;
+}
+
+.None { float: none; }
+
+.Left { float: left; }
+
+.Right { float: right; }
+
+.NoMargin { margin: 0; }
+
+.Bold { font-weight: 500; }
+
+@media (max-width: 400px) {
+  .WideOnMobile { width: 100%; }
+}

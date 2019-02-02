@@ -1,0 +1,72 @@
+.SearchBox {
+  float: right;
+  width: 30%;
+  padding-top: 5px;
+  margin-bottom: 10px;
+}
+
+.SearchBox::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.SearchInput {
+  width: 100%;
+  background-color: #eee;
+  color: black;
+  border: 1px solid #aaa;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.Wrapper {
+  overflow: hidden;
+}
+
+.SearchButton {
+  background-color: #234;
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  float: right;
+  cursor: pointer;
+  position: relative;
+  padding: 0 5px 0 6px;
+  overflow: hidden;
+  color: #eee;
+}
+
+.SearchButton:hover {
+  background-color: #456;
+  color: #fff;
+}
+
+.SearchButton:active {
+  box-shadow: inset 0 0 4px #ccc;
+}
+
+
+@media (max-width: 920px) {
+  .SearchBox {
+    width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .SearchBox {
+    width: 60%;
+  }
+}
+
+@media print {
+  .SearchBox {
+    display: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .SearchBox {
+    width: calc(100% - 80px);
+  }
+}

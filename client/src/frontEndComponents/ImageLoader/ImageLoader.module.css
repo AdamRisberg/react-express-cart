@@ -1,0 +1,10 @@
+.Image {
+  max-width: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.Show {
+  opacity: 1;
+}

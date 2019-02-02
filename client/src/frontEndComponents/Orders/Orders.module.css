@@ -1,0 +1,13 @@
+.OrderFilter {
+  margin-bottom: 20px;
+}
+
+.OrderFilter span {
+  font-weight: 500;
+}
+
+@media (max-width: 400px) {
+  .OrderFilter {
+    text-align: center;
+  }
+}

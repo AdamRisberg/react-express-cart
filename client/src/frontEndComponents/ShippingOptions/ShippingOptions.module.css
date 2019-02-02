@@ -1,0 +1,20 @@
+.Options {
+  margin-bottom: 30px;
+}
+
+.Options label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.Options label:last-of-type {
+  margin-bottom: 0;
+}
+
+.Options input {
+  margin-right: 4px;
+}
+
+.Bold {
+  font-weight: 500;
+}

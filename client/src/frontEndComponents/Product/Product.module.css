@@ -1,0 +1,49 @@
+.Row {
+  margin-bottom: 30px;
+  min-height: 1px;
+}
+
+.Row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Column60 {
+  float: left;
+  width: 60%;
+  padding-right: 50px;
+}
+
+.Column40 {
+  float: left;
+  width: 40%;
+}
+
+.QuantityInput {
+  display: block;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.QuantityLabel {
+  display: block;
+  margin-top: 20px;
+  font-weight: 700;
+}
+
+
+@media (max-width: 600px) {
+  .Column60,
+  .Column40 {
+    float: none;
+    width: 100%;
+    padding: 0;
+    min-height: 1px;
+    margin-bottom: 30px;
+  }
+
+  .Row {
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,70 @@
+.OrderPreview {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.LeftColumn,
+.RightColumn {
+  float: left;
+  width: 50%;
+}
+
+.RightColumn {
+  text-align: right;
+}
+
+.ClearFix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.OrderItemsBox {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 30px 0;
+  margin: 20px 0;
+}
+
+.SmallMarginBottom {
+  margin-bottom: 5px;
+}
+
+.SmallMarginBottom:last-of-type {
+  margin-bottom: 0;
+}
+
+.Bold {
+  font-weight: 500;
+}
+
+.Bottom {
+  text-align: right;
+}
+
+@media (max-width: 400px) {
+  .OrderPreview {
+    padding: 20px 15px;
+    margin-left: -10px;
+    margin-right: -10px;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .LeftColumn,
+  .RightColumn {
+    float: none;
+    width: 100%;
+  }
+
+  .RightColumn {
+    text-align: center;
+  }
+
+  .SmallMarginBottom:last-of-type {
+    margin-bottom: 5px;
+  }
+}

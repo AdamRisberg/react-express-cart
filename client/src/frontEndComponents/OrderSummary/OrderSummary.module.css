@@ -1,0 +1,69 @@
+.OrderSummary {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.NoTitle {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+.EditCart {
+  float: right;
+  font-size: .9rem;
+  font-weight: 400;
+  padding-top: 1px;
+}
+
+.EditCart:hover {
+  text-decoration: underline;
+}
+
+.Content {
+  padding: 10px 15px 15px 15px;
+}
+
+.ItemTitle {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.Options {
+  font-size: .9rem;
+  margin-bottom: 5px;
+}
+
+.Bold {
+  font-weight: 500;
+}
+
+.Title {
+  padding: 10px 15px;
+  background-color: #123;
+  color: #fff;
+  font-weight: 500;
+}
+
+.Row {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.Row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.LeftColumn {
+  float: left;
+}
+
+.RightColumn {
+  float: right;
+}

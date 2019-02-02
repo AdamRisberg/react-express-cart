@@ -1,0 +1,103 @@
+.ProductDescription {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.TitleRow::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.TitleBox {
+  background-color: #eee;
+  color: #888;
+  float: left;
+  padding: 8px 20px;
+  border: 1px solid #aaa;
+  border-bottom: none;
+  border-right: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.TitleBox:last-of-type {
+  border-right: 1px solid #aaa;
+  border-top-right-radius: 4px;
+}
+
+.TitleBox:first-of-type {
+  border-top-left-radius: 4px;
+}
+
+.Selected {
+  background-color: #fff;
+  border-bottom: 2px solid #fff;
+  z-index: 10;
+  margin-bottom: -2px;
+  color: #111;
+}
+
+.Content {
+  padding: 30px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  line-height: 1.4rem;
+}
+
+.Content p {
+  margin-bottom: 15px;
+}
+
+.Hidden {
+  display: none;
+}
+
+.Show {
+  display: block;
+}
+
+.Title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #aaa;
+}
+
+.DescriptionBox {
+  padding: 30px;
+  border: 1px solid #aaa;
+}
+
+@media (max-width: 400px) {
+  .Hidden {
+    display: block;
+  }
+
+  .Show {
+    display: none;
+  }
+
+  .DescriptionBox {
+    padding: 0;
+    border: none;
+    margin-bottom: 30px;
+  }
+
+  .Last {
+    margin-bottom: 0;
+  }
+
+  .Content {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    margin-bottom: 30px;
+  }
+
+  .Content:last-of-type {
+    margin-bottom: 0;
+  }
+}

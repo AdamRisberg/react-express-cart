@@ -1,0 +1,101 @@
+.Page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+.Header {
+  background-color: #111;
+  margin-bottom: 20px;
+  color: #eee;
+  padding: 5px 20px;
+}
+
+.Header > svg {
+  margin-bottom: -5px;
+
+}
+
+.MainBody,
+.LoginBody {
+  padding-bottom: 40px;
+  flex-grow: 1;
+  min-height: 1px;
+}
+
+.LoginBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.Content {
+  padding: 20px;
+  min-height: 1px;
+}
+
+.Content::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Footer {
+  background-color: #111;
+  color: #eee;
+  padding: 15px 20px;
+  font-size: .9rem;
+}
+
+.Column50 {
+  width: 50%;
+  float: left;
+}
+
+.Right {
+  text-align: right;
+}
+
+.Login {
+  max-width: 500px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  padding: 20px 30px 30px 30px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px #ccc;
+  background-color: #fff;
+}
+
+.FlashError {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,.9);
+  color: #fff;
+  font-weight: 500;
+  padding: 15px 20px;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform .3s;
+}
+
+.ShowFlashError {
+  transform: translateY(0);
+}
+
+.LoggedInAs {
+  float: right;
+  padding: 12px;
+  font-size: 16px;
+}
+
+@media (max-width: 350px) {
+  .Login {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

@@ -1,0 +1,38 @@
+.Settings {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.Settings label {
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.Settings .InputGroup {
+  padding-bottom: 20px;
+}
+
+.Settings .InputGroup:last-of-type {
+  padding-bottom: 0;
+}
+
+.Settings input,
+.Settings select {
+  display: block;
+  margin-top: 2px;
+  width: 100%;
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #111;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Title {
+  font-size: 1.4rem;
+  font-weight: 500;
+}

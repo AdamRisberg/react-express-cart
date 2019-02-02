@@ -1,0 +1,8 @@
+.ArrowIcon {
+  width: 1.25em;
+  height: 1.25em;
+  display: inline-block;
+  margin-bottom: -.3rem;
+  margin-right: .5rem;
+  fill: currentColor;
+}

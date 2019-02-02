@@ -1,0 +1,44 @@
+.MainNav {
+  float: left;
+  color: #ddd;
+  border-radius: 4px;
+  width: 70%;
+  padding: 10px 0;
+}
+
+.MainNav svg {
+  cursor: pointer;
+}
+
+.MainNav svg:hover {
+  color: #fff;
+}
+
+@media (max-width: 920px) {
+  .MainNav {
+    width: 40%;
+    padding: 0;
+  }
+
+  .MainNav li {
+    display: none;
+  }
+}
+
+@media (min-width: 921px) {
+  .MainNav svg {
+    display: none;
+  }
+}
+
+@media print {
+  .MainNav {
+    display: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .MainNav {
+    width: 80px;
+  }
+}

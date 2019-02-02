@@ -1,0 +1,83 @@
+.OrderPreviewItem {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.OrderPreviewItem:last-of-type {
+  margin-bottom: 0;
+}
+
+.OrderPreviewItem::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.ImageBox {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.Image {
+  height: 100px;
+  border-radius: 4px;
+}
+
+.Content {
+  flex-grow: 1;
+}
+
+.Quantity {
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.Title {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+  margin-top: 0;
+  font-weight: 500;
+}
+
+.OptionName {
+  font-weight: 500;
+}
+
+.Price {
+  color: #d00;
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+.Black {
+  color: #000;
+}
+
+
+@media (max-width: 400px) {
+  .OrderPreviewItem {
+    display: block;
+    text-align: center;
+  }
+
+  .ImageBox {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .Image {
+    max-width: 100%;
+    max-height: 200px;
+    height: unset;
+    display: inline-block;
+  }
+
+  .Content {
+    margin-right: 0;
+  }
+
+  .Quantity {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}

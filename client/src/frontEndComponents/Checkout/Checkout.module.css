@@ -1,0 +1,107 @@
+.Checkout {
+  overflow: hidden;
+  position: relative;
+}
+
+.Column50 {
+  float: left;
+  width: 50%;
+  padding-left: 2.5%;
+}
+
+.Column50:first-of-type {
+  padding-left: 0;
+  padding-right: 2.5%;
+}
+
+.BorderRight {
+  border-right: 1px solid #aaa;
+}
+
+.Content {
+  display: flex;
+}
+
+.ColumnLeft {
+  flex-grow: 1;
+}
+
+.ColumnRight {
+  margin-left: 30px;
+  width: 250px;
+}
+
+.Label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.Label input {
+  display: block;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.CheckBoxLabel {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+.CheckBoxLabel input {
+  margin-left: 10px;
+}
+
+.FormBox {
+  max-width: 450px;
+  margin-bottom: 30px;
+}
+
+.ShippingOptions {
+  margin-bottom: 30px;
+}
+
+.Bold {
+  font-weight: 500;
+}
+
+.GuestMessage {
+  margin-bottom: 20px;
+}
+
+.Left {
+  text-align: left;
+}
+
+@media (max-width: 500px) {
+  .Column50 {
+    padding: 0;
+    width: 100%;
+    float: none;
+    margin-bottom: 20px;
+  }
+
+  .BorderRight {
+    border-right: none;
+  }
+
+  .BorderRight::after {
+    content: "OR";
+    display: block;
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin: 30px 0;
+    text-align: center;
+  }
+
+  .Left {
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .FormBox {
+    margin: 0 auto 30px auto;
+  }
+}

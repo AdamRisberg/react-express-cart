@@ -1,0 +1,96 @@
+.Row {
+  margin: 20px 0;
+  border-bottom: 1px solid #ddd;
+  max-width: 1140px;
+  padding-bottom: 20px;
+}
+
+.Row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Row a {
+  display: inline-block;
+}
+
+.RowContent {
+  display: flex;
+}
+
+.ImageBox {
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.Image {
+  height: 100px;
+  border-radius: 4px;
+}
+
+.Content {
+  margin-bottom: 20px;
+  margin-right: 20px;
+  flex-grow: 1;
+}
+
+.Title {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  margin-top: 0;
+  font-weight: 500;
+}
+
+.OptionName {
+  font-weight: 500;
+}
+
+.Price {
+  color: #d00;
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+.Header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.Controls input {
+  width: 75px;
+  margin-right: 10px;
+  margin-left: 4px;
+}
+
+@media (max-width: 400px) {
+  .RowContent {
+    display: block;
+    text-align: center;
+  }
+
+  .ImageBox {
+    margin-right: 0;
+  }
+  
+  .Image {
+    max-width: 100%;
+    max-height: 200px;
+    height: unset;
+    display: inline-block;
+  }
+
+  .Content {
+    margin-right: 0;
+  }
+  
+  .Controls {
+    text-align: left;
+  }
+  
+  .Controls label {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+}

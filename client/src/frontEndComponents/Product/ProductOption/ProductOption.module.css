@@ -1,0 +1,102 @@
+.Input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  background-color: #fff;
+}
+
+.Fieldset {
+  border: none;
+  margin-top: 20px;
+}
+
+.Label,
+.Legend {
+  display: block;
+  font-weight: 700;
+}
+
+.Label {
+  margin-top: 20px;
+}
+
+.RadioLabel {
+  margin-left: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.RadioInput {
+  cursor: pointer;
+}
+
+.TextRadio {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  background-color: #fafafa;
+  color: #888;
+  cursor: pointer;
+}
+
+.TextRadioLabel {
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.TextRadioLabel:last-of-type {
+  margin-right: 0;
+}
+
+.TextRadioInput {
+  opacity: 0;
+  width: 0;
+}
+
+.TextRadioInput:checked:not(:focus) + .TextRadio {
+  background-color: #fff;
+  color: #111;
+  border: 2px solid #FF5100;
+}
+
+.TextRadioInput:checked:not(:focus) + .ColorRadio {
+  border: 2px solid #FF5100;
+}
+
+.TextRadioInput:hover + .TextRadio,
+.TextRadioInput:hover + .ColorRadio {
+  border: 2px solid #FF5100;
+}
+
+.TextRadioInput:focus + .TextRadio,
+.TextRadioInput:focus + .ColorRadio {
+  outline: 2px solid rgb(81, 203, 238);
+}
+
+.TextRadioInput:focus + .TextRadio {
+  color: #111;
+  background-color: #fff;
+}
+
+.ColorRadioLabel {
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.ColorRadio {
+  display: inline-block;
+  padding: 2px 2px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.Color {
+  display: block;
+  width: 2.14rem;
+  height: 2.14rem;
+  border-radius: 4px;
+}

@@ -1,0 +1,82 @@
+.Table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.TitleBox {
+  padding: 10px 20px;
+  background-color: #111;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 500;
+  border: 2px solid #111;
+}
+
+.TitleBox button {
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+.Table th,
+.Table td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+.Table td label {
+  margin-bottom: -2px;
+}
+
+.Table th {
+  padding-top: 8px;
+}
+
+.Table th:first-of-type {
+  width: 30px;
+}
+
+.Table th:nth-of-type(5) {
+  width: 100px;
+}
+
+.Table th:last-of-type {
+  width: 50px;
+}
+
+.Table thead {
+  border-bottom: 2px solid #ccc;
+  background-color: #eee;
+  background-image: linear-gradient(0deg, #ddd, #f4f4f4 10%, #f4f4f4 90%, #ddd);
+  color: #111;
+  text-transform: uppercase;
+}
+
+.Table tbody tr:hover {
+  background-color: #f4f4f4;
+}
+
+.Table img {
+  width: 50px;
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .CollapseLarge {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .Collapse {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .CollapseSmall {
+    display: none;
+  }
+}

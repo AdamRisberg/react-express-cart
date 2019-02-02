@@ -1,0 +1,57 @@
+.Modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.8);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: all .3s ease;
+}
+
+.Content {
+  position: relative;
+  margin: auto;
+  max-width: 400px;
+  max-height: 100%;
+  border: 1px solid #aaa;
+  padding: 35px;
+  border-radius: 4px;
+  background-color: #fcfcfc;
+  overflow: auto;
+  align-self: center;
+  text-align: center;
+
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-100vh);
+  transition: all .3s ease;
+}
+
+.Show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.Content.Show {
+  transform: translateY(0);
+}
+
+.CloseButton {
+  font-size: 30px;
+  position: absolute;
+  top: 5px;
+  right: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 350px) {
+  .Content {
+    padding: 35px 25px;
+  }
+}

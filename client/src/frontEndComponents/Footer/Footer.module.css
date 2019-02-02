@@ -1,0 +1,69 @@
+.Footer {
+  background-color: #123;
+  color: #ccc;
+}
+
+.FooterContent {
+  padding: 30px 20px;
+}
+
+.FooterContent::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Wrapper {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.List {
+  display: inline-block;
+  float: left;
+  width: 25%;
+}
+
+.ListItem {
+  list-style: none;
+  margin-top: 4px;
+  font-size: .9rem;
+}
+
+.ListItem a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.Title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #eee;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 850px) {
+  .List {
+    width: 33.33%;
+  }
+}
+
+@media (max-width: 600px) {
+  .List {
+    width: 50%;
+  }
+}
+
+@media (max-width: 400px) {
+  .List {
+    width: 100%;
+    float: none;
+    text-align: center;
+  }
+}
+
+@media print {
+  .Footer {
+    display: none;
+  }
+}

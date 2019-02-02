@@ -1,0 +1,11 @@
+.Label {
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.Label select {
+  margin-top: 2px;
+  display: block;
+  width: 100%;
+}

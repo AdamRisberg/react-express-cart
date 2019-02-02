@@ -1,0 +1,35 @@
+.Totals {
+  text-align: right;
+}
+
+.Totals::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.TotalLeftColumn {
+  float: right;
+}
+
+.TotalRightColumn {
+  margin-left: 10px;
+  float: right;
+}
+
+.AlignLeft {
+  text-align: left;
+  float: left;
+}
+
+.SmallMarginBottom {
+  margin-bottom: 5px;
+}
+
+.SmallMarginBottom:last-of-type {
+  margin-bottom: 0;
+}
+
+.Bold {
+  font-weight: 500;
+}

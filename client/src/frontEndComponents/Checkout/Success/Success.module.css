@@ -1,0 +1,21 @@
+.SuccessTitle {
+  font-weight: 500;
+  font-size: 1.35rem;
+  margin-bottom: 20px;
+}
+
+.SuccessParagraph {
+  margin-bottom: 20px;
+}
+
+.SuccessParagraph:last-of-type {
+  margin-bottom: 30px;
+}
+
+.SuccessParagraph span {
+  padding-left: .35rem;
+}
+
+.Bold {
+  font-weight: 500;
+}

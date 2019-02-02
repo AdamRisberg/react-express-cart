@@ -1,0 +1,40 @@
+.MainImageBox {
+  width: 100%;
+  border: 1px solid #aaa;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #eee;
+}
+
+.MainImage {
+  max-width: 100%;
+  max-height: 410px;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  cursor: zoom-in;
+}
+
+.PreviewImage {
+  display: inline-block;
+  height: 60px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  margin-right: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.PreviewImage:hover,
+.SelectedPreview {
+  border: 1px solid #FF5100;
+  box-shadow: 0 0 4px #FF5100;
+}
+
+
+@media (max-width: 400px) {
+  .PreviewImage {
+    height: 40px;
+  }
+}

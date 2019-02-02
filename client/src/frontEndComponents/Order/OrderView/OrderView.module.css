@@ -1,0 +1,98 @@
+.Order {
+  margin-bottom: 20px;
+}
+
+.LeftColumn,
+.RightColumn {
+  float: left;
+  width: 49%;
+}
+
+.LeftColumn {
+  margin-right: 2%;
+}
+
+.ClearFix:nth-of-type(2) {
+  margin-top: 20px;
+}
+
+.ClearFix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.OrderItemsBox {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 30px 0;
+  margin: 20px 0;
+}
+
+.Heading {
+  margin-bottom: 4px;
+}
+
+.SmallMarginBottom {
+  margin-bottom: 5px;
+}
+
+.SmallMarginBottom:last-of-type {
+  margin-bottom: 0;
+}
+
+.Bold {
+  font-weight: 500;
+}
+
+.TextLink {
+  cursor: pointer;
+}
+
+.TextLink:hover {
+  text-decoration: underline;
+}
+
+.Total {
+  border-top: 1px solid #aaa;
+  padding-top: 5px;
+}
+
+.SmallPaddingTop {
+  padding-top: 5px;
+}
+
+@media (max-width: 400px) {
+  .OrderPreview {
+    padding: 20px 15px;
+    margin-left: -10px;
+    margin-right: -10px;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .LeftColumn,
+  .RightColumn {
+    float: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .Heading {
+    margin-bottom: 5px;
+    margin-top: 20px;
+  }
+
+  .Totals {
+    width: auto;
+    margin: 0 auto;
+  }
+
+  .ClearFix:nth-of-type(2) {
+    margin-top: 0;
+  }
+
+  .SmallMarginBottom:last-of-type {
+    margin-bottom: 5px;
+  }
+}

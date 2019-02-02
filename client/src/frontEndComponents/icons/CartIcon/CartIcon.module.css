@@ -1,0 +1,8 @@
+.CartIcon {
+  width: 1.25em;
+  height: 1.15em;
+  display: inline-block;
+  margin-bottom: -.21rem;
+  margin-right: .28rem;
+  fill: currentColor;
+}

@@ -1,0 +1,48 @@
+.Admin,
+.Header {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.Admin label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.Admin input,
+.Admin select {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.Shipping {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.AddAdmin:hover {
+  background-color: #f4f4f4;
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 2px solid #aaa;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.ValidateMessage {
+  color: #a00;
+  margin-bottom: 20px;
+  text-align: right;
+  font-weight: 500;
+}

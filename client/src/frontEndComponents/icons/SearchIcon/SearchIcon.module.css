@@ -1,0 +1,11 @@
+.SearchIcon {
+  display: inline-block;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0 .3rem;
+  margin-top: .368rem;
+  margin-bottom: .14rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}

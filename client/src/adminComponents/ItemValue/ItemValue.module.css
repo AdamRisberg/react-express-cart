@@ -1,0 +1,9 @@
+.ItemValue {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.ItemValue .Value {
+  margin-top: 2px;
+  font-weight: 400;
+}

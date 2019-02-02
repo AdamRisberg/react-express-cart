@@ -1,0 +1,45 @@
+.ProductPreview {
+  display: inline-block;
+  margin-bottom: 20px;
+  position: relative;
+  width: 23%;
+  margin-left: 1%;
+  margin-right: 1%;
+  border-radius: 4px;
+  overflow: hidden;
+
+  box-shadow: 0 2px 3px #ccc;
+}
+
+.Content {
+  padding: 0 12px 10px 12px;
+}
+
+.Title {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.Price {
+  font-size: .9rem;
+}
+
+@media (max-width: 850px) {
+  .ProductPreview {
+    width: 31.33%;
+  }
+}
+
+@media (max-width: 600px) {
+  .ProductPreview {
+    width: 48%;
+  }
+}
+
+@media (max-width: 400px) {
+  .ProductPreview {
+    width: 98%;
+  }
+}

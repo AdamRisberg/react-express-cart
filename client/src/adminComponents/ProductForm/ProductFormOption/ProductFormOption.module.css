@@ -1,0 +1,5 @@
+.ClearFix::after {
+  content: "";
+  clear: both;
+  display: table;
+}

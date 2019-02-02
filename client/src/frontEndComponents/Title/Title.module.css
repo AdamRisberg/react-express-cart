@@ -1,0 +1,25 @@
+.Title {
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.Underline {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: .5rem;
+}
+
+.Center {
+  text-align: center;
+}
+
+@media (max-width: 400px) {
+  .CenterOnMobile {
+    text-align: center;
+  }
+
+  .CenterOn500 {
+    text-align: center;
+  }
+}

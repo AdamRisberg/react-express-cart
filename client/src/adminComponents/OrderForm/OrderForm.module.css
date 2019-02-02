@@ -1,0 +1,19 @@
+.ProductForm {
+  max-width: 500px;
+}
+
+.ProductForm input,
+.ProductForm select {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 20px;
+}
+
+.ProductForm label {
+  font-weight: 500;
+}
+
+.Address {
+  margin-bottom: 20px;
+}

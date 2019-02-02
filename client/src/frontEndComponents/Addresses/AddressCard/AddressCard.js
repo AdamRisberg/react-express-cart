@@ -1,0 +1,26 @@
+import React from "react";
+
+import Address from "../../Address/Address";
+import Button from "../../Button/Button";
+
+import styles from "./AddressCard.module.css";
+
+const AddressCard = ({ address, onBlankClick, showEditForm, setAsDefault, deleteAddress, blank }) => {
+  return (
+    blank ? (
+      <div className={`${styles.AddressCard} ${styles.Blank}`} onClick={onBlankClick}>
+        <span>Add New Address</span>
+      </div>
+    ) : (
+      <div className={`${styles.AddressCard} ${address.default ? styles.DarkBorder : ""}`}>
+        {address.default ? <div className={styles.Default}>Default</div> : null}
+        <Address address={address} showPhone />
+        <Button text="Edit" onClick={showEditForm} size="Small" />
+        <Button text="Delete" onClick={() => deleteAddress(address._id)} buttonStyle="Cancel" size="Small" />
+        {address.default ? null : <Button text="Set as Default" onClick={setAsDefault} size="Small" />}
+      </div>
+    )
+  );
+};
+
+export default AddressCard;

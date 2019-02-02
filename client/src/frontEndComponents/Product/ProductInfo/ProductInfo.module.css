@@ -1,0 +1,21 @@
+.ProductInfo {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 20px;
+}
+
+.ProductName {
+  font-weight: 500;
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.Model {
+  font-size: .95rem;
+  margin-bottom: 15px;
+}
+
+.Price {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #d00;
+}

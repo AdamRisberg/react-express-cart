@@ -1,0 +1,56 @@
+.AddressCard {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px 20px;
+  position: relative;
+  margin-bottom: 20px;
+  background-color: #fff;
+  display: inline-block;
+  width: 49%;
+}
+
+.AddressCard:nth-of-type(odd) {
+  margin-right: 2%;
+}
+
+.Blank {
+  border-style: dashed;
+  border-color: #aaa;
+  font-weight: 500;
+  color: #777;
+  font-size: 1.3rem;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Blank:hover {
+  background-color: #fafafa;
+  border-color: #555;
+  color: #333;
+}
+
+@media (max-width: 700px) {
+  .AddressCard {
+    width: 100%;
+  }
+
+  .AddressCard:nth-of-type(odd) {
+    margin-right: 0;
+  }
+}
+
+.DarkBorder {
+  border-color: #aaa;
+  border-width: 2px;
+}
+
+.Default {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: .9rem;
+  font-weight: 500;
+}

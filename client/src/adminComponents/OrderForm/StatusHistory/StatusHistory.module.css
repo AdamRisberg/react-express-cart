@@ -1,0 +1,44 @@
+.StatusHistory {
+  margin-bottom: 40px;
+}
+
+.HistoryItem {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.HistoryItem:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 10px;
+}
+
+.HistoryItem div {
+  margin-top: 2px;
+  display: inline-block;
+  width: 50%;
+}
+
+.HistoryItem div:last-of-type {
+  width: 100%;
+}
+
+.Bold {
+  font-weight: 500;
+}
+
+.TitleBox {
+  padding: 6px 15px;
+  background-color: #111;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border: 2px solid #111;
+}
+
+.HistoryContent {
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-top: none;
+}

@@ -1,0 +1,13 @@
+.HamburgerIcon {
+  width: 3em;
+  height: 3em;
+  margin-top: -.23rem;
+  display: inline-block;
+  color: #eee;
+  cursor: pointer;
+  fill: currentColor;
+}
+
+.HamburgerIcon:hover {
+  color: #fff;
+}

@@ -1,0 +1,52 @@
+.PreviewBox {
+  max-width: 500px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.Edit {
+  display: block;
+}
+
+.PreviewBox::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Preview {
+  float: left;
+  flex-grow: 1;
+}
+
+.PreviewLabel {
+  font-weight: 500;
+}
+
+.Button {
+  float: right;
+}
+
+.PreviewBox label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.PreviewBox input {
+  display: block;
+  margin-top: 2px;
+  width: 100%;
+}
+
+.ErrorMessage {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #fff;
+  text-align: center;
+  background-color: #a00;
+  padding: 5px 10px;
+}

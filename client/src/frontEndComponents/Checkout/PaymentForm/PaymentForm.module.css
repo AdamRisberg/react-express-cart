@@ -1,0 +1,60 @@
+.Form {
+  margin-bottom: 30px;
+}
+
+.BottomDiv {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.BottomDiv .Label:first-of-type {
+  flex: 2;
+}
+
+.BottomDiv .Label:last-of-type {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.Label {
+  font-weight: 500;
+  display: inline-block;
+  width: 100%;
+}
+
+.Form input {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.LoadingText {
+  padding-left: 8px;
+}
+
+.CardItem {
+  border: 1px solid #aaa;
+  padding: 4px 8px;
+  margin-bottom: 15px;
+  margin-top: 4px;
+  background-color: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.Focused {
+  border: 1px solid #4D90FE;
+}
+
+.Hide {
+  display: none;
+}
+
+.Error {
+  text-align: center;
+  padding: 5px;
+  color: #fff;
+  background-color: #c00;
+  font-weight: 500;
+  margin-bottom: 5px;
+}

@@ -1,0 +1,24 @@
+.SpinnerBox {
+  margin: auto;
+  font-size: 5rem;
+}
+
+.Spinner {
+  margin: 0 auto;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: .15em solid #ddd;
+  border-right-color: #555;
+  animation: spinner 1s infinite linear;
+  margin-top: auto;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

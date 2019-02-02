@@ -1,0 +1,60 @@
+.CheckoutProgress {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  margin-bottom: 70px;
+}
+
+.Step {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  color: #123;
+  flex-grow: 0;
+  flex-shrink: 0;
+  border: 2px solid #123;
+  position: relative;
+}
+
+.Check {
+  display: inline-block;
+  margin-top: -2px;
+}
+
+.Between {
+  flex-shrink: 1;
+  flex-grow: 1;
+  height: 6px;
+  border-top: 2px solid #aaa;
+  border-bottom: 2px solid #aaa;
+  background-color: #aaa;
+  margin-left: -2px;
+  margin-right: -2px;
+}
+
+.Label {
+  position: absolute;
+  left: -85%;
+  top: 130%;
+  color: #123;
+  font-size: 14px;
+}
+
+.Disabled {
+  background-color: #aaa;
+  color: #fff;
+  border-color: #aaa;
+}
+
+.DisabledLabel {
+  color: #aaa;
+}
+
+.Done {
+  background-color: #123;
+  color: white;
+  border-color: #123;
+}

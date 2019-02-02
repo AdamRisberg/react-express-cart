@@ -1,0 +1,28 @@
+.LeftColumn {
+  display: inline-block;
+  width: 50%;
+  font-weight: 500;
+  text-align: right;
+  float: right;
+}
+
+.RightColumn {
+  display: inline-block;
+  width: 50%;
+  text-align: left;
+  float: right;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 400px) {
+  .LeftColumn,
+  .RightColumn {
+    display: block;
+    float: none;
+    width: 100%;
+  }
+
+  .RightColumn {
+    margin-top: 20px;
+  }
+}

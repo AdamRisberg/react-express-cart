@@ -1,0 +1,45 @@
+.CategoryPreview {
+  display: inline-block;
+  position: relative;
+  width: 23%;
+  overflow: hidden;
+  margin: 0 1% 20px 1%;
+  border-radius: 4px;
+
+  box-shadow: 0 2px 3px #ccc;
+}
+
+.Title {
+  position: absolute;
+  bottom: -1px;
+  right: 0;
+  text-align: right;
+  background-color: #fcfcfc;
+  border-top-left-radius: 4px;
+  font-weight: 500;
+  z-index: 10;
+
+  padding: 4px 12px;
+}
+
+.Content {
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 850px) {
+  .CategoryPreview {
+    width: 31.33%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .CategoryPreview {
+    width: 48%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .CategoryPreview {
+    width: 98%;
+  }
+}

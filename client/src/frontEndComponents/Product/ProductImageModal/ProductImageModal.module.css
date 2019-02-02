@@ -1,0 +1,118 @@
+.Modal {
+  background-color: rgba(0,0,0,.9);
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.Modal::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.ModalContent {
+  margin: auto;
+  color: #fff;
+  border: 2px solid #eee;
+  position: relative;
+  display: inline-block;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ButtonLeft,
+.ButtonRight {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 30px;
+  height: 64px;
+  border: 2px solid #eee;
+  background-color: rgba(0,0,0,.5);
+}
+
+.ButtonLeft {
+  left: 0px;
+  border-left: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.ButtonRight {
+  right: 0px;
+  border-right: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.LeftTriangle,
+.RightTriangle {
+  position: absolute;
+  content: "";
+  top: 10px;
+}
+
+.LeftTriangle {
+  left: 8px;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+
+  border-right: 10px solid #eee;
+}
+
+.RightTriangle {
+  right: 8px;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+
+  border-left: 10px solid #eee;
+}
+
+.CloseButton {
+  cursor: pointer;
+  background-color: rgba(0,0,0,.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 2px solid #eee;
+  border-top: none;
+  border-right: none;
+  border-bottom-left-radius: 5px;
+  height: 30px;
+  width: 30px;
+}
+
+.CloseButton::before,
+.CloseButton::after {
+  content: "";
+  height: 2px;
+  width: 20px;
+  background-color: #eee;
+  position: absolute;
+  top: 13px;
+  right: 4px;
+}
+
+.CloseButton::before {
+  transform: rotate(45deg);
+}
+
+.CloseButton::after {
+  transform: rotate(-45deg);
+}
+
+.ModalImage {
+  max-width: 100%;
+  max-height: 90vh;
+  display: block;
+  margin: 0 auto;
+}
