@@ -2,6 +2,13 @@
   margin-bottom: 30px;
 }
 
+.DemoMessage {
+  margin-bottom: 20px;
+  font-style: italic;
+  font-size: .9rem;
+  margin-top: -10px;
+}
+
 .BottomDiv {
   align-items: center;
   display: flex;

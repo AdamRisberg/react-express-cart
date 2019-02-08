@@ -8,7 +8,7 @@ import styles from "./MainNav.module.css";
 const MainNav = (props) => {
   return (
     <nav className={styles.MainNav}>
-      {renderMenuItems(props.categories || [])}
+      {renderMenuItems(props.categories)}
       <HamburgerIcon onHamburgerClick={props.onHamburgerClick} />
     </nav>
   );

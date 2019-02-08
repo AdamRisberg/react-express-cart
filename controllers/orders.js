@@ -165,25 +165,25 @@ function getOrderAnalytics(req, res) {
     year: { 
       $year: {
         date: "$date",
-        timezone: "America/Chicago"
+        timezone: { $literal: "America/Chicago" }
       }
     },
     month: { 
       $month: {
         date: "$date",
-        timezone: "America/Chicago"
+        timezone: { $literal: "America/Chicago" }
       }
     },
     dayOfMonth: {
       $dayOfMonth: {
         date: "$date",
-        timezone: "America/Chicago"
+        timezone: { $literal: "America/Chicago" }
       }
     },
     dayOfWeek: {
       $dayOfWeek: {
         date: "$date",
-        timezone: "America/Chicago"
+        timezone: { $literal: "America/Chicago" }
       }
     }
   };

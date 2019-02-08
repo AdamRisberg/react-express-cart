@@ -62,6 +62,9 @@ class PaymentForm extends Component {
     return (
         <div>
           <Title text="Payment Method" underline />
+          <div className={styles.DemoMessage}>
+            This is only a demo. No cards will actually be charged. To finish testing the checkout process, use 4242-4242-4242-4242 for the card number, any name, any valid expiration date, and any CVV. 
+          </div>
           <div className={styles.Form}>
             <form className={this.state.ready !== 3 ? styles.Hide : ""} onSubmit={this.handleSubmit}>
               {this.props.renderSummary ? this.props.renderSummary() : null}

@@ -36,7 +36,7 @@ class FrontEnd extends Component {
     showLogin: false,
     showSideNav: false,
     isRegister: false,
-    categories: null,
+    categories: [],
     cart: [],
     cartID: "",
     loggedIn: false,

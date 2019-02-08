@@ -96,7 +96,7 @@ function sendConfirmationEmail(order) {
     .then(file => JSON.parse(file))
     .then(settings => {
       const emailSettings = settings.email;
-      const companyName = settings.general.brand_name;
+      const companyName = settings.general.store_name;
 
       const transporter = nodemailer.createTransport({
         host: emailSettings.smtp_host,
