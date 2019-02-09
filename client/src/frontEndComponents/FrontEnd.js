@@ -50,16 +50,18 @@ class FrontEnd extends Component {
     settings: {}
   };
 
+  cancelTokens = {};
+
   componentDidMount() {
     const token = window.localStorage.getItem("session");
     const cartID = window.localStorage.getItem("cartSession");
 
-    this.cancelGetCatsRequest = api.getCancelTokenSource();
-    this.cancelGetSettingsRequest = api.getCancelTokenSource();
+    this.cancelTokens.getCatsRequest = api.getCancelTokenSource();
+    this.cancelTokens.getSettingsRequest = api.getCancelTokenSource();
 
     Promise.all([
-      api.get("/api/categories", { cancelToken: this.cancelGetCatsRequest.token }, false, false),
-      api.get("/api/settings/general", { cancelToken: this.cancelGetSettingsRequest.token }, false, false)
+      api.get("/api/categories", { cancelToken: this.cancelTokens.getCatsRequest.token }, false, false),
+      api.get("/api/settings/general", { cancelToken: this.cancelTokens.getSettingsRequest.token }, false, false)
     ])
       .then(([cats, settings]) => {
         this.setState({
@@ -76,9 +78,9 @@ class FrontEnd extends Component {
       });
 
     if(token) {
-      this.cancelTokenLoginRequest = api.getCancelTokenSource();
+      this.cancelTokens.tokenLoginRequest = api.getCancelTokenSource();
 
-      api.post("/api/auth/login", {}, { cancelToken: this.cancelTokenLoginRequest.token }, true, false)
+      api.post("/api/auth/login", {}, { cancelToken: this.cancelTokens.tokenLoginRequest.token }, true, false)
         .then(response => {
           window.localStorage.setItem("session", response.data.token);
           this.setState(() => ({ loggedIn: true, user: response.data.user, loadingUser: false }));
@@ -96,9 +98,9 @@ class FrontEnd extends Component {
     }
 
     if(cartID) {
-      this.cancelGetCartRequest = api.getCancelTokenSource();
+      this.cancelTokens.getCartRequest = api.getCancelTokenSource();
 
-      api.get("/api/cart/" + cartID, { cancelToken: this.cancelGetCartRequest.token }, false, false)
+      api.get("/api/cart/" + cartID, { cancelToken: this.cancelTokens.getCartRequest.token }, false, false)
         .then(response => {
           window.localStorage.setItem("cartSession", response.data.cartID);
           this.setState(() => ({ 
@@ -121,19 +123,9 @@ class FrontEnd extends Component {
   }
 
   componentWillUnmount() {
-    this.cancelAddCartPostRequest && this.cancelAddCartPostRequest.cancel();
-    this.cancelAddressPostRequest && this.cancelAddressPostRequest.cancel();
-    this.cancelAddressPutRequest && this.cancelAddressPutRequest.cancel();
-    this.cancelClearCartRequest && this.cancelClearCartRequest.cancel();
-    this.cancelDeleteAddressRequest && this.cancelDeleteAddressRequest.cancel();
-    this.cancelGetCartRequest && this.cancelGetCartRequest.cancel();
-    this.cancelGetCatsRequest && this.cancelGetCatsRequest.cancel();
-    this.cancelGetSettingsRequest && this.cancelGetSettingsRequest.cancel();
-    this.cancelLoginRequest && this.cancelLoginRequest.cancel();
-    this.cancelLogoutRequest && this.cancelLogoutRequest.cancel();
-    this.cancelRegisterRequest && this.cancelRegisterRequest.cancel();
-    this.cancelRemoveCartRequest && this.cancelRemoveCartRequest.cancel();
-    this.cancelTokenLoginRequest && this.cancelTokenLoginRequest.cancel();
+    this.cancelTokens && Object.keys(this.cancelTokens).forEach(requestKey => {
+      this.cancelTokens[requestKey].cancel();
+    });
   }
 
   handleScriptLoad = () => {
@@ -145,9 +137,9 @@ class FrontEnd extends Component {
   };
 
   addAddress = (address) => {
-    this.cancelAddressPostRequest = api.getCancelTokenSource();
+    this.cancelTokens.addressPostRequest = api.getCancelTokenSource();
 
-    api.post("/api/addresses", { id: this.state.user.id, address }, { cancelToken: this.cancelAddressPostRequest.token }, true, false)
+    api.post("/api/addresses", { id: this.state.user.id, address }, { cancelToken: this.cancelTokens.addressPostRequest.token }, true, false)
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
@@ -160,9 +152,9 @@ class FrontEnd extends Component {
   };
 
   editAddress = (addressID, address) => {
-    this.cancelAddressPutRequest = api.getCancelTokenSource();
+    this.cancelTokens.addressPutRequest = api.getCancelTokenSource();
 
-    api.put("/api/addresses", { id: this.state.user.id, address, addressID }, { cancelToken: this.cancelAddressPutRequest.token }, true, false)
+    api.put("/api/addresses", { id: this.state.user.id, address, addressID }, { cancelToken: this.cancelTokens.addressPutRequest.token }, true, false)
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
@@ -175,9 +167,9 @@ class FrontEnd extends Component {
   };
 
   deleteAddress = (addressID) => {
-    this.cancelDeleteAddressRequest = api.getCancelTokenSource();
+    this.cancelTokens.deleteAddressRequest = api.getCancelTokenSource();
 
-    api.post("/api/addresses/remove", { id: this.state.user.id, addressID }, { cancelToken: this.cancelDeleteAddressRequest.token }, true, false)
+    api.post("/api/addresses/remove", { id: this.state.user.id, addressID }, { cancelToken: this.cancelTokens.deleteAddressRequest.token }, true, false)
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
@@ -190,9 +182,9 @@ class FrontEnd extends Component {
   };
 
   addToCart = (add, update) => {
-    this.cancelAddCartPostRequest = api.getCancelTokenSource();
+    this.cancelTokens.addCartPostRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/add", { cartID: this.state.cartID, cartItem: add }, { cancelToken: this.cancelAddCartPostRequest.token }, false, false)
+    api.post("/api/cart/add", { cartID: this.state.cartID, cartItem: add }, { cancelToken: this.cancelTokens.addCartPostRequest.token }, false, false)
       .then(response => {
         window.localStorage.setItem("cartSession", response.data.cartID);
         this.setState(() => ({
@@ -215,9 +207,9 @@ class FrontEnd extends Component {
   };
 
   removeFromCart = (id, optionsKey) => {
-    this.cancelRemoveCartRequest = api.getCancelTokenSource();
+    this.cancelTokens.removeCartRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/remove", { cartID: this.state.cartID, id, optionsKey }, { cancelToken: this.cancelRemoveCartRequest.token }, false, false)
+    api.post("/api/cart/remove", { cartID: this.state.cartID, id, optionsKey }, { cancelToken: this.cancelTokens.removeCartRequest.token }, false, false)
       .then(response => {
         this.setState(() => ({ cart: response.data }));
       })
@@ -230,9 +222,9 @@ class FrontEnd extends Component {
   };
 
   clearCart = () => {
-    this.cancelClearCartRequest = api.getCancelTokenSource();
+    this.cancelTokens.clearCartRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/clear", { cartID: this.state.cartID }, { cancelToken: this.cancelClearCartRequest.token }, false, false)
+    api.post("/api/cart/clear", { cartID: this.state.cartID }, { cancelToken: this.cancelTokens.clearCartRequest.token }, false, false)
       .then(response => {
         this.setState(() => ({ cart: response.data }));
       })
@@ -291,9 +283,9 @@ class FrontEnd extends Component {
   };
 
   onLogin = (formData, cb, errorCb) => {
-    this.cancelLoginRequest = api.getCancelTokenSource();
+    this.cancelTokens.loginRequest = api.getCancelTokenSource();
 
-    api.post("/api/auth/login", formData, { cancelToken: this.cancelLoginRequest.token }, false, false)
+    api.post("/api/auth/login", formData, { cancelToken: this.cancelTokens.loginRequest.token }, false, false)
       .then(response => {
         window.localStorage.setItem("session", response.data.token);
         this.setState(() => ({ loggedIn: true, showLogin: false, user: response.data.user }));
@@ -309,9 +301,9 @@ class FrontEnd extends Component {
   };
 
   onRegister = (formData, cb, errorCb) => {
-    this.cancelRegisterRequest = api.getCancelTokenSource();
+    this.cancelTokens.registerRequest = api.getCancelTokenSource();
 
-    api.post("/api/auth/register", formData, { cancelToken: this.cancelRegisterRequest.token }, false, false)
+    api.post("/api/auth/register", formData, { cancelToken: this.cancelTokens.registerRequest.token }, false, false)
       .then(response => {
         window.localStorage.setItem("session", response.data.token);
         this.setState(() => ({ loggedIn: true, showLogin: false, user: response.data.user }));
@@ -328,10 +320,10 @@ class FrontEnd extends Component {
 
   onLogout = (e) => {
     if(e && e.preventDefault) e.preventDefault();
-    this.cancelLogoutRequest = api.getCancelTokenSource();
+    this.cancelTokens.logoutRequest = api.getCancelTokenSource();
 
     
-    api.get("/api/auth/logout", { cancelToken: this.cancelLogoutRequest.token }, true, false)
+    api.get("/api/auth/logout", { cancelToken: this.cancelTokens.logoutRequest.token }, true, false)
       .then(() => this.logout())
       .catch(err => {
         if(api.checkCancel(err)) {
