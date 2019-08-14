@@ -58,13 +58,13 @@ class AddressForm extends Component {
   };
 
   componentDidMount() {
-    if(this.props.address) {
+    if (this.props.address) {
       this.resetAddress(this.props.address);
     }
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.address && !prevProps.address) {
+    if (this.props.address && !prevProps.address) {
       this.resetAddress(this.props.address);
     }
   }
@@ -72,7 +72,9 @@ class AddressForm extends Component {
   handleOnChange = key => e => {
     const value = e.target.value;
 
-    this.setState(() => ({ [key]: { ...this.state[key], value, valid: true }}));
+    this.setState(() => ({
+      [key]: { ...this.state[key], value, valid: true }
+    }));
   };
 
   handleOnBlur = key => e => {
@@ -80,27 +82,25 @@ class AddressForm extends Component {
     const valid = this.validate(key, value);
 
     this.setState(() => ({
-      [key]: { ...this.state[key],
-      value,
-      valid
-    }}))
+      [key]: { ...this.state[key], value, valid }
+    }));
   };
 
-  handleOnSubmit = (e) => {
+  handleOnSubmit = e => {
     e.preventDefault();
-    if(!this.checkFormValid()) return;
+    if (!this.checkFormValid()) return;
 
     const address = Object.keys(this.state).reduce((acc, key) => {
-      if(key !== "email" || this.props.includeEmail) {
+      if (key !== "email" || this.props.includeEmail) {
         acc[key] = this.state[key].value.trim();
       }
       return acc;
     }, {});
     this.props.handleOnSubmit(address);
-  }
+  };
 
   validate(key, value) {
-    switch(key) {
+    switch (key) {
       case "email":
         return !this.props.includeEmail || isEmail(value);
       case "zip":
@@ -118,7 +118,7 @@ class AddressForm extends Component {
     let valid = true;
 
     const updateObj = Object.keys(this.state).reduce((acc, key) => {
-      if(!this.validate(key, this.state[key].value)) {
+      if (!this.validate(key, this.state[key].value)) {
         acc[key] = {
           ...this.state[key],
           valid: false
@@ -137,7 +137,7 @@ class AddressForm extends Component {
       acc[key] = {
         ...this.state[key],
         value: defaultAddress[key] || ""
-      }
+      };
       return acc;
     }, {});
     this.setState(() => ({ ...address }));
@@ -145,11 +145,11 @@ class AddressForm extends Component {
 
   renderFormInputs() {
     return Object.keys(this.state).map(key => {
-      if(key === "email" && !this.props.includeEmail) {
+      if (key === "email" && !this.props.includeEmail) {
         return null;
       }
 
-      if(key === "state") {
+      if (key === "state") {
         return (
           <StateSelect
             key={key}
@@ -180,8 +180,19 @@ class AddressForm extends Component {
         <form onSubmit={this.handleOnSubmit} className={styles.AddressForm}>
           {this.renderFormInputs()}
           {this.props.renderExtras ? this.props.renderExtras() : null}
-          <Button text={this.props.cancelButtonText} onClick={this.props.handleCancel} buttonStyle="Cancel" bold />
-          <Button text={this.props.submitButtonText} buttonStyle="Submit" type="submit" bold float="Right" />
+          <Button
+            text={this.props.cancelButtonText}
+            onClick={this.props.handleCancel}
+            buttonStyle="Cancel"
+            bold
+          />
+          <Button
+            text={this.props.submitButtonText}
+            buttonStyle="Submit"
+            type="submit"
+            bold
+            float="Right"
+          />
         </form>
       </React.Fragment>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import api from "../../api";
 
 import ProductOption from "./ProductOption/ProductOption";
@@ -25,16 +25,22 @@ class Product extends Component {
   componentDidMount() {
     this.cancelGetRequest = api.getCancelTokenSource();
 
-    api.get("/api/products/" + this.props.match.params.id, { cancelToken: this.cancelGetRequest.token }, false, false)
+    api
+      .get(
+        "/api/products/" + this.props.match.params.id,
+        { cancelToken: this.cancelGetRequest.token },
+        false,
+        false
+      )
       .then(result => {
-        if(!result.data) {
+        if (!result.data) {
           return this.setState({ notFound: true });
         }
         this.setState({ ...result.data, loaded: true });
         window.scrollTo({ top: 0 });
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err);
@@ -47,14 +53,16 @@ class Product extends Component {
 
   handleInputChange = (id, price, value) => {
     const name = this.state.options[id].name;
-    this.setState({ options: { ...this.state.options, [id]: { price, value, name }}});
+    this.setState({
+      options: { ...this.state.options, [id]: { price, value, name } }
+    });
   };
 
-  handleQuantityChange = (e) => {
-    if(!e.target.value) return;
+  handleQuantityChange = e => {
+    if (!e.target.value) return;
 
     this.setState({ quantity: parseInt(e.target.value, 10) });
-  }
+  };
 
   calculateTotal() {
     const newTotal = Object.keys(this.state.options).reduce((acc, key) => {
@@ -73,7 +81,7 @@ class Product extends Component {
         value: this.state.options[key].value,
         name: this.state.options[key].name
       };
-    })
+    });
     const item = {
       productID: this.state.product._id,
       optionsKey: JSON.stringify(this.state.options),
@@ -85,34 +93,46 @@ class Product extends Component {
     };
 
     this.props.addToCart(item);
-  }
+  };
 
   renderProductOptions() {
     return this.state.product.options.map(option => {
-      return <ProductOption
-        styles={styles}
-        key={option._id}
-        {...option}
-        value={this.state.options[option._id].value}
-        inputChange={this.handleInputChange} />
+      return (
+        <ProductOption
+          styles={styles}
+          key={option._id}
+          {...option}
+          value={this.state.options[option._id].value}
+          inputChange={this.handleInputChange}
+        />
+      );
     });
   }
 
   render() {
-    if(this.state.notFound) {
+    if (this.state.notFound) {
       return <Redirect to="/" />;
     }
-    if(!this.state.loaded) {
+    if (!this.state.loaded) {
       return <Spinner />;
     }
 
     return (
       <React.Fragment>
         <Helmet>
-          <title>{`${this.state.product.name} - ${this.props.storeName}`}</title>
-          <meta name="description" content={this.state.product.metaDescription} />
+          <title>{`${this.state.product.name} - ${
+            this.props.storeName
+          }`}</title>
+          <meta
+            name="description"
+            content={this.state.product.metaDescription}
+          />
         </Helmet>
-        <Breadcrumbs isProduct={true} pathname={this.state.product.path + "/" + this.state.product.name} categories={this.props.categories} />
+        <Breadcrumbs
+          isProduct={true}
+          pathname={this.state.product.path + "/" + this.state.product.name}
+          categories={this.props.categories}
+        />
         <div className={styles.Row}>
           <div className={styles.Column60}>
             <ProductImages images={this.state.product.images} />
@@ -124,7 +144,8 @@ class Product extends Component {
               price={this.calculateTotal()}
             />
             {this.renderProductOptions()}
-            <label className={styles.QuantityLabel}>Quantity
+            <label className={styles.QuantityLabel}>
+              Quantity
               <input
                 type="number"
                 min="1"
@@ -133,7 +154,13 @@ class Product extends Component {
                 value={this.state.quantity}
               />
             </label>
-            <Button text="Add to Cart" onClick={this.handleAddToCart} buttonStyle="Submit" bold size="WideLarge" />
+            <Button
+              text="Add to Cart"
+              onClick={this.handleAddToCart}
+              buttonStyle="Submit"
+              bold
+              size="WideLarge"
+            />
           </div>
         </div>
         <ProductDescription info={this.state.product.info} />

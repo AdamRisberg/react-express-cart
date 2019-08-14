@@ -1,11 +1,17 @@
 import React from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 import Category from "../Category/Category";
 
 import styles from "./Home.module.css";
 
-const Home = ({ metaTitle, metaDescription, storeName, loadingCategories, ...props }) => {
+const Home = ({
+  metaTitle,
+  metaDescription,
+  storeName,
+  loadingCategories,
+  ...props
+}) => {
   return (
     <React.Fragment>
       <Helmet>
@@ -16,6 +22,6 @@ const Home = ({ metaTitle, metaDescription, storeName, loadingCategories, ...pro
       {loadingCategories ? null : <Category {...props} isHome={true} />}
     </React.Fragment>
   );
-}
+};
 
 export default Home;

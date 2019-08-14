@@ -1,10 +1,11 @@
 import "es6-promise/auto";
 import "es6-object-assign/auto";
 
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component, lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import api from "../api";
 import scriptLoader from "react-async-script";
+import { HelmetProvider } from "react-helmet-async";
 
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
@@ -20,13 +21,13 @@ import Spinner from "./Spinner/Spinner";
 import styles from "./FrontEnd.module.css";
 
 const Checkout = lazy(() => import("./Checkout/Checkout"));
-const Cart = lazy(() => import ("./Cart/Cart"));
-const Product = lazy(() => import ("./Product/Product"));
-const Addresses = lazy(() => import ("./Addresses/Addresses"));
-const Orders = lazy(() => import ("./Orders/Orders"));
-const Order = lazy(() => import ("./Order/Order"));
-const Page = lazy(() => import ("./Page/Page"));
-const Success = lazy(() => import ("./Checkout/Success/Success"));
+const Cart = lazy(() => import("./Cart/Cart"));
+const Product = lazy(() => import("./Product/Product"));
+const Addresses = lazy(() => import("./Addresses/Addresses"));
+const Orders = lazy(() => import("./Orders/Orders"));
+const Order = lazy(() => import("./Order/Order"));
+const Page = lazy(() => import("./Page/Page"));
+const Success = lazy(() => import("./Checkout/Success/Success"));
 const Profile = lazy(() => import("./Profile/Profile"));
 
 const CheckoutWithScript = scriptLoader("https://js.stripe.com/v3/")(Checkout);
@@ -60,8 +61,18 @@ class FrontEnd extends Component {
     this.cancelTokens.getSettingsRequest = api.getCancelTokenSource();
 
     Promise.all([
-      api.get("/api/categories", { cancelToken: this.cancelTokens.getCatsRequest.token }, false, false),
-      api.get("/api/settings/general", { cancelToken: this.cancelTokens.getSettingsRequest.token }, false, false)
+      api.get(
+        "/api/categories",
+        { cancelToken: this.cancelTokens.getCatsRequest.token },
+        false,
+        false
+      ),
+      api.get(
+        "/api/settings/general",
+        { cancelToken: this.cancelTokens.getSettingsRequest.token },
+        false,
+        false
+      )
     ])
       .then(([cats, settings]) => {
         this.setState({
@@ -71,22 +82,33 @@ class FrontEnd extends Component {
         });
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err);
       });
 
-    if(token) {
+    if (token) {
       this.cancelTokens.tokenLoginRequest = api.getCancelTokenSource();
 
-      api.post("/api/auth/login", {}, { cancelToken: this.cancelTokens.tokenLoginRequest.token }, true, false)
+      api
+        .post(
+          "/api/auth/login",
+          {},
+          { cancelToken: this.cancelTokens.tokenLoginRequest.token },
+          true,
+          false
+        )
         .then(response => {
           window.localStorage.setItem("session", response.data.token);
-          this.setState(() => ({ loggedIn: true, user: response.data.user, loadingUser: false }));
+          this.setState(() => ({
+            loggedIn: true,
+            user: response.data.user,
+            loadingUser: false
+          }));
         })
         .catch(err => {
-          if(api.checkCancel(err)) {
+          if (api.checkCancel(err)) {
             return;
           }
           window.localStorage.removeItem("session");
@@ -97,24 +119,30 @@ class FrontEnd extends Component {
       this.setState(() => ({ loadingUser: false, loggedIn: false }));
     }
 
-    if(cartID) {
+    if (cartID) {
       this.cancelTokens.getCartRequest = api.getCancelTokenSource();
 
-      api.get("/api/cart/" + cartID, { cancelToken: this.cancelTokens.getCartRequest.token }, false, false)
+      api
+        .get(
+          "/api/cart/" + cartID,
+          { cancelToken: this.cancelTokens.getCartRequest.token },
+          false,
+          false
+        )
         .then(response => {
           window.localStorage.setItem("cartSession", response.data.cartID);
-          this.setState(() => ({ 
+          this.setState(() => ({
             cartID: response.data.cartID,
             cart: response.data.cart,
-            loadingCart: false 
+            loadingCart: false
           }));
         })
         .catch(err => {
-          if(api.checkCancel(err)) {
+          if (api.checkCancel(err)) {
             return;
           }
           window.localStorage.removeItem("cartSession");
-          this.setState(() => ({ loadingCart: false }))
+          this.setState(() => ({ loadingCart: false }));
           console.log(err.response);
         });
     } else {
@@ -123,28 +151,36 @@ class FrontEnd extends Component {
   }
 
   componentWillUnmount() {
-    this.cancelTokens && Object.keys(this.cancelTokens).forEach(requestKey => {
-      this.cancelTokens[requestKey].cancel();
-    });
+    this.cancelTokens &&
+      Object.keys(this.cancelTokens).forEach(requestKey => {
+        this.cancelTokens[requestKey].cancel();
+      });
   }
 
   handleScriptLoad = () => {
     this.setState({ scriptLoaded: true });
   };
 
-  refreshUser = (user) => {
+  refreshUser = user => {
     this.setState(() => ({ user }));
   };
 
-  addAddress = (address) => {
+  addAddress = address => {
     this.cancelTokens.addressPostRequest = api.getCancelTokenSource();
 
-    api.post("/api/addresses", { id: this.state.user.id, address }, { cancelToken: this.cancelTokens.addressPostRequest.token }, true, false)
+    api
+      .post(
+        "/api/addresses",
+        { id: this.state.user.id, address },
+        { cancelToken: this.cancelTokens.addressPostRequest.token },
+        true,
+        false
+      )
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
@@ -154,27 +190,41 @@ class FrontEnd extends Component {
   editAddress = (addressID, address) => {
     this.cancelTokens.addressPutRequest = api.getCancelTokenSource();
 
-    api.put("/api/addresses", { id: this.state.user.id, address, addressID }, { cancelToken: this.cancelTokens.addressPutRequest.token }, true, false)
+    api
+      .put(
+        "/api/addresses",
+        { id: this.state.user.id, address, addressID },
+        { cancelToken: this.cancelTokens.addressPutRequest.token },
+        true,
+        false
+      )
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
       });
   };
 
-  deleteAddress = (addressID) => {
+  deleteAddress = addressID => {
     this.cancelTokens.deleteAddressRequest = api.getCancelTokenSource();
 
-    api.post("/api/addresses/remove", { id: this.state.user.id, addressID }, { cancelToken: this.cancelTokens.deleteAddressRequest.token }, true, false)
+    api
+      .post(
+        "/api/addresses/remove",
+        { id: this.state.user.id, addressID },
+        { cancelToken: this.cancelTokens.deleteAddressRequest.token },
+        true,
+        false
+      )
       .then(response => {
         this.setState(() => ({ user: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
@@ -184,7 +234,14 @@ class FrontEnd extends Component {
   addToCart = (add, update) => {
     this.cancelTokens.addCartPostRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/add", { cartID: this.state.cartID, cartItem: add }, { cancelToken: this.cancelTokens.addCartPostRequest.token }, false, false)
+    api
+      .post(
+        "/api/cart/add",
+        { cartID: this.state.cartID, cartItem: add },
+        { cancelToken: this.cancelTokens.addCartPostRequest.token },
+        false,
+        false
+      )
       .then(response => {
         window.localStorage.setItem("cartSession", response.data.cartID);
         this.setState(() => ({
@@ -195,7 +252,7 @@ class FrontEnd extends Component {
         }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
@@ -209,12 +266,19 @@ class FrontEnd extends Component {
   removeFromCart = (id, optionsKey) => {
     this.cancelTokens.removeCartRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/remove", { cartID: this.state.cartID, id, optionsKey }, { cancelToken: this.cancelTokens.removeCartRequest.token }, false, false)
+    api
+      .post(
+        "/api/cart/remove",
+        { cartID: this.state.cartID, id, optionsKey },
+        { cancelToken: this.cancelTokens.removeCartRequest.token },
+        false,
+        false
+      )
       .then(response => {
         this.setState(() => ({ cart: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
@@ -224,12 +288,19 @@ class FrontEnd extends Component {
   clearCart = () => {
     this.cancelTokens.clearCartRequest = api.getCancelTokenSource();
 
-    api.post("/api/cart/clear", { cartID: this.state.cartID }, { cancelToken: this.cancelTokens.clearCartRequest.token }, false, false)
+    api
+      .post(
+        "/api/cart/clear",
+        { cartID: this.state.cartID },
+        { cancelToken: this.cancelTokens.clearCartRequest.token },
+        false,
+        false
+      )
       .then(response => {
         this.setState(() => ({ cart: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         window.localStorage.removeItem("cartSession");
@@ -241,8 +312,8 @@ class FrontEnd extends Component {
     const cart = this.state.cart;
     let cartItem;
 
-    for(let i = 0; i < cart.length; i++) {
-      if(cart[i].productID === id && cart[i].optionsKey === optionsKey) {
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].productID === id && cart[i].optionsKey === optionsKey) {
         cartItem = cart[i];
         break;
       }
@@ -257,18 +328,18 @@ class FrontEnd extends Component {
   getCartSize() {
     return this.state.cart.reduce((acc, item) => {
       return acc + item.quantity;
-    }, 0)
+    }, 0);
   }
 
-  showLogin = (e) => {
-    if(e) e.preventDefault();
+  showLogin = e => {
+    if (e) e.preventDefault();
     this.setState({ showLogin: true, isRegister: false });
   };
 
-  showRegister = (e) => {
-    if(e) e.preventDefault();
+  showRegister = e => {
+    if (e) e.preventDefault();
     this.setState({ showLogin: true, isRegister: true });
-  }
+  };
 
   onHamburgerClick = () => {
     this.setState({ showSideNav: true });
@@ -277,7 +348,7 @@ class FrontEnd extends Component {
   closeLogin = () => {
     this.setState({ showLogin: false });
   };
-  
+
   closeSideNav = () => {
     this.setState({ showSideNav: false });
   };
@@ -285,17 +356,28 @@ class FrontEnd extends Component {
   onLogin = (formData, cb, errorCb) => {
     this.cancelTokens.loginRequest = api.getCancelTokenSource();
 
-    api.post("/api/auth/login", formData, { cancelToken: this.cancelTokens.loginRequest.token }, false, false)
+    api
+      .post(
+        "/api/auth/login",
+        formData,
+        { cancelToken: this.cancelTokens.loginRequest.token },
+        false,
+        false
+      )
       .then(response => {
         window.localStorage.setItem("session", response.data.token);
-        this.setState(() => ({ loggedIn: true, showLogin: false, user: response.data.user }));
-        if(cb) cb();
+        this.setState(() => ({
+          loggedIn: true,
+          showLogin: false,
+          user: response.data.user
+        }));
+        if (cb) cb();
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
-        if(errorCb) errorCb();
+        if (errorCb) errorCb();
         console.log(err.response);
       });
   };
@@ -303,33 +385,49 @@ class FrontEnd extends Component {
   onRegister = (formData, cb, errorCb) => {
     this.cancelTokens.registerRequest = api.getCancelTokenSource();
 
-    api.post("/api/auth/register", formData, { cancelToken: this.cancelTokens.registerRequest.token }, false, false)
+    api
+      .post(
+        "/api/auth/register",
+        formData,
+        { cancelToken: this.cancelTokens.registerRequest.token },
+        false,
+        false
+      )
       .then(response => {
         window.localStorage.setItem("session", response.data.token);
-        this.setState(() => ({ loggedIn: true, showLogin: false, user: response.data.user }));
-        if(cb) cb();
+        this.setState(() => ({
+          loggedIn: true,
+          showLogin: false,
+          user: response.data.user
+        }));
+        if (cb) cb();
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
-        if(errorCb) errorCb();
+        if (errorCb) errorCb();
         console.log(err.response);
       });
   };
 
-  onLogout = (e) => {
-    if(e && e.preventDefault) e.preventDefault();
+  onLogout = e => {
+    if (e && e.preventDefault) e.preventDefault();
     this.cancelTokens.logoutRequest = api.getCancelTokenSource();
 
-    
-    api.get("/api/auth/logout", { cancelToken: this.cancelTokens.logoutRequest.token }, true, false)
+    api
+      .get(
+        "/api/auth/logout",
+        { cancelToken: this.cancelTokens.logoutRequest.token },
+        true,
+        false
+      )
       .then(() => this.logout())
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
-        console.log("Error on logout")
+        console.log("Error on logout");
       });
   };
 
@@ -368,108 +466,163 @@ class FrontEnd extends Component {
         />
         <div className={styles.MainBody}>
           <div className={styles.Content}>
-            <Suspense fallback={<Spinner />}>
-              <Switch>
-                <Route path="/" exact render={(props) => (
-                  <Home
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    metaTitle={this.state.settings.meta_title}
-                    metaDescription={this.state.settings.meta_description}
-                    categories={this.state.categories}
-                    loadingCategories={this.state.loadingCategories}
+            <HelmetProvider>
+              <Suspense fallback={<Spinner />}>
+                <Switch>
+                  <Route
+                    path="/"
+                    exact
+                    render={props => (
+                      <Home
+                        {...props}
+                        storeName={this.state.settings.store_name}
+                        metaTitle={this.state.settings.meta_title}
+                        metaDescription={this.state.settings.meta_description}
+                        categories={this.state.categories}
+                        loadingCategories={this.state.loadingCategories}
+                      />
+                    )}
                   />
-                )} />
-                <Route path="/product/:id" render={(props) => (
-                  <Product
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    categories={this.state.categories}
-                    addToCart={this.addToCart}
+                  <Route
+                    path="/product/:id"
+                    render={props => (
+                      <Product
+                        {...props}
+                        storeName={this.state.settings.store_name}
+                        categories={this.state.categories}
+                        addToCart={this.addToCart}
+                      />
+                    )}
                   />
-                )} />
-                <Route path="/category/:any" render={(props) => (
-                  this.state.loadingCategories ? null :
-                  <Category
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    categories={this.state.categories}
+                  <Route
+                    path="/category/:any"
+                    render={props =>
+                      this.state.loadingCategories ? null : (
+                        <Category
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          categories={this.state.categories}
+                        />
+                      )
+                    }
                   />
-                )} />
-                <Route path="/search" render={props => (
-                  <Products {...props} isSearch={true} />
-                )} />
-                <Route path="/checkout/cart" render={(props) => (
-                  this.state.loadingCart ? null :
-                  <Cart
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    updateCart={this.updateCart}
-                    removeFromCart={this.removeFromCart}
-                    cart={this.state.cart}
+                  <Route
+                    path="/search"
+                    render={props => <Products {...props} isSearch={true} />}
                   />
-                )} />
-                <Route path="/checkout/success" render={props => (
-                  <Success {...props} storeName={this.state.settings.store_name} />
-                )} />
-                <Route path="/checkout" render={(props) => (
-                  this.state.loadingUser || this.state.loadingCart ? null :
-                  <CheckoutWithScript
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    asyncScriptOnLoad={this.handleScriptLoad}
-                    clearCart={this.clearCart}
-                    loggedIn={this.state.loggedIn}
-                    onLogin={this.onLogin}
-                    onRegister={this.onRegister}
-                    cart={this.state.cart}
-                    cartID={this.state.cartID}
-                    user={this.state.user}
-                    scriptLoaded={this.state.scriptLoaded}
+                  <Route
+                    path="/checkout/cart"
+                    render={props =>
+                      this.state.loadingCart ? null : (
+                        <Cart
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          updateCart={this.updateCart}
+                          removeFromCart={this.removeFromCart}
+                          cart={this.state.cart}
+                        />
+                      )
+                    }
                   />
-                )} />
-                <Route exact path="/account" render={(props) => (
-                  this.state.loadingUser ? null :
-                  <Profile
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    refreshUser={this.refreshUser}
-                    user={this.state.user}
+                  <Route
+                    path="/checkout/success"
+                    render={props => (
+                      <Success
+                        {...props}
+                        storeName={this.state.settings.store_name}
+                      />
+                    )}
                   />
-                )} />
-                <Route path="/account/orders" render={(props) => (
-                  this.state.loadingUser ? null : 
-                  <Orders
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    userID={this.state.user.id}
-                    loggedIn={this.state.loggedIn}
+                  <Route
+                    path="/checkout"
+                    render={props =>
+                      this.state.loadingUser ||
+                      this.state.loadingCart ? null : (
+                        <CheckoutWithScript
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          asyncScriptOnLoad={this.handleScriptLoad}
+                          clearCart={this.clearCart}
+                          loggedIn={this.state.loggedIn}
+                          onLogin={this.onLogin}
+                          onRegister={this.onRegister}
+                          cart={this.state.cart}
+                          cartID={this.state.cartID}
+                          user={this.state.user}
+                          scriptLoaded={this.state.scriptLoaded}
+                        />
+                      )
+                    }
                   />
-                )} />
-                <Route exact path="/account/addresses" render={(props) => (
-                  this.state.loadingUser ? null :
-                  <Addresses
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    addAddress={this.addAddress}
-                    editAddress={this.editAddress}
-                    deleteAddress={this.deleteAddress}
-                    user={this.state.user}
-                    loggedIn={this.state.loggedIn}
+                  <Route
+                    exact
+                    path="/account"
+                    render={props =>
+                      this.state.loadingUser ? null : (
+                        <Profile
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          refreshUser={this.refreshUser}
+                          user={this.state.user}
+                        />
+                      )
+                    }
                   />
-                )} />
-                <Route path="/account/order/:id" render={(props) => (
-                  this.state.loadingUser ? null :
-                  <Order
-                    {...props}
-                    storeName={this.state.settings.store_name}
-                    loggedIn={this.state.loggedIn}
-                    user={this.state.user}
+                  <Route
+                    path="/account/orders"
+                    render={props =>
+                      this.state.loadingUser ? null : (
+                        <Orders
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          userID={this.state.user.id}
+                          loggedIn={this.state.loggedIn}
+                        />
+                      )
+                    }
                   />
-                )} />
-                <Route path="/:page" render={props => <Page {...props} storeName={this.state.settings.store_name} />} />    
-              </Switch>
-            </Suspense>
+                  <Route
+                    exact
+                    path="/account/addresses"
+                    render={props =>
+                      this.state.loadingUser ? null : (
+                        <Addresses
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          addAddress={this.addAddress}
+                          editAddress={this.editAddress}
+                          deleteAddress={this.deleteAddress}
+                          user={this.state.user}
+                          loggedIn={this.state.loggedIn}
+                        />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/account/order/:id"
+                    render={props =>
+                      this.state.loadingUser ? null : (
+                        <Order
+                          {...props}
+                          storeName={this.state.settings.store_name}
+                          loggedIn={this.state.loggedIn}
+                          user={this.state.user}
+                        />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/:page"
+                    render={props => (
+                      <Page
+                        {...props}
+                        storeName={this.state.settings.store_name}
+                      />
+                    )}
+                  />
+                </Switch>
+              </Suspense>
+            </HelmetProvider>
             {!this.state.showLogin ? null : (
               <Modal close={this.closeLogin}>
                 <Login
@@ -483,9 +636,15 @@ class FrontEnd extends Component {
               </Modal>
             )}
             {!this.state.showCartAdded ? null : (
-              <Modal close={this.closeCartAdded} renderContent={(close) => (
-                <CartAdded cartItem={this.state.cartItemAdded} close={close} />
-              )} />
+              <Modal
+                close={this.closeCartAdded}
+                renderContent={close => (
+                  <CartAdded
+                    cartItem={this.state.cartItemAdded}
+                    close={close}
+                  />
+                )}
+              />
             )}
           </div>
         </div>

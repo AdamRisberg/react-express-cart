@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import FrontEnd from "./frontEndComponents/FrontEnd";
 import Admin from "./adminComponents/Admin";
 
-import './index.css';
+import "./index.css";
 
 const App = () => {
   return (
@@ -19,6 +19,6 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
 
 serviceWorker.unregister();

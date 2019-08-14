@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import api from "../../api";
 
 import RenderHTML from "../RenderHTML/RenderHTML";
@@ -26,7 +26,7 @@ class Page extends Component {
 
   componentDidUpdate() {
     const route = this.props.match.url.substring(1);
-    if(!this.state.loading && this.state.path !== route) {
+    if (!this.state.loading && this.state.path !== route) {
       this.setState(() => ({ loading: true }));
       this.fetchData(route);
     }
@@ -35,9 +35,15 @@ class Page extends Component {
   fetchData(path) {
     this.cancelGetRequest = api.getCancelTokenSource();
 
-    api.get("/api/pages/path/" + path, { cancelToken: this.cancelGetRequest.token }, false, false)
+    api
+      .get(
+        "/api/pages/path/" + path,
+        { cancelToken: this.cancelGetRequest.token },
+        false,
+        false
+      )
       .then(response => {
-        if(response.data) {
+        if (response.data) {
           this.setState(() => ({
             title: response.data.title,
             content: response.data.content,
@@ -50,7 +56,7 @@ class Page extends Component {
         }
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err);
@@ -59,12 +65,12 @@ class Page extends Component {
   }
 
   render() {
-    if(this.state.loading) {
+    if (this.state.loading) {
       return <Spinner />;
     }
 
-    if(this.state.notFound) {
-      return <Redirect to="/" /> 
+    if (this.state.notFound) {
+      return <Redirect to="/" />;
     }
 
     return (

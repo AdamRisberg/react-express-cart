@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import api from "../../api";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { StripeProvider, Elements } from "react-stripe-elements";
 
 import Login from "../Login/Login";
@@ -43,34 +43,34 @@ class Checkout extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.user.addresses && !prevProps.user.addresses) {
+    if (this.props.user.addresses && !prevProps.user.addresses) {
       this.loadDefaultAddress();
     }
   }
 
   updateWindowSize = () => {
     const width = window.innerWidth;
-    if(width <= 600 && !this.state.mobileSize) {
+    if (width <= 600 && !this.state.mobileSize) {
       this.setState(() => ({ mobileSize: true }));
-    } else if(width > 600 && this.state.mobileSize) {
+    } else if (width > 600 && this.state.mobileSize) {
       this.setState(() => ({ mobileSize: false }));
     }
-  }
+  };
 
   loadDefaultAddress() {
     const addresses = this.props.user.addresses;
 
-    if(addresses && addresses.length) {
+    if (addresses && addresses.length) {
       let defaultAddress;
 
-      for(let i = 0; i < addresses.length; i++) {
-        if(addresses[i].default) {
-           defaultAddress = { ...addresses[i] };
+      for (let i = 0; i < addresses.length; i++) {
+        if (addresses[i].default) {
+          defaultAddress = { ...addresses[i] };
         }
       }
 
-      if(!defaultAddress) {
-        defaultAddress = {...addresses[0]}
+      if (!defaultAddress) {
+        defaultAddress = { ...addresses[0] };
       }
       defaultAddress.email = this.props.user.email;
 
@@ -88,22 +88,22 @@ class Checkout extends Component {
 
   onRegisterClick = () => {
     this.setState({ isRegister: true });
-  }
-
-  onGuestContinue = () => {
-    this.setState({ showCheckout: true })
   };
 
-  onNextStep = (formData) => {
+  onGuestContinue = () => {
+    this.setState({ showCheckout: true });
+  };
+
+  onNextStep = formData => {
     const stateChange = {
       step: this.state.step + 1
     };
-   
-    switch(this.state.step) {
+
+    switch (this.state.step) {
       case 1:
         stateChange.billingAddress = formData;
-        if(this.state.sameAsBilling) {
-          stateChange.shippingAddress = {...formData};
+        if (this.state.sameAsBilling) {
+          stateChange.shippingAddress = { ...formData };
           stateChange.step++;
         }
         break;
@@ -114,23 +114,27 @@ class Checkout extends Component {
         break;
     }
     this.setState(() => ({ ...stateChange }));
-    window.scrollTo({top: 0, left: 0, behavior: "smooth"});
-  }
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
 
-  onPreviousStep = (e) => {
-    if(e && e.preventDefault) e.preventDefault();
+  onPreviousStep = e => {
+    if (e && e.preventDefault) e.preventDefault();
     this.setState(() => ({ step: this.state.step - 1 }));
-    window.scrollTo({top: 0, left: 0, behavior: "smooth"});
-  }
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
 
-  onBackToCart = (e) => {
-    if(e && e.preventDefault) e.preventDefault();
+  onBackToCart = e => {
+    if (e && e.preventDefault) e.preventDefault();
     this.props.history.push("/checkout/cart");
-  }
+  };
 
   onShippingChange = (id, shippingMethod, price) => () => {
-    this.setState(() => ({ shippingMethod, shippingPrice: price, shippingID: id}));
-  }
+    this.setState(() => ({
+      shippingMethod,
+      shippingPrice: price,
+      shippingID: id
+    }));
+  };
 
   renderSignIn() {
     return (
@@ -149,7 +153,9 @@ class Checkout extends Component {
           <div className={styles.Left}>
             <Title text="Checkout as Guest" underline />
           </div>
-          <p className={styles.GuestMessage}>Continue to checkout without an account.</p>
+          <p className={styles.GuestMessage}>
+            Continue to checkout without an account.
+          </p>
           <Button
             text="Continue"
             onClick={this.onGuestContinue}
@@ -162,24 +168,25 @@ class Checkout extends Component {
     );
   }
 
-  handleCheckboxChange = (e) => {
+  handleCheckboxChange = e => {
     this.setState({ sameAsBilling: e.target.checked });
-  }
+  };
 
   handleCheckout = (stripe, name, onError) => {
     let errMessage;
 
-    stripe.createToken({
-      name,
-      address_line1: this.state.billingAddress.address1,
-      address_line2: this.state.billingAddress.address2,
-      address_city: this.state.billingAddress.city,
-      address_state: this.state.billingAddress.state,
-      address_zip: this.state.billingAddress.zip,
-      address_country: "US"
-    })
-      .then((response) => {
-        if(response.error) {
+    stripe
+      .createToken({
+        name,
+        address_line1: this.state.billingAddress.address1,
+        address_line2: this.state.billingAddress.address2,
+        address_city: this.state.billingAddress.city,
+        address_state: this.state.billingAddress.state,
+        address_zip: this.state.billingAddress.zip,
+        address_country: "US"
+      })
+      .then(response => {
+        if (response.error) {
           errMessage = response.error.message;
           throw new Error();
         }
@@ -199,18 +206,28 @@ class Checkout extends Component {
           tokenID: token.id,
           shippingID: this.state.shippingID
         };
-        
+
         this.cancelPostRequest = api.getCancelTokenSource();
 
-        api.post("/api/checkout", order, { cancelToken: this.cancelPostRequest.token }, false, false)
+        api
+          .post(
+            "/api/checkout",
+            order,
+            { cancelToken: this.cancelPostRequest.token },
+            false,
+            false
+          )
           .then(response => {
-            if(response.data.success) {
+            if (response.data.success) {
               this.props.clearCart();
-              this.setState(() => ({ step: 5, orderID: response.data.orderID }));
+              this.setState(() => ({
+                step: 5,
+                orderID: response.data.orderID
+              }));
             }
           })
           .catch(err => {
-            if(!api.checkCancel(err)) {
+            if (!api.checkCancel(err)) {
               errMessage = err.response.data;
             }
             throw new Error();
@@ -220,82 +237,100 @@ class Checkout extends Component {
         console.log("Error creating payment request.");
         onError(errMessage || "Something went wrong. Please try again later.");
       });
-  }
+  };
 
   renderCheckoutForm() {
-    switch(this.state.step) {
+    switch (this.state.step) {
       case 1:
-        return <AddressForm
-          key="billing"
-          title="Billing Address"
-          cancelButtonText="Back"
-          submitButtonText="Continue"
-          handleOnSubmit={this.onNextStep}
-          handleCancel={this.onBackToCart}
-          includeEmail
-          address={this.state.billingAddress}
-          renderExtras={() => (
-            <label className={styles.CheckBoxLabel}>
-              Same as shipping
-              <input type="checkbox" onChange={this.handleCheckboxChange} checked={this.state.sameAsBilling} />
-            </label>
-          )}
-        />;
+        return (
+          <AddressForm
+            key="billing"
+            title="Billing Address"
+            cancelButtonText="Back"
+            submitButtonText="Continue"
+            handleOnSubmit={this.onNextStep}
+            handleCancel={this.onBackToCart}
+            includeEmail
+            address={this.state.billingAddress}
+            renderExtras={() => (
+              <label className={styles.CheckBoxLabel}>
+                Same as shipping
+                <input
+                  type="checkbox"
+                  onChange={this.handleCheckboxChange}
+                  checked={this.state.sameAsBilling}
+                />
+              </label>
+            )}
+          />
+        );
       case 2:
-        return <AddressForm
-          key="shipping"
-          title="Shipping Address"
-          cancelButtonText="Back"
-          submitButtonText="Continue"
-          handleOnSubmit={this.onNextStep}
-          handleCancel={this.onPreviousStep}
-          address={this.state.shippingAddress}
-        />;
+        return (
+          <AddressForm
+            key="shipping"
+            title="Shipping Address"
+            cancelButtonText="Back"
+            submitButtonText="Continue"
+            handleOnSubmit={this.onNextStep}
+            handleCancel={this.onPreviousStep}
+            address={this.state.shippingAddress}
+          />
+        );
       case 3:
-        return <ShippingOptions
-          updateShipping={this.updateShipping}
-          handleCancel={this.onPreviousStep}
-          onNextStep={this.onNextStep}
-          onShippingChange={this.onShippingChange}
-          shippingAddress={this.state.shippingAddress}
-          shippingMethod={this.state.shippingMethod}
-        />;
+        return (
+          <ShippingOptions
+            updateShipping={this.updateShipping}
+            handleCancel={this.onPreviousStep}
+            onNextStep={this.onNextStep}
+            onShippingChange={this.onShippingChange}
+            shippingAddress={this.state.shippingAddress}
+            shippingMethod={this.state.shippingMethod}
+          />
+        );
       case 4:
-        return <PaymentForm
-          handleCancel={this.onPreviousStep}
-          onPlaceOrder={this.onPlaceOrder}
-          handleCheckout={this.handleCheckout}
-          mobileSize={this.state.mobileSize}
-          renderSummary={() => (
-            this.state.mobileSize ? <OrderSummary
-              cart={this.props.cart}
-              shippingMethod={this.state.shippingMethod}
-              shippingPrice={this.state.shippingPrice}
-              onlyTotals={false}
-            /> : null
-          )}
-        />;
+        return (
+          <PaymentForm
+            handleCancel={this.onPreviousStep}
+            onPlaceOrder={this.onPlaceOrder}
+            handleCheckout={this.handleCheckout}
+            mobileSize={this.state.mobileSize}
+            renderSummary={() =>
+              this.state.mobileSize ? (
+                <OrderSummary
+                  cart={this.props.cart}
+                  shippingMethod={this.state.shippingMethod}
+                  shippingPrice={this.state.shippingPrice}
+                  onlyTotals={false}
+                />
+              ) : null
+            }
+          />
+        );
       default:
         return null;
     }
   }
 
   render() {
-    if(this.state.step === 5) {
-      return <Redirect to={{
-        pathname: "/checkout/success",
-        state: {
-          email: this.state.billingAddress.email,
-          orderID: this.state.orderID
-        }
-      }} />;
+    if (this.state.step === 5) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/checkout/success",
+            state: {
+              email: this.state.billingAddress.email,
+              orderID: this.state.orderID
+            }
+          }}
+        />
+      );
     }
 
-    if(!this.props.cart.length) {
+    if (!this.props.cart.length) {
       return <Redirect to="/checkout/cart" />;
     }
 
-    if(!this.props.scriptLoaded) {
+    if (!this.props.scriptLoaded) {
       return <Spinner />;
     }
 
@@ -305,8 +340,9 @@ class Checkout extends Component {
           <Helmet>
             <title>{`Checkout - ${this.props.storeName}`}</title>
           </Helmet>
-          {!this.props.loggedIn && !this.state.showCheckout ? 
-            this.renderSignIn() : (
+          {!this.props.loggedIn && !this.state.showCheckout ? (
+            this.renderSignIn()
+          ) : (
             <Elements>
               <div className={styles.Content}>
                 <div className={styles.ColumnLeft}>
@@ -315,14 +351,16 @@ class Checkout extends Component {
                     {this.renderCheckoutForm()}
                   </div>
                 </div>
-                {!this.state.mobileSize ? <div className={styles.ColumnRight}>
-                  <OrderSummary
-                    showTitle={true}
-                    cart={this.props.cart}
-                    shippingMethod={this.state.shippingMethod}
-                    shippingPrice={this.state.shippingPrice}
-                  />
-                </div> : null}
+                {!this.state.mobileSize ? (
+                  <div className={styles.ColumnRight}>
+                    <OrderSummary
+                      showTitle={true}
+                      cart={this.props.cart}
+                      shippingMethod={this.state.shippingMethod}
+                      shippingPrice={this.state.shippingPrice}
+                    />
+                  </div>
+                ) : null}
               </div>
             </Elements>
           )}

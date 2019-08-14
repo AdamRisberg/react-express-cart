@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import api from "../../api";
 
 import OrderPreview from "./OrderPreview/OrderPreview";
@@ -12,18 +12,24 @@ import styles from "./Orders.module.css";
 class Orders extends Component {
   state = {
     years: []
-  }
+  };
 
   componentDidMount() {
-    if(!this.props.loggedIn) return;
+    if (!this.props.loggedIn) return;
     this.cancelGetRequest = api.getCancelTokenSource();
 
-    api.get("/api/orders/years/" + this.props.userID, { cancelToken: this.cancelGetRequest.token }, true, false)
+    api
+      .get(
+        "/api/orders/years/" + this.props.userID,
+        { cancelToken: this.cancelGetRequest.token },
+        true,
+        false
+      )
       .then(response => {
         this.setState(() => ({ years: response.data }));
       })
       .catch(err => {
-        if(api.checkCancel(err)) {
+        if (api.checkCancel(err)) {
           return;
         }
         console.log(err.response);
@@ -35,17 +41,25 @@ class Orders extends Component {
   }
 
   render() {
-    if(!this.props.loggedIn) {
+    if (!this.props.loggedIn) {
       return <Redirect to="/" />;
     }
 
     const fetchUrl = "/api/orders/all/" + this.props.userID + "?page=";
     const dateOptions = [];
     const yearOptions = this.state.years.map((year, i) => {
-      return <option key={i}>{year}</option>
+      return <option key={i}>{year}</option>;
     });
-    dateOptions.push(<option key="last30" value="last30">last 30 days</option>);
-    dateOptions.push(<option key="last6" value="last6">last 6 months</option>);
+    dateOptions.push(
+      <option key="last30" value="last30">
+        last 30 days
+      </option>
+    );
+    dateOptions.push(
+      <option key="last6" value="last6">
+        last 6 months
+      </option>
+    );
     dateOptions.push(...yearOptions);
 
     return (
@@ -56,9 +70,7 @@ class Orders extends Component {
         <WithPagination
           fetchUrl={fetchUrl}
           fetchUseSession
-          renderTitle={() => (
-            <Title text="Orders" underline centerOnMobile />
-          )}
+          renderTitle={() => <Title text="Orders" underline centerOnMobile />}
           renderFilters={(filter, handleChange) => (
             <div className={styles.OrderFilter}>
               <span>Within: </span>
@@ -67,12 +79,13 @@ class Orders extends Component {
               </select>
             </div>
           )}
-          renderItems={items => (
-            !items.length ? <span>You have no orders.</span> :
-              items.map(order => (
-                <OrderPreview key={order._id} {...order} />
-              ))
-          )}
+          renderItems={items =>
+            !items.length ? (
+              <span>You have no orders.</span>
+            ) : (
+              items.map(order => <OrderPreview key={order._id} {...order} />)
+            )
+          }
         />
       </React.Fragment>
     );

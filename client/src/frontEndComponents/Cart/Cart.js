@@ -1,5 +1,5 @@
 import React from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 import CartItem from "./CartItem/CartItem";
 import Title from "../Title/Title";
@@ -7,7 +7,7 @@ import Button from "../Button/Button";
 
 import styles from "./Cart.module.css";
 
-const Cart = (props) => {
+const Cart = props => {
   const itemCount = countItems(props);
   const total = calculateTotal(props);
 
@@ -30,10 +30,19 @@ const Cart = (props) => {
       {props.cart.length > 0 ? (
         <React.Fragment>
           <div className={styles.LeftColumn}>
-            {`Subtotal (${itemCount} item${itemCount > 1 ? "s" : ""}): $${total}`}
+            {`Subtotal (${itemCount} item${
+              itemCount > 1 ? "s" : ""
+            }): $${total}`}
           </div>
           <div className={styles.RightColumn}>
-            <Button text="Proceed to Checkout" onClick={() => props.history.push("/checkout")} buttonStyle="Submit" size="WideOnMobile" noMargin bold />
+            <Button
+              text="Proceed to Checkout"
+              onClick={() => props.history.push("/checkout")}
+              buttonStyle="Submit"
+              size="WideOnMobile"
+              noMargin
+              bold
+            />
           </div>
         </React.Fragment>
       ) : (

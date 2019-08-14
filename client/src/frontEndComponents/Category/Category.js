@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 import CategoryPreview from "../CategoryPreview/CategoryPreview";
 import Products from "../Products/Products";
@@ -26,31 +26,38 @@ class Category extends Component {
   }
 
   componentDidUpdate() {
-    const path = this.props.location.pathname.split("/").slice(2).join("/") || "/";
+    const path =
+      this.props.location.pathname
+        .split("/")
+        .slice(2)
+        .join("/") || "/";
 
-    if(this.state.fetchData || path !== this.state.path) {
+    if (this.state.fetchData || path !== this.state.path) {
       this.fetchData(!this.state.fetchData);
     }
   }
 
-  changePages = (page) => {
-    if(this.state.page === page) return;
+  changePages = page => {
+    if (this.state.page === page) return;
 
     this.setState(() => ({ page, fetchData: true }));
   };
 
   fetchData(resetPage) {
-    this.setState({loading: true, fetchData: false });
+    this.setState({ loading: true, fetchData: false });
 
     const found = this.searchCategories(this.props.location.pathname);
-    
-    if(found) {
+
+    if (found) {
       const startIdx = (this.state.page - 1) * this.state.catsPerPage;
 
       const subcategories = found.subcategories.slice(
         startIdx,
-        startIdx + this.state.catsPerPage);
-      const numPages = Math.ceil(found.subcategories.length / this.state.catsPerPage);
+        startIdx + this.state.catsPerPage
+      );
+      const numPages = Math.ceil(
+        found.subcategories.length / this.state.catsPerPage
+      );
 
       this.setState({
         ...found,
@@ -67,11 +74,11 @@ class Category extends Component {
   searchCategories(query) {
     let categories = [];
 
-    if(this.props && this.props.categories) {
+    if (this.props && this.props.categories) {
       categories = this.props.categories;
     }
 
-    if(query === "/") {
+    if (query === "/") {
       return {
         path: "/",
         name: "Categories",
@@ -80,18 +87,21 @@ class Category extends Component {
     }
 
     function search(path, cats = categories) {
-      if(!cats) return;
-    
-      for(let i = 0; i < cats.length; i++) {
-        if(cats[i].path === path) return cats[i];
+      if (!cats) return;
+
+      for (let i = 0; i < cats.length; i++) {
+        if (cats[i].path === path) return cats[i];
         let found = search(path, cats[i].subcategories);
-        if(found) {
+        if (found) {
           return found;
         }
       }
     }
-  
-    const path = query.split("/").slice(2).join("/");
+
+    const path = query
+      .split("/")
+      .slice(2)
+      .join("/");
     return search(path);
   }
 
@@ -100,11 +110,11 @@ class Category extends Component {
   }
 
   renderSubcategories() {
-    if(!this.hasSubcategories()) return null;
+    if (!this.hasSubcategories()) return null;
     return (
       <div className={styles.SubcategoriesBox}>
         <div className={styles.Subcategories}>
-          {this.state.subcategories.map((category) => (
+          {this.state.subcategories.map(category => (
             <CategoryPreview key={category._id} category={category} />
           ))}
         </div>
@@ -119,7 +129,7 @@ class Category extends Component {
   }
 
   injectMetaData() {
-    if(this.props.isHome) {
+    if (this.props.isHome) {
       return null;
     }
 
@@ -132,19 +142,26 @@ class Category extends Component {
   }
 
   render() {
-    if(this.state.notFound) {
+    if (this.state.notFound) {
       return <Redirect to="/" />;
     }
 
-    if(this.state.loading) {
+    if (this.state.loading) {
       return <Spinner />;
     }
 
     return (
       <React.Fragment>
         {this.injectMetaData()}
-        {!this.props.isHome ? <Breadcrumbs pathname={this.state.path} categories={this.props.categories} /> : null}
-        {!this.props.isHome ? <Title text={this.state.name} underline centerOnMobile/> : null}
+        {!this.props.isHome ? (
+          <Breadcrumbs
+            pathname={this.state.path}
+            categories={this.props.categories}
+          />
+        ) : null}
+        {!this.props.isHome ? (
+          <Title text={this.state.name} underline centerOnMobile />
+        ) : null}
         {this.renderSubcategories()}
         <Products
           isSearch={false}
@@ -156,6 +173,6 @@ class Category extends Component {
       </React.Fragment>
     );
   }
-};
+}
 
 export default Category;
