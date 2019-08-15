@@ -1,0 +1,56 @@
+.PageForm {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.PageForm input {
+  display: block;
+  margin-top: 2px;
+  width: 100%;
+}
+
+.PageForm label {
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.PageForm input:disabled {
+  background-color: #f4f4f4;
+}
+
+.PageForm img {
+  width: 100px;
+  display: block;
+  margin-bottom: 20px;
+  margin-top: 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ButtonBack {
+  background-color: #111;
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #111;
+  align-items: center;
+  display: flex;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Header::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Title {
+  float: left;
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex-grow: 1;
+}

@@ -1,0 +1,156 @@
+.ProductForm {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.ProductForm input,
+.ProductForm select,
+.ProductForm textarea {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 20px;
+}
+
+.ProductForm .Checkbox {
+  width: auto;
+  display: inline-block;
+}
+
+.ProductForm label {
+  font-weight: 500;
+  display: block;
+}
+
+.Label,
+.ColorLabel {
+  font-weight: 500;
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 2px solid #aaa;
+  align-items: center;
+  display: flex;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Header::after,
+.ClearFix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Title {
+  float: left;
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.TextEditor {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ccc;
+}
+
+.Enabled {
+  display: flex;
+  align-items: center;
+}
+
+.Enabled::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.AddTab {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.AddTab:hover {
+  background-color: #f4f4f4;
+}
+
+.Black {
+  margin-bottom: 30px;
+}
+
+.SubHeader {
+  background-color: #111;
+  color: #fff;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.Subtitle {
+  float: left;
+  font-weight: 500;
+  font-size: 1.1rem;
+  flex-grow: 1;
+}
+
+.InfoTab {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.AddOptionButtons {
+  margin-bottom: 20px;
+}
+
+.AddOptionButtons button {
+  background-color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.AddOptionButtons button:first-of-type {
+  margin: 0;
+}
+
+.AddOptionButtons button:hover {
+  background-color: #f4f4f4;
+}
+
+.OptionBox {
+  padding: 15px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.Underline {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.ColorPreviewButton {
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 20px;
+  width: 228px;
+  padding: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.ColorPreviewButton:hover {
+  background-color: #f4f4f4;
+}
+
+.ColorPreview {
+  width: 100%;
+  height: 35px;
+}

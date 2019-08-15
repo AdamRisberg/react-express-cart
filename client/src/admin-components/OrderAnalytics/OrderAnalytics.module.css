@@ -1,0 +1,59 @@
+.RangeSelect {
+  margin-top: 2px;
+  margin-left: 8px;
+}
+
+.ChartSelectLabel {
+  display: block;
+  float: left;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.ChartSelectLabel:first-of-type {
+  margin-right: 30px;
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 2px solid #aaa;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Title {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.TitleBox {
+  padding: 6px 15px;
+  background-color: #111;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border: 2px solid #111;
+}
+
+.AnalyticsBox {
+  border: 1px solid #ccc;
+  padding: 15px 20px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 450px) {
+  .AnalyticsBox {
+    padding: 15px;
+  }
+
+  .RangeSelect {
+    display: block;
+    margin-left: 0;
+    font-size: 0.9rem;
+  }
+
+  .ChartSelectLabel:first-of-type {
+    margin-right: 20px;
+  }
+}

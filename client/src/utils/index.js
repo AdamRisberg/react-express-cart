@@ -1,36 +1,36 @@
 import api from "../api";
 
-export const handleRequestError = (err) => {
-  if(api.checkCancel(err)) {
+export const handleRequestError = err => {
+  if (api.checkCancel(err)) {
     return true;
   }
   console.log(err);
-}
+};
 
 export const handleAdminRequestError = (flashErrorMessage, err) => {
-  if(api.checkCancel(err)) {
+  if (api.checkCancel(err)) {
     return true;
   }
-  if(err.response && err.response.status === 401) {
+  if (err.response && err.response.status === 401) {
     const shouldLogout = err.response.data && err.response.data.logout;
     flashErrorMessage && flashErrorMessage(shouldLogout);
     return true;
   }
 
   console.log(err);
-}
+};
 
-export const handleAdminRequestErrorFull = (flashErrorMessage) => (err) => {
-  if(api.checkCancel(err)) {
+export const handleAdminRequestErrorFull = flashErrorMessage => err => {
+  if (api.checkCancel(err)) {
     return;
   }
-  if(err.response && err.response.status === 401) {
+  if (err.response && err.response.status === 401) {
     const shouldLogout = err.response.data && err.response.data.logout;
     return flashErrorMessage && flashErrorMessage(shouldLogout);
   }
 
   console.log(err);
-}
+};
 
 const monthLookup = [
   "January",
@@ -63,7 +63,7 @@ export const formatDateShort = dateString => {
   const month = date.getMonth();
   const year = date.getFullYear();
   return `${month}/${day}/${year}`;
-}
+};
 
 export const flattenCategories = (
   categories,

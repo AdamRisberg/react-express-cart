@@ -1,0 +1,53 @@
+.ColorPickerBox {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  display: block;
+  width: 228px;
+  padding-bottom: 10px;
+  margin-top: 2px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  position: relative;
+  z-index: 999;
+}
+
+.ColorPickerBox button {
+  font-size: 0.9rem;
+  width: 80px;
+  padding: 4px 8px;
+}
+
+.ColorButtons {
+  margin: 5px 10px 0 10px;
+}
+
+.ColorPicker {
+  box-shadow: none !important;
+}
+
+.ColorPicker input {
+  margin-bottom: 0 !important;
+  font-size: 0.9rem !important;
+  text-align: center;
+  border: 1px solid #aaa !important;
+  box-shadow: none !important;
+}
+
+.ColorPicker span {
+  font-size: 0.9rem !important;
+}
+
+.ClearFix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Cover {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+}

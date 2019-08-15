@@ -1,0 +1,46 @@
+.Brand {
+  float: left;
+  width: 50%;
+}
+
+.BrandText {
+  font-size: 2.1rem;
+  color: #eee;
+  font-weight: 500;
+}
+
+.BrandText:hover {
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .Brand {
+    width: calc(100% - 110px);
+    margin-bottom: 5px;
+  }
+
+  .BrandText {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .Brand {
+    float: none;
+    width: 100%;
+
+    margin-bottom: 0;
+  }
+
+  .BrandText {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media print {
+  .BrandText {
+    color: #aaa;
+  }
+}

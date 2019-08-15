@@ -1,0 +1,76 @@
+.SideNav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 500;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.SideNavContent {
+  position: fixed;
+  top: 0;
+  transform: translateX(-100%);
+  height: 100vh;
+  background-color: #fff;
+  padding: 20px 0;
+  padding-top: 0;
+  transition: transform 0.3s ease;
+  z-index: 501;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.Open + .SideNavContent {
+  transform: translateX(0);
+}
+
+.Open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.CloseButton {
+  position: absolute;
+  right: 20px;
+  line-height: 1.2rem;
+  margin-left: -2.25rem;
+  padding: 20px 0;
+  font-size: 2.5rem;
+  color: #eee;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.CloseButton:hover {
+  color: #fff;
+}
+
+.Brand {
+  padding: 20px;
+  padding-right: 100px;
+  background-color: #111;
+  color: #eee;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.NavLink {
+  display: block;
+  padding: 6px 20px;
+  cursor: pointer;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.NavLink:hover {
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  background-color: #eee;
+}

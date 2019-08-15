@@ -1,0 +1,96 @@
+.Images .Label {
+  font-weight: 500;
+}
+
+.Images .HiddenFilePicker {
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  z-index: -1;
+}
+
+.Images .ImagesContainer {
+  margin: 2px -5px 0px -5px;
+}
+
+.Images .ImageBox {
+  height: 120px;
+  border: 1px solid #aaa;
+  display: inline-block;
+  text-align: center;
+  padding: 10px;
+  color: #555;
+  margin: 0 5px 20px 5px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.FixedWidth {
+  width: 120px;
+}
+
+.Images .ImageBox img {
+  max-width: 100%;
+  max-height: 67px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 4px;
+}
+
+.Images .HiddenFilePicker:focus + .ImageBox {
+  outline-color: rgb(77, 144, 254);
+  outline-offset: -2px;
+  outline-style: auto;
+  outline-width: 5px;
+}
+
+.DeleteButton,
+.ArrowButton {
+  width: 33.333%;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.ArrowButton:first-of-type {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.ArrowButton:last-of-type {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+}
+
+.Images .DeleteButton {
+  color: #fff;
+  background-color: rgba(200, 30, 60, 1);
+  border-radius: 0;
+}
+
+.Images .ArrowButton {
+  background-color: #f4f4f4;
+}
+
+.Images .ArrowButton:hover {
+  background-color: #fff;
+}
+
+.Images .ArrowButton:disabled {
+  cursor: default;
+}
+
+.Images .ArrowButton:disabled:hover {
+  background-color: #f4f4f4;
+}
+
+.Images .ArrowButton:disabled:active {
+  box-shadow: none;
+}
+
+.Images .DeleteButton:hover {
+  background-color: rgb(220, 50, 80);
+}

@@ -1,0 +1,66 @@
+.CategoriesBox {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.Category {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.Category:hover {
+  background-color: #f4f4f4;
+}
+
+.Category::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Name {
+  float: left;
+  flex-grow: 1;
+  padding-right: 10px;
+  margin-left: 10px;
+}
+
+.Header {
+  padding: 10px 20px;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #111;
+  align-items: center;
+  display: flex;
+  text-transform: uppercase;
+}
+
+.Header button {
+  box-shadow: none;
+}
+
+.Header::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.Title {
+  float: left;
+  font-size: 1.4rem;
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.CategoryItem {
+  display: inline-block;
+  padding: 5px 20px 5px 10px;
+  width: 100%;
+  color: #555;
+}
+
+.CategoryItem:hover {
+  background-color: red;
+}

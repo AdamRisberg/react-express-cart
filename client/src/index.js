@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import FrontEnd from "./frontEndComponents/FrontEnd";
-import Admin from "./adminComponents/Admin";
+import Storefront from "./Storefront";
+import Admin from "./Admin";
 
 import "./index.css";
 
@@ -13,7 +13,7 @@ const App = () => {
     <BrowserRouter>
       <Switch>
         <Route path="/admin" component={Admin} />
-        <Route path="/" component={FrontEnd} />
+        <Route path="/" component={Storefront} />
       </Switch>
     </BrowserRouter>
   );
