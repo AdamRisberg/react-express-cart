@@ -13,8 +13,8 @@ const monthLookup = [
   "December"
 ];
 
-const formatDate = (dateString) => {
-  if(!dateString) return "";
+const formatDate = dateString => {
+  if (!dateString) return "";
   const date = new Date(dateString);
   const day = date.getDate();
   const month = monthLookup[date.getMonth()];
@@ -36,29 +36,39 @@ Payment Method: ${order.paymentMethod}
 Shipping Method: ${order.shippingMethod}\n
 Billing Address:
 ${order.billingAddress.firstName} ${order.billingAddress.lastName}
-${order.billingAddress.address1}\n`
+${order.billingAddress.address1}\n`;
 
-  text += order.billingAddress.address2 ? `${order.billingAddress.address2}\n` : "";
-  text += `${order.billingAddress.city}, ${order.billingAddress.state} ${order.billingAddress.zip}\n
+  text += order.billingAddress.address2
+    ? `${order.billingAddress.address2}\n`
+    : "";
+  text += `${order.billingAddress.city}, ${order.billingAddress.state} ${
+    order.billingAddress.zip
+  }\n
 Shipping Address:
 ${order.shippingAddress.firstName} ${order.shippingAddress.lastName}
 ${order.shippingAddress.address1}\n`;
 
-  text += order.shippingAddress.address2 ? `${order.shippingAddress.address2}\n` : "";
+  text += order.shippingAddress.address2
+    ? `${order.shippingAddress.address2}\n`
+    : "";
 
-  text += `${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}\n
+  text += `${order.shippingAddress.city}, ${order.shippingAddress.state} ${
+    order.shippingAddress.zip
+  }\n
 --------------------------------------------------------------------------\n\n`;
 
   order.items.forEach(item => {
     text += `${item.name}\n`;
 
     item.options.forEach((option, i) => {
-      text += `${option.name}: ${option.value}${item.options.length-1 === i ? "" : ", "}`
+      text += `${option.name}: ${option.value}${
+        item.options.length - 1 === i ? "" : ", "
+      }`;
     });
 
     text += `\n`;
     text += `$${item.price.toFixed(2)}
-Qty: ${item.quantity}\n\n`
+Qty: ${item.quantity}\n\n`;
   });
 
   text += `--------------------------------------------------------------------------\n
@@ -104,19 +114,35 @@ function createConfirmationEmailHTML(order, companyName) {
         <td>
           <div style="font-weight: bold; margin-top:10px;">Billing Address:</div>
           <div>
-            ${order.billingAddress.firstName} ${order.billingAddress.lastName}<br/>
+            ${order.billingAddress.firstName} ${
+    order.billingAddress.lastName
+  }<br/>
             ${order.billingAddress.address1}<br/>
-            ${order.billingAddress.address2 ? order.billingAddress.address2 + "<br/>" : ""}
-            ${order.billingAddress.city}, ${order.billingAddress.state} ${order.billingAddress.zip}
+            ${
+              order.billingAddress.address2
+                ? order.billingAddress.address2 + "<br/>"
+                : ""
+            }
+            ${order.billingAddress.city}, ${order.billingAddress.state} ${
+    order.billingAddress.zip
+  }
           </div>
         </td>
         <td>
           <div style="font-weight: bold; margin-top:10px;">Shipping Address:</div>
           <div>
-            ${order.shippingAddress.firstName} ${order.shippingAddress.lastName}<br/>
+            ${order.shippingAddress.firstName} ${
+    order.shippingAddress.lastName
+  }<br/>
             ${order.shippingAddress.address1}<br/>
-            ${order.shippingAddress.address2 ? order.shippingAddress.address2 + "<br/>" : ""}
-            ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}
+            ${
+              order.shippingAddress.address2
+                ? order.shippingAddress.address2 + "<br/>"
+                : ""
+            }
+            ${order.shippingAddress.city}, ${order.shippingAddress.state} ${
+    order.shippingAddress.zip
+  }
           </div>
         </td>
       </tr>
@@ -133,7 +159,9 @@ function createConfirmationEmailHTML(order, companyName) {
           <div style="margin-bottom: 4px">`;
 
     item.options.forEach((option, i) => {
-      html += `${option.name}: ${option.value}${item.options.length-1 === i ? "" : ", "}`
+      html += `${option.name}: ${option.value}${
+        item.options.length - 1 === i ? "" : ", "
+      }`;
     });
 
     html += `</div>
@@ -142,7 +170,7 @@ function createConfirmationEmailHTML(order, companyName) {
         <td style="text-align: right; vertical-align: top;">
           <div style="margin-top: 10px;">Qty: ${item.quantity}</div>
         </td>
-      </tr>`
+      </tr>`;
   });
 
   html += `<tr>
@@ -185,18 +213,20 @@ function createStatusEmailHTML(status, companyName, customerName, orderNumber) {
     <div style="margin-bottom: 40px;">
       <h2 style="font-size: 1.75rem">Order #${orderNumber} Status Update</h2>
       <p>Hello ${customerName},</p>
-      <p>Your order's status has been changed to <strong>${status.status}</strong>. Please let us know if you have any questions and thanks again for choosing ${companyName}.</p>`;
-  
-  if(status.tracking.length) {
+      <p>Your order's status has been changed to <strong>${
+        status.status
+      }</strong>. Please let us know if you have any questions and thanks again for choosing ${companyName}.</p>`;
+
+  if (status.tracking.length) {
     html += `<b>Tracking Number(s):</b><div style="margin-bottom: 20px">`;
-    status.tracking.forEach(num => html += `<div>${num}</div>`);
+    status.tracking.forEach(num => (html += `<div>${num}</div>`));
     html += "</div>";
   }
 
-  if(status.comment) {
+  if (status.comment) {
     html += `<b>Comments:</b><div>${status.comment}</div>`;
   }
-  
+
   html += `</div></div>`;
 
   return html;
@@ -206,13 +236,15 @@ function createStatusEmailText(status, companyName, customerName, orderNumber) {
   let text = `${companyName}\n
 Order #${orderNumber} Status Update\n
 Hello ${customerName},\n
-Your order's status has been changed to *${status.status}*. Please let us know if you have any questions and thanks again for choosing ${companyName}.\n\n`;
-  if(status.tracking.length) {
+Your order's status has been changed to *${
+    status.status
+  }*. Please let us know if you have any questions and thanks again for choosing ${companyName}.\n\n`;
+  if (status.tracking.length) {
     text += "Tracking Number(s):\n";
-    status.tracking.forEach(num => text += num + "\n");
+    status.tracking.forEach(num => (text += num + "\n"));
     text += "\n";
   }
-  if(status.comment) {
+  if (status.comment) {
     text += status.comment;
   }
   return text;

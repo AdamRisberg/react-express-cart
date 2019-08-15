@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const adminController = require("../controllers/admin");
-const { authorizeAdmin, userIsAdmin, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  userHasEditPermission
+} = require("../middleware");
 
 router.use(authorizeAdmin);
 router.use(userIsAdmin);

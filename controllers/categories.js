@@ -12,26 +12,28 @@ function getAll(req, res) {
 }
 
 function getAllCategories() {
-  return Category
-    .find({ topLevel: true })
-    .sort({ order: 1, _id: 1 });
+  return Category.find({ topLevel: true }).sort({ order: 1, _id: 1 });
 }
 
 function remove(req, res) {
   const categoryIDs = req.body;
   const images = [];
 
-  Category
-    .find({ _id: { $in: categoryIDs } })
+  Category.find({ _id: { $in: categoryIDs } })
     .then(results => {
       results.forEach(cat => {
-        if(cat.image) {
+        if (cat.image) {
           images.push(cat.image);
         }
       });
     })
     .then(() => Category.deleteMany({ _id: { $in: categoryIDs } }))
-    .then(() => Category.updateMany({}, { $pull: { subcategories: { $in: categoryIDs } } }))
+    .then(() =>
+      Category.updateMany(
+        {},
+        { $pull: { subcategories: { $in: categoryIDs } } }
+      )
+    )
     .then(() => Category.find({ parent: { $in: categoryIDs } }))
     .then(children => {
       return asyncForEach(children, async child => {
@@ -72,8 +74,7 @@ function removeDeletedPathFromChidren(parentPath, parentID, category) {
 }
 
 function getOne(req, res) {
-  Category
-    .findById(req.params.id)
+  Category.findById(req.params.id)
     .then(cat => res.json(cat))
     .catch(err => {
       console.log(err.message);
@@ -85,17 +86,20 @@ function update(req, res) {
   const category = req.body.category;
   let foundCategory;
 
-  Category
-    .findById(req.params.id)
+  Category.findById(req.params.id)
     .then(_category => {
       foundCategory = _category;
-      if(category.parent !== foundCategory.parent) {
+      if (category.parent !== foundCategory.parent) {
         return swapParents(foundCategory.parent, category.parent, category._id);
       }
     })
     .then(() => {
-      if(category.path !== foundCategory.path) {
-        return adjustChildPaths(foundCategory.path, category.path, foundCategory);
+      if (category.path !== foundCategory.path) {
+        return adjustChildPaths(
+          foundCategory.path,
+          category.path,
+          foundCategory
+        );
       }
     })
     .then(() => {
@@ -117,16 +121,16 @@ function update(req, res) {
     });
 }
 
-async function asyncForEach (array, cb) {
-  for(let i = 0; i < array.length; i++) {
+async function asyncForEach(array, cb) {
+  for (let i = 0; i < array.length; i++) {
     await cb(array[i], i, array);
   }
 }
 
-function adjustChildPaths (oldPath, newPath, category) {
+function adjustChildPaths(oldPath, newPath, category) {
   const oldLength = oldPath.length;
 
-  return asyncForEach(category.subcategories, async (cat) => {
+  return asyncForEach(category.subcategories, async cat => {
     cat.path = newPath + cat.path.substring(oldLength);
     await cat.save();
     adjustChildPaths(oldPath, newPath, cat);
@@ -139,14 +143,14 @@ function swapParents(oldParentID, newParentID, childID) {
   return Category.findById(newParentID)
     .then(found => {
       newParent = found;
-      if(oldParentID) {
-        return Category.findById(oldParentID)
+      if (oldParentID) {
+        return Category.findById(oldParentID);
       }
     })
     .then(found => {
       oldParent = found;
 
-      if(oldParent) {
+      if (oldParent) {
         oldParent.subcategories = oldParent.subcategories.filter(subcat => {
           return subcat.id !== childID;
         });
@@ -160,7 +164,15 @@ function swapParents(oldParentID, newParentID, childID) {
 }
 
 function add(req, res) {
-  const { name, path, pathName, image, topLevel, subcategories, parent } = req.body.category;
+  const {
+    name,
+    path,
+    pathName,
+    image,
+    topLevel,
+    subcategories,
+    parent
+  } = req.body.category;
   let newCatID;
 
   const category = new Category({
@@ -175,9 +187,9 @@ function add(req, res) {
 
   category
     .save()
-    .then(savedCat => newCatID = savedCat._id)
+    .then(savedCat => (newCatID = savedCat._id))
     .then(() => {
-      if(parent) {
+      if (parent) {
         return addToParent(parent, newCatID);
       }
     })
@@ -186,14 +198,12 @@ function add(req, res) {
 }
 
 function addToParent(parentID, newCatID) {
-  return Category
-    .findById(parentID)
-    .then(parentCat => {
-      if(parentCat) {
-        parentCat.subcategories.push(newCatID);
-        return parentCat.save();
-      }
-    });
+  return Category.findById(parentID).then(parentCat => {
+    if (parentCat) {
+      parentCat.subcategories.push(newCatID);
+      return parentCat.save();
+    }
+  });
 }
 
 function addImage(req, res) {
@@ -220,11 +230,10 @@ function addImage(req, res) {
     const destPathMedium = `${filePath}medium/${fileName}${fileExt}`;
     const destPathSmall = `${filePath}small/${fileName}${fileExt}`;
 
-    Promise
-      .all([
-        resizeImage(imagePath, destPathMedium, 400),
-        resizeImage(imagePath, destPathSmall, 100)
-      ])
+    Promise.all([
+      resizeImage(imagePath, destPathMedium, 400),
+      resizeImage(imagePath, destPathSmall, 100)
+    ])
       .then(() => Category.findById(categoryID))
       .then(category => {
         category.image = `${fileName}${fileExt}`;
@@ -247,7 +256,7 @@ function addImage(req, res) {
 function resizeImage(imagePath, destinationPath, width) {
   return sharp(imagePath)
     .resize({ width })
-    .toFile(destinationPath)
+    .toFile(destinationPath);
 }
 
 function deleteImage(req, res) {
@@ -259,8 +268,7 @@ function deleteImage(req, res) {
   const mediumPath = `./public/images/${imgLocation}/medium/${fileName}`;
   const smallPath = `./public/images/${imgLocation}/small/${fileName}`;
 
-  Category
-    .findByIdAndUpdate(categoryID, { image: "" }, { new: true })
+  Category.findByIdAndUpdate(categoryID, { image: "" }, { new: true })
     .then(updatedCategory => res.json(updatedCategory))
     .catch(err => {
       console.log(err);
@@ -268,7 +276,11 @@ function deleteImage(req, res) {
       throw new Error("Failed to update category");
     })
     .then(() => {
-      return Promise.all([unlink(largePath), unlink(mediumPath), unlink(smallPath)]);
+      return Promise.all([
+        unlink(largePath),
+        unlink(mediumPath),
+        unlink(smallPath)
+      ]);
     })
     .catch(err => console.log(err));
 }

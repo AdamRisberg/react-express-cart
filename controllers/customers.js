@@ -2,16 +2,15 @@ const Customer = require("../models/customer");
 const bcrypt = require("bcrypt");
 
 function getAll(req, res) {
-  Customer
-    .paginate({}, {page: req.query.page, limit: 12 })
+  Customer.paginate({}, { page: req.query.page, limit: 12 })
     .then(results => {
       const customers = results.docs.map(customer => {
         const cleanCustomer = { ...customer._doc };
         delete cleanCustomer.password;
         delete cleanCustomer.token;
         return cleanCustomer;
-      })
-      res.json({ items: customers, pages: results.pages })
+      });
+      res.json({ items: customers, pages: results.pages });
     })
     .catch(err => {
       console.log(err);
@@ -22,14 +21,13 @@ function getAll(req, res) {
 function getOne(req, res) {
   const customerID = req.params.id;
 
-  Customer
-    .findById(customerID)
+  Customer.findById(customerID)
     .then(customer => {
       const cleanCustomer = { ...customer._doc };
       delete cleanCustomer.password;
       delete cleanCustomer.token;
 
-      res.json(customer)
+      res.json(customer);
     })
     .catch(err => {
       console.log(err);
@@ -40,8 +38,7 @@ function getOne(req, res) {
 function remove(req, res) {
   const customerIDs = req.body;
 
-  Customer
-    .deleteMany({ _id: { $in: customerIDs }})
+  Customer.deleteMany({ _id: { $in: customerIDs } })
     .then(() => Customer.find({}))
     .then(customers => res.json(customers))
     .catch(err => {
@@ -57,9 +54,9 @@ function update(req, res) {
 
   let errorMessage = "Error saving customer.";
 
-  Customer.findOne({ email: customer.email, _id: { $ne: customerID }})
+  Customer.findOne({ email: customer.email, _id: { $ne: customerID } })
     .then(found => {
-      if(found) {
+      if (found) {
         errorMessage = "Email already in use.";
         throw new Error("");
       }
@@ -77,14 +74,19 @@ function updateName(req, res) {
 
   let errorMessage = "An error occurred. Please try again later.";
 
-  Promise
-    .resolve()
+  Promise.resolve()
     .then(() => {
-      if(customerID !== req.user.id) {
+      if (customerID !== req.user.id) {
         throw new Error("Requesting customer doesn't match auth.");
       }
     })
-    .then(() => Customer.findByIdAndUpdate(customerID, { firstName, lastName }, { new: true }))
+    .then(() =>
+      Customer.findByIdAndUpdate(
+        customerID,
+        { firstName, lastName },
+        { new: true }
+      )
+    )
     .then(savedCustomer => {
       res.json({
         id: savedCustomer._id,
@@ -104,16 +106,15 @@ function updateEmail(req, res) {
 
   let errorMessage = "An error occurred. Please try again later.";
 
-  Promise
-    .resolve()
+  Promise.resolve()
     .then(() => {
-      if(customerID !== req.user.id) {
+      if (customerID !== req.user.id) {
         throw new Error("Requesting customer doesn't match auth.");
       }
     })
-    .then(() => Customer.findOne({ email, _id: { $ne: customerID }}))
+    .then(() => Customer.findOne({ email, _id: { $ne: customerID } }))
     .then(found => {
-      if(found) {
+      if (found) {
         errorMessage = "Email already in use.";
         throw new Error("");
       }
@@ -138,18 +139,19 @@ function updatePassword(req, res) {
 
   let errorMessage = "Error saving name.";
 
-  bcrypt.compare(oldPassword, req.user.password)
-    .then((match) => {
-      if(customerID !== req.user.id) {
+  bcrypt
+    .compare(oldPassword, req.user.password)
+    .then(match => {
+      if (customerID !== req.user.id) {
         throw new Error("Requesting customer doesn't match auth.");
       }
-      if(!match) {
+      if (!match) {
         errorMessage = "Current password is incorrect.";
         throw new Error(errorMessage);
       }
     })
     .then(() => bcrypt.hash(newPassword, 10))
-    .then((pass) => Customer.findByIdAndUpdate(customerID, { password: pass }))
+    .then(pass => Customer.findByIdAndUpdate(customerID, { password: pass }))
     .then(() => res.json(true))
     .catch(err => {
       console.log(err);

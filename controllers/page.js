@@ -1,8 +1,7 @@
 const Page = require("../models/page");
 
 function getAll(req, res) {
-  Page
-    .find({})
+  Page.find({})
     .then(pages => res.json(pages))
     .catch(err => {
       console.log(err);
@@ -24,8 +23,7 @@ function getPage(req, res) {
 function getPageByPath(req, res) {
   const path = req.params.path;
 
-  Page
-    .findOne({ path })
+  Page.findOne({ path })
     .then(page => res.json(page))
     .catch(err => {
       console.log(err);
@@ -36,13 +34,12 @@ function getPageByPath(req, res) {
 function remove(req, res) {
   const pageIDs = req.body;
 
-  Page
-    .deleteMany({ _id: { $in: pageIDs }})
+  Page.deleteMany({ _id: { $in: pageIDs } })
     .then(() => Page.find({}))
     .then(pages => res.json(pages))
     .catch(err => {
       console.log(err);
-      res.status(400).send("Unable to delete page(s)")
+      res.status(400).send("Unable to delete page(s)");
     });
 }
 
@@ -64,13 +61,12 @@ function add(req, res) {
 function update(req, res) {
   const { title, content, path, metaDescription } = req.body.page;
 
-  Page
-    .findByIdAndUpdate(req.params.id, {
-      title,
-      content,
-      path,
-      metaDescription
-    })
+  Page.findByIdAndUpdate(req.params.id, {
+    title,
+    content,
+    path,
+    metaDescription
+  })
     .then(() => res.json(true))
     .catch(console.log);
 }

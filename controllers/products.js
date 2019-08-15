@@ -8,24 +8,24 @@ const unlink = promisify(require("fs").unlink);
 function getFeatured(req, res) {
   const page = req.query.page;
 
-  Product
-    .paginate({ featured: true }, { page: page, limit: 12, sort: "name" })
-    .then(results => {
-      res.json({items: results.docs, pages: results.pages });
-    });
+  Product.paginate(
+    { featured: true },
+    { page: page, limit: 12, sort: "name" }
+  ).then(results => {
+    res.json({ items: results.docs, pages: results.pages });
+  });
 }
 
 function getAll(req, res) {
   const queryObj = {};
-  if(req.query.category) {
+  if (req.query.category) {
     queryObj.category = req.query.category;
   }
-  if(req.query.search) {
+  if (req.query.search) {
     queryObj.name = new RegExp(`.*${req.query.search}.*`, "i");
   }
 
-  Product
-    .paginate(queryObj, { page: req.query.page, limit: 12 })
+  Product.paginate(queryObj, { page: req.query.page, limit: 12 })
     .then(results => {
       res.json({ items: results.docs, pages: results.pages });
     })
@@ -37,18 +37,21 @@ function getAll(req, res) {
 
 function getByCategory(req, res) {
   const queryObj = {};
-  if(req.query.category) {
+  if (req.query.category) {
     queryObj.$or = [
       { category: req.query.category },
       { path: new RegExp(`^${req.query.path}`) }
     ];
   }
-  if(req.query.search) {
+  if (req.query.search) {
     queryObj.name = new RegExp(`.*${req.query.search}.*`, "i");
   }
 
-  Product
-    .paginate(queryObj, { page: req.query.page, limit: 12, sort: "field path" })
+  Product.paginate(queryObj, {
+    page: req.query.page,
+    limit: 12,
+    sort: "field path"
+  })
     .then(results => {
       res.json({ items: results.docs, pages: results.pages });
     })
@@ -59,18 +62,20 @@ function getByCategory(req, res) {
 }
 
 function getOne(req, res) {
-  Product
-    .findById(req.params.id)
+  Product.findById(req.params.id)
     .then(product => {
-      if(!product) {
+      if (!product) {
         throw new Error("Unable to find product");
       }
       const optionsObj = {};
       const options = product.options;
-      
+
       options.forEach(option => {
-        if(option.options.length) {
-          let defaultIdx = option.options.reduce((acc, el, i) => el.default ? i : acc, 0);
+        if (option.options.length) {
+          let defaultIdx = option.options.reduce(
+            (acc, el, i) => (el.default ? i : acc),
+            0
+          );
 
           optionsObj[option._id] = {
             price: option.options[defaultIdx].price,
@@ -98,8 +103,7 @@ function update(req, res) {
   const productID = req.body._id;
   delete req.body._id;
 
-  Product
-    .findByIdAndUpdate(productID, req.body, { new: true })
+  Product.findByIdAndUpdate(productID, req.body, { new: true })
     .then(updatedProduct => {
       res.json(updatedProduct);
     })
@@ -147,11 +151,10 @@ function addImage(req, res) {
     const destPathMedium = `${filePath}medium/${fileName}${fileExt}`;
     const destPathSmall = `${filePath}small/${fileName}${fileExt}`;
 
-    Promise
-      .all([
-        resizeImage(imagePath, destPathMedium, 400),
-        resizeImage(imagePath, destPathSmall, 100)
-      ])
+    Promise.all([
+      resizeImage(imagePath, destPathMedium, 400),
+      resizeImage(imagePath, destPathSmall, 100)
+    ])
       .then(() => Product.findById(productID))
       .then(product => {
         product.images.push({
@@ -177,7 +180,7 @@ function addImage(req, res) {
 function resizeImage(imagePath, destinationPath, width) {
   return sharp(imagePath)
     .resize({ width })
-    .toFile(destinationPath)
+    .toFile(destinationPath);
 }
 
 function deleteImage(req, res) {
@@ -189,8 +192,11 @@ function deleteImage(req, res) {
   const mediumPath = `./public/images/${imgLocation}/medium/${fileName}`;
   const smallPath = `./public/images/${imgLocation}/small/${fileName}`;
 
-  Product
-    .findByIdAndUpdate(productID, { $pull: { images: { src: fileName } } }, { new: true })
+  Product.findByIdAndUpdate(
+    productID,
+    { $pull: { images: { src: fileName } } },
+    { new: true }
+  )
     .then(updatedProduct => res.json(updatedProduct))
     .catch(err => {
       console.log(err);
@@ -198,7 +204,11 @@ function deleteImage(req, res) {
       throw new Error("Failed to update product");
     })
     .then(() => {
-      return Promise.all([unlink(largePath), unlink(mediumPath), unlink(smallPath)]);
+      return Promise.all([
+        unlink(largePath),
+        unlink(mediumPath),
+        unlink(smallPath)
+      ]);
     })
     .catch(err => console.log(err));
 }
@@ -207,8 +217,7 @@ function deleteProducts(req, res) {
   const productIDs = req.body;
   const images = [];
 
-  Product
-    .find({ _id: { $in: productIDs }})
+  Product.find({ _id: { $in: productIDs } })
     .then(results => {
       results.forEach(product => {
         product.images.forEach(image => {

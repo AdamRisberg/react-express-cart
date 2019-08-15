@@ -16,11 +16,11 @@ function get(req, res) {
 
 function getGeneral(req, res) {
   readFile("./settings/settings.json", "utf8")
-  .then(file => {
-    const settings = JSON.parse(file)
-    return res.json(settings.general);
-  })
-  .catch(err => copyDefaults(req, res, getGeneral));
+    .then(file => {
+      const settings = JSON.parse(file);
+      return res.json(settings.general);
+    })
+    .catch(err => copyDefaults(req, res, getGeneral));
 }
 
 function copyDefaults(req, res, callback) {
@@ -31,8 +31,7 @@ function copyDefaults(req, res, callback) {
 }
 
 function writeSettings(settings) {
-  return writeFile("./settings/settings.json", settings)
-    .then(() => settings);
+  return writeFile("./settings/settings.json", settings).then(() => settings);
 }
 
 function update(req, res) {
@@ -63,11 +62,10 @@ function addImage(req, res) {
     const destPathMedium = `${filePath}medium/${fileName}${fileExt}`;
     const destPathSmall = `${filePath}small/${fileName}${fileExt}`;
 
-    Promise
-      .all([
-        resizeImage(imagePath, destPathMedium, null, 40),
-        resizeImage(imagePath, destPathSmall, null, 67)
-      ])
+    Promise.all([
+      resizeImage(imagePath, destPathMedium, null, 40),
+      resizeImage(imagePath, destPathSmall, null, 67)
+    ])
       .then(() => readFile("./settings/settings.json", "utf8"))
       .then(file => {
         sharp.cache(false);
@@ -91,7 +89,7 @@ function addImage(req, res) {
 function resizeImage(imagePath, destinationPath, width, height) {
   return sharp(imagePath)
     .resize({ width, height })
-    .toFile(destinationPath)
+    .toFile(destinationPath);
 }
 
 function deleteImage(req, res) {
@@ -111,7 +109,11 @@ function deleteImage(req, res) {
     })
     .then(settings => res.json(JSON.parse(settings)))
     .then(() => {
-      return Promise.all([unlink(largePath), unlink(mediumPath), unlink(smallPath)]);
+      return Promise.all([
+        unlink(largePath),
+        unlink(mediumPath),
+        unlink(smallPath)
+      ]);
     })
     .catch(err => console.log(err));
 }

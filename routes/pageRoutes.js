@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const pageController = require("../controllers/page");
-const { authorizeAdmin, userIsAdmin, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  userHasEditPermission
+} = require("../middleware");
 
 router.get("/path/:path", pageController.getPageByPath);
 router.use(authorizeAdmin);

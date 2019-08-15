@@ -1,6 +1,12 @@
 const router = require("express").Router();
 const customerController = require("../controllers/customers");
-const { authorizeAdmin, userIsAdmin, authorizeCustomer, userExists, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  authorizeCustomer,
+  userExists,
+  userHasEditPermission
+} = require("../middleware");
 
 router.use(authorizeCustomer);
 router.use(authorizeAdmin);
@@ -11,7 +17,7 @@ router.put("/password", customerController.updatePassword);
 router.use(userIsAdmin);
 router.get("/", customerController.getAll);
 router.get("/:id", customerController.getOne);
-router.use(userHasEditPermission)
+router.use(userHasEditPermission);
 router.post("/delete", customerController.remove);
 router.put("/:id", customerController.update);
 

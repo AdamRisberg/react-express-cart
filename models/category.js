@@ -25,10 +25,12 @@ const categorySchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  subcategories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "category"
-  }],
+  subcategories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category"
+    }
+  ],
   metaDescription: {
     type: String,
     default: ""
@@ -39,12 +41,13 @@ const categorySchema = new mongoose.Schema({
   }
 });
 
-categorySchema
-  .pre("find", populateChildren)
-  .pre("findOne", populateChildren);
+categorySchema.pre("find", populateChildren).pre("findOne", populateChildren);
 
 function populateChildren(next) {
-  this.populate({ path: "subcategories", options: { sort: { order: 1, _id: 1 }}});
+  this.populate({
+    path: "subcategories",
+    options: { sort: { order: 1, _id: 1 } }
+  });
   next();
 }
 

@@ -3,7 +3,7 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-if(process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").load();
 }
 
@@ -31,7 +31,7 @@ app.use("/api/shipping", require("./routes/shippingRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
 
-if(process.env.NODE_ENV == "production") {
+if (process.env.NODE_ENV == "production") {
   app.use(express.static("client/build"));
 
   app.get("*", (req, res) => {

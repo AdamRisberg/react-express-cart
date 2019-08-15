@@ -17,10 +17,9 @@ function register(req, res) {
   });
   let errorMessage;
 
-  Customer
-    .findOne({ email })
+  Customer.findOne({ email })
     .then(foundCustomer => {
-      if(foundCustomer) {
+      if (foundCustomer) {
         errorMessage = "Email already in use.";
         throw new Error(errorMessage);
       }
@@ -45,7 +44,9 @@ function register(req, res) {
     })
     .catch(err => {
       console.log(err.message);
-      res.status(400).send(errorMessage || "Something went wrong. Please try again later.");
+      res
+        .status(400)
+        .send(errorMessage || "Something went wrong. Please try again later.");
     });
 }
 
@@ -53,9 +54,9 @@ function login(req, res) {
   const { email, password } = req.body;
   const { authorization } = req.headers;
 
-  if(authorization) {
+  if (authorization) {
     handleLoginWithToken(authorization.split(" ")[1], res);
-  } else if(email && password) {
+  } else if (email && password) {
     handleLoginWithPassword(email, password, res);
   } else {
     res.send(400).send("No login info provided");
@@ -88,14 +89,13 @@ function handleLoginWithPassword(email, password, res) {
   let errorMessage;
   let customer;
 
-  Customer
-    .findOne({ email })
+  Customer.findOne({ email })
     .then(foundCustomer => {
-      if(!foundCustomer) {
+      if (!foundCustomer) {
         errorMessage = "Could not find customer";
         throw new Error(errorMessage);
       }
-      if(!bcrypt.compareSync(password, foundCustomer.password)) {
+      if (!bcrypt.compareSync(password, foundCustomer.password)) {
         errorMessage = "Incorrect password";
         throw new Error(errorMessage);
       }
@@ -121,7 +121,9 @@ function handleLoginWithPassword(email, password, res) {
     })
     .catch(err => {
       console.log(err.message);
-      return res.status(400).send(errorMessage || "Unable to login. Please try again later.");
+      return res
+        .status(400)
+        .send(errorMessage || "Unable to login. Please try again later.");
     });
 }
 
@@ -129,9 +131,9 @@ function adminLogin(req, res) {
   const { email, password } = req.body;
   const { authorization } = req.headers;
 
-  if(authorization) {
+  if (authorization) {
     handleAdminLoginWithToken(authorization.split(" ")[1], res);
-  } else if(email && password) {
+  } else if (email && password) {
     handleAdminLoginWithPassword(email, password, res);
   } else {
     res.send(400).send("No login info provided");
@@ -164,20 +166,21 @@ function handleAdminLoginWithPassword(email, password, res) {
   let errorMessage;
   let admin;
 
-  Admin
-    .findOne({ email, active: true })
+  Admin.findOne({ email, active: true })
     .then(foundAdmin => {
-      if(!foundAdmin) {
+      if (!foundAdmin) {
         errorMessage = "Could not find account";
         throw new Error(errorMessage);
       }
-      if(!bcrypt.compareSync(password, foundAdmin.password)) {
+      if (!bcrypt.compareSync(password, foundAdmin.password)) {
         errorMessage = "Incorrect password";
         throw new Error(errorMessage);
       }
       admin = foundAdmin;
 
-      return jwtSign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: "12h" });
+      return jwtSign({ id: admin._id }, process.env.JWT_SECRET, {
+        expiresIn: "12h"
+      });
     })
     .then(token => {
       admin.token = token;
@@ -198,20 +201,21 @@ function handleAdminLoginWithPassword(email, password, res) {
     })
     .catch(err => {
       console.log(err.message);
-      return res.status(400).send(errorMessage || "Unable to login. Please try again later.");
+      return res
+        .status(400)
+        .send(errorMessage || "Unable to login. Please try again later.");
     });
 }
 
 function logout(req, res) {
   const { authorization } = req.headers;
 
-  if(!authorization) {
+  if (!authorization) {
     return res.json(true);
   }
   const token = authorization.split(" ")[1];
 
-  Customer
-    .findOneAndUpdate({ token: token }, { token: "" })
+  Customer.findOneAndUpdate({ token: token }, { token: "" })
     .then(() => res.json(true))
     .catch(console.log);
 }
@@ -219,13 +223,12 @@ function logout(req, res) {
 function adminLogout(req, res) {
   const { authorization } = req.headers;
 
-  if(!authorization) {
+  if (!authorization) {
     return res.json(true);
   }
   const token = authorization.split(" ")[1];
 
-  Admin
-    .findOneAndUpdate({ token: token }, { token: "" })
+  Admin.findOneAndUpdate({ token: token }, { token: "" })
     .then(() => res.json(true))
     .catch(console.log);
 }

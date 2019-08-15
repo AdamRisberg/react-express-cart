@@ -27,11 +27,10 @@ function upload(req, res) {
     const destPathMedium = `${filePath}medium/${fileName}${fileExt}`;
     const destPathSmall = `${filePath}small/${fileName}${fileExt}`;
 
-    Promise
-      .all([
-        resizeImage(imagePath, destPathMedium, 400),
-        resizeImage(imagePath, destPathSmall, 100)
-      ])
+    Promise.all([
+      resizeImage(imagePath, destPathMedium, 400),
+      resizeImage(imagePath, destPathSmall, 100)
+    ])
       .then(_ => {
         res.json({ success: true });
       })
@@ -48,7 +47,7 @@ function upload(req, res) {
 function resizeImage(imagePath, destinationPath, width) {
   return sharp(imagePath)
     .resize({ width })
-    .toFile(destinationPath)
+    .toFile(destinationPath);
 }
 
 function getImages(req, res) {

@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const productController = require("../controllers/products");
-const { authorizeAdmin, userIsAdmin, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  userHasEditPermission
+} = require("../middleware");
 
 router.get("/featured", productController.getFeatured);
 router.get("/category", productController.getByCategory);

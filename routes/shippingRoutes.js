@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const shippingController = require("../controllers/shipping");
-const { authorizeAdmin, userIsAdmin, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  userHasEditPermission
+} = require("../middleware");
 
 router.get("/active", shippingController.getActive);
 router.use(authorizeAdmin);

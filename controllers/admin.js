@@ -2,8 +2,7 @@ const Admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 
 function getAll(req, res) {
-  Admin
-    .paginate({}, { page: req.query.page, limit: 12 })
+  Admin.paginate({}, { page: req.query.page, limit: 12 })
     .then(results => {
       const accounts = results.docs.map(account => {
         const cleanAccount = { ...account._doc };
@@ -22,18 +21,17 @@ function getAll(req, res) {
 function getOne(req, res) {
   const adminID = req.params.id;
 
-  Admin
-    .findById(adminID)
+  Admin.findById(adminID)
     .then(admin => {
       const cleanAdmin = { ...admin._doc };
 
-      if(cleanAdmin.password) {
+      if (cleanAdmin.password) {
         cleanAdmin.hasPassword = true;
       }
       delete cleanAdmin.password;
       delete cleanAdmin.token;
 
-      res.json(cleanAdmin)
+      res.json(cleanAdmin);
     })
     .catch(err => {
       console.log(err);
@@ -44,8 +42,7 @@ function getOne(req, res) {
 function remove(req, res) {
   const adminIDs = req.body;
 
-  Admin
-    .deleteMany({ _id: { $in: adminIDs } })
+  Admin.deleteMany({ _id: { $in: adminIDs } })
     .then(() => Admin.find({}))
     .then(accounts => res.json(accounts))
     .catch(err => {
@@ -59,7 +56,7 @@ function update(req, res) {
   const id = admin._id;
   delete admin._id;
 
-  if(admin.password) {
+  if (admin.password) {
     admin.password = bcrypt.hashSync(admin.password, 10);
   } else {
     delete admin.password;
@@ -67,10 +64,9 @@ function update(req, res) {
 
   let errorMessage;
 
-  Admin
-    .findOne({ email: admin.email, _id: { $ne: id } })
+  Admin.findOne({ email: admin.email, _id: { $ne: id } })
     .then(found => {
-      if(found) {
+      if (found) {
         errorMessage = "Email already in use.";
         throw new Error("Duplicate email");
       }
@@ -90,10 +86,9 @@ function add(req, res) {
   });
   let errorMessage;
 
-  Admin
-    .findOne({ email: admin.email })
+  Admin.findOne({ email: admin.email })
     .then(found => {
-      if(found) {
+      if (found) {
         errorMessage = "Email already in use.";
         throw new Error("Duplicate email");
       }

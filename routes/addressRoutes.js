@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const addressController = require("../controllers/addresses");
-const { authorizeCustomer, authorizeAdmin, userExists } = require("../middleware");
+const {
+  authorizeCustomer,
+  authorizeAdmin,
+  userExists
+} = require("../middleware");
 
 router.use(authorizeCustomer);
 router.use(authorizeAdmin);

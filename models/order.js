@@ -50,7 +50,11 @@ const orderSchema = new mongoose.Schema({
 });
 
 orderSchema.pre("save", function(next) {
-  Counter.findOneAndUpdate({}, { $inc: { counter: 1 } }, { upsert: true, new: true })
+  Counter.findOneAndUpdate(
+    {},
+    { $inc: { counter: 1 } },
+    { upsert: true, new: true }
+  )
     .then(counter => {
       this.orderNumber = counter.counter;
       next();

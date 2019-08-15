@@ -1,8 +1,7 @@
 const ShippingMethod = require("../models/shipping");
 
 function getAll(req, res) {
-  ShippingMethod
-    .paginate({}, { page: req.query.page, limit: 12 })
+  ShippingMethod.paginate({}, { page: req.query.page, limit: 12 })
     .then(results => {
       res.json({ items: results.docs, pages: results.pages });
     })
@@ -13,8 +12,7 @@ function getAll(req, res) {
 }
 
 function getActive(req, res) {
-  ShippingMethod
-    .find({ active: true })
+  ShippingMethod.find({ active: true })
     .then(methods => res.json(methods))
     .catch(err => {
       console.log(err);
@@ -23,8 +21,7 @@ function getActive(req, res) {
 }
 
 function getOne(req, res) {
-  ShippingMethod
-    .findById(req.params.id)
+  ShippingMethod.findById(req.params.id)
     .then(shipping => res.json({ shipping }))
     .catch(console.log);
 }
@@ -42,8 +39,7 @@ function update(req, res) {
   const shippingID = req.body._id;
   delete req.body._id;
 
-  ShippingMethod 
-    .findByIdAndUpdate(shippingID, req.body, { new: true })
+  ShippingMethod.findByIdAndUpdate(shippingID, req.body, { new: true })
     .then(updatedShipping => res.json(updatedShipping))
     .catch(err => {
       console.log(err);
@@ -54,8 +50,7 @@ function update(req, res) {
 function remove(req, res) {
   const shippingIDs = req.body;
 
-  ShippingMethod
-    .deleteMany({ _id: { $in: shippingIDs }})
+  ShippingMethod.deleteMany({ _id: { $in: shippingIDs } })
     .then(() => ShippingMethod.find({}))
     .then(shipping => res.json(shipping))
     .catch(err => {

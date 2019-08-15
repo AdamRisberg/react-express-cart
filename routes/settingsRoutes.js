@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const settingsController = require("../controllers/settings");
-const { authorizeAdmin, userHasEditPermission, userIsAdmin } = require("../middleware");
+const {
+  authorizeAdmin,
+  userHasEditPermission,
+  userIsAdmin
+} = require("../middleware");
 
 router.get("/general", settingsController.getGeneral);
 router.use(authorizeAdmin);

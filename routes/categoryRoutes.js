@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const categoryController = require("../controllers/categories");
-const { authorizeAdmin, userIsAdmin, userHasEditPermission } = require("../middleware");
+const {
+  authorizeAdmin,
+  userIsAdmin,
+  userHasEditPermission
+} = require("../middleware");
 
 router.get("/", categoryController.getAll);
 router.get("/:id", categoryController.getOne);

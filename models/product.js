@@ -22,28 +22,36 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  info: [{
-    title: String,
-    body: String
-  }],
+  info: [
+    {
+      title: String,
+      body: String
+    }
+  ],
   price: {
     type: Number,
     default: 0
   },
-  images: [{
-    src: String,
-    alt: String
-  }],
-  options: [{
-    optionType: String,
-    label: String,
-    options: [{
+  images: [
+    {
+      src: String,
+      alt: String
+    }
+  ],
+  options: [
+    {
+      optionType: String,
       label: String,
-      price: Number,
-      color: String,
-      default: Boolean
-    }]
-  }],
+      options: [
+        {
+          label: String,
+          price: Number,
+          color: String,
+          default: Boolean
+        }
+      ]
+    }
+  ],
   metaDescription: {
     type: String,
     default: ""

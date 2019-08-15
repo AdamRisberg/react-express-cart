@@ -5,7 +5,10 @@ const fs = require("fs");
 const { promisify } = require("util");
 const stripe = require("stripe")("sk_test_bVsmWqjL4C09q3NnBz4sok9S");
 const nodemailer = require("nodemailer");
-const { createConfirmationEmailHTML, createConfirmationEmailText } = require("../utils/utils");
+const {
+  createConfirmationEmailHTML,
+  createConfirmationEmailText
+} = require("../utils/utils");
 const readFile = promisify(fs.readFile);
 
 function createOrder(req, res) {
@@ -32,23 +35,24 @@ function createOrder(req, res) {
     status: "Processing",
     date: new Date(),
     shipping: 0,
-    history: [{
-      date: new Date(),
-      status: "Processing",
-      notified: "Yes",
-      comment: "",
-      tracking: []
-    }]
+    history: [
+      {
+        date: new Date(),
+        status: "Processing",
+        notified: "Yes",
+        comment: "",
+        tracking: []
+      }
+    ]
   });
 
-  if(userID) {
+  if (userID) {
     order.customer = userID;
   }
 
-  ShippingMethod
-    .findById(shippingID)
+  ShippingMethod.findById(shippingID)
     .then(method => {
-      if(!method) {
+      if (!method) {
         throw new Error("Could not find shipping method.");
       }
       order.shipping = method.price;
@@ -58,10 +62,10 @@ function createOrder(req, res) {
       order.items = cart.items;
 
       order.subtotal = order.items.reduce((acc, item) => {
-        const price = acc + (item.price * item.quantity);
+        const price = acc + item.price * item.quantity;
         return parseFloat(price.toFixed(2), 10);
       }, 0);
-      
+
       const total = order.subtotal + order.shipping;
       order.total = parseFloat(total.toFixed(2), 10);
 
@@ -85,8 +89,7 @@ function createOrder(req, res) {
 }
 
 function getShippingMethods(req, res) {
-  ShippingMethod
-    .find({})
+  ShippingMethod.find({})
     .then(methods => res.json(methods))
     .catch(console.log);
 }
@@ -107,7 +110,7 @@ function sendConfirmationEmail(order) {
           pass: process.env.EMAIL_PASSWORD
         }
       });
-    
+
       const mailOptions = {
         from: emailSettings.email_address,
         to: order.email,
@@ -115,9 +118,9 @@ function sendConfirmationEmail(order) {
         text: createConfirmationEmailText(order, companyName),
         html: createConfirmationEmailHTML(order, companyName)
       };
-    
-      transporter.sendMail(mailOptions, (error) => {
-        if(error) {
+
+      transporter.sendMail(mailOptions, error => {
+        if (error) {
           console.log(error);
         }
       });

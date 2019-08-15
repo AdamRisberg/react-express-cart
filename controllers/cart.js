@@ -5,10 +5,9 @@ function add(req, res) {
   const { cartItem, cartID } = req.body;
   let errorMessage;
 
-  Product
-    .findById(cartItem.productID)
+  Product.findById(cartItem.productID)
     .then(product => {
-      if(!verifyPrice(cartItem, product)) {
+      if (!verifyPrice(cartItem, product)) {
         errorMessage = "Unable to verify price";
         throw new Error(errorMessage);
       }
@@ -18,15 +17,18 @@ function add(req, res) {
     .then(cart => {
       let found = false;
 
-      for(let i = 0; i < cart.items.length; i++) {
-        if(cartItem.productID === cart.items[i].productID && cartItem.optionsKey === cart.items[i].optionsKey) {
+      for (let i = 0; i < cart.items.length; i++) {
+        if (
+          cartItem.productID === cart.items[i].productID &&
+          cartItem.optionsKey === cart.items[i].optionsKey
+        ) {
           cart.items[i].quantity += cartItem.quantity;
           found = true;
           break;
         }
       }
 
-      if(!found) {
+      if (!found) {
         cart.items.push(cartItem);
       }
       cart.lastUpdated = new Date();
@@ -48,10 +50,9 @@ function get(req, res) {
   const cartID = req.params.id;
   let cart;
 
-  Cart
-    .findById(cartID)
+  Cart.findById(cartID)
     .then(foundCart => {
-      if(!foundCart) throw new Error("Could not find cart");
+      if (!foundCart) throw new Error("Could not find cart");
 
       const IDs = foundCart.items.map(item => item.productID);
       cart = foundCart;
@@ -76,8 +77,7 @@ function get(req, res) {
 function remove(req, res) {
   const { cartID, id, optionsKey } = req.body;
 
-  Cart
-    .findById(cartID)
+  Cart.findById(cartID)
     .then(cart => {
       cart.items = cart.items.filter(item => {
         return item._id !== id && item.optionsKey !== optionsKey;
@@ -96,8 +96,7 @@ function remove(req, res) {
 function clear(req, res) {
   const { cartID } = req.body;
 
-  Cart
-    .findByIdAndUpdate(cartID, { $set: { items: [] }})
+  Cart.findByIdAndUpdate(cartID, { $set: { items: [] } })
     .then(_ => res.json([]))
     .catch(err => {
       console.log(err.message);
@@ -109,31 +108,31 @@ function verifyAllPrices(cart, products) {
   cart.items.forEach(item => {
     let found;
 
-    for(let i = 0; i < products.length; i++) {
-      if(item.productID === products[i].id) {
+    for (let i = 0; i < products.length; i++) {
+      if (item.productID === products[i].id) {
         found = products[i];
       }
     }
 
-    if(!verifyPrice(item, found)) {
+    if (!verifyPrice(item, found)) {
       item.remove();
     }
   });
 }
 
 function verifyPrice(cartItem, product) {
-  if(!product) return false;
+  if (!product) return false;
 
   cartItem.price = product.price;
 
-  for(let j = 0; j < cartItem.options.length; j++) {
+  for (let j = 0; j < cartItem.options.length; j++) {
     const itemOption = cartItem.options[j];
     const productOptions = findOption(product.options, itemOption.optionID);
 
-    if(!productOptions) return false;
+    if (!productOptions) return false;
 
-    for(let i = 0; i < productOptions.length; i++) {
-      if(productOptions[i].label === itemOption.value) {
+    for (let i = 0; i < productOptions.length; i++) {
+      if (productOptions[i].label === itemOption.value) {
         itemOption.price = productOptions[i].price;
         cartItem.price += itemOption.price;
       }
@@ -143,8 +142,8 @@ function verifyPrice(cartItem, product) {
 }
 
 function findOption(options, findId) {
-  for(let i = 0; i < options.length; i++) {
-    if(options[i].id === findId) {
+  for (let i = 0; i < options.length; i++) {
+    if (options[i].id === findId) {
       return options[i].options;
     }
   }
