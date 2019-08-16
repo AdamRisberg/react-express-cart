@@ -147,7 +147,7 @@ class Category extends Component {
       return <Redirect to="/" />;
     }
 
-    if (this.state.loading) {
+    if (this.state.loading || this.props.loadingCategories) {
       return <Spinner />;
     }
 
@@ -174,8 +174,10 @@ class Category extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, categories }) => ({
+  storeName: settings.store_name,
+  categories: categories.categories,
+  loadingCategories: categories.loadingCategories
 });
 
 export default connect(mapStateToProps)(Category);

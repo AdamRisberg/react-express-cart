@@ -9,6 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
 import { fetchSettings } from "./redux/settings/settings.actions";
+import { fetchCategories } from "./redux/categories/categories-actions";
 
 import Header from "./storefront-components/Header/Header";
 import Footer from "./storefront-components/Footer/Footer";
@@ -58,31 +59,10 @@ class Storefront extends Component {
 
   componentDidMount() {
     this.props.fetchSettings();
+    this.props.fetchCategories();
     this.props.fetchCart();
 
     const token = window.localStorage.getItem("session");
-
-    this.cancelTokens.getCatsRequest = api.getCancelTokenSource();
-
-    api
-      .get(
-        "/api/categories",
-        { cancelToken: this.cancelTokens.getCatsRequest.token },
-        false,
-        false
-      )
-      .then(res => {
-        this.setState({
-          categories: res.data,
-          loadingCategories: false
-        });
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err);
-      });
 
     if (token) {
       this.cancelTokens.tokenLoginRequest = api.getCancelTokenSource();
@@ -325,7 +305,6 @@ class Storefront extends Component {
           user={this.state.user}
           showLogin={this.showLogin}
           showRegister={this.showRegister}
-          categories={this.state.categories}
           onHamburgerClick={this.onHamburgerClick}
         />
         <div className={styles.MainBody}>
@@ -333,34 +312,9 @@ class Storefront extends Component {
             <HelmetProvider>
               <Suspense fallback={<Spinner />}>
                 <Switch>
-                  <Route
-                    path="/"
-                    exact
-                    render={props => (
-                      <Home
-                        {...props}
-                        categories={this.state.categories}
-                        loadingCategories={this.state.loadingCategories}
-                      />
-                    )}
-                  />
-                  <Route
-                    path="/product/:id"
-                    render={props => (
-                      <Product {...props} categories={this.state.categories} />
-                    )}
-                  />
-                  <Route
-                    path="/category/:any"
-                    render={props =>
-                      this.state.loadingCategories ? null : (
-                        <Category
-                          {...props}
-                          categories={this.state.categories}
-                        />
-                      )
-                    }
-                  />
+                  <Route path="/" exact component={Home} />
+                  <Route path="/product/:id" component={Product} />
+                  <Route path="/category/:any" component={Category} />
                   <Route path="/search" component={Products} />
                   <Route path="/checkout/cart" component={Cart} />
                   <Route path="/checkout/success" component={Success} />
@@ -456,7 +410,6 @@ class Storefront extends Component {
         <SideNav
           loggedIn={this.state.loggedIn}
           onLogout={this.onLogout}
-          categories={this.state.categories}
           show={this.state.showSideNav}
           closeSideNav={this.closeSideNav}
           showLogin={this.showLogin}
@@ -469,7 +422,8 @@ class Storefront extends Component {
 
 const mapDispatchToProps = dispatch => ({
   fetchCart: () => dispatch(fetchCart()),
-  fetchSettings: () => dispatch(fetchSettings())
+  fetchSettings: () => dispatch(fetchSettings()),
+  fetchCategories: () => dispatch(fetchCategories())
 });
 
 export default connect(

@@ -225,8 +225,9 @@ class SideNav extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, categories }) => ({
+  storeName: settings.store_name,
+  categories: categories.categories
 });
 
 export default connect(mapStateToProps)(SideNav);

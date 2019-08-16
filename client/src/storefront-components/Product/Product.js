@@ -171,8 +171,9 @@ class Product extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, categories }) => ({
+  storeName: settings.store_name,
+  categories: categories.categories
 });
 
 const mapDispatchToProps = dispatch => ({
