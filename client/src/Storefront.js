@@ -47,11 +47,9 @@ class Storefront extends Component {
     showLogin: false,
     showSideNav: false,
     isRegister: false,
-    categories: [],
     loggedIn: false,
     user: {},
     loadingUser: true,
-    loadingCategories: true,
     scriptLoaded: false
   };
 
