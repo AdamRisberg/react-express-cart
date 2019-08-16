@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
 import api from "../../api";
 
 import Spinner from "../../shared-components/Spinner/Spinner";
@@ -61,4 +62,8 @@ class Order extends Component {
   }
 }
 
-export default Order;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Order);

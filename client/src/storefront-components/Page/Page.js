@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
 import api from "../../api";
 
 import RenderHTML from "../../shared-components/RenderHTML/RenderHTML";
@@ -86,4 +87,8 @@ class Page extends Component {
   }
 }
 
-export default Page;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Page);

@@ -171,11 +171,15 @@ class Product extends Component {
   }
 }
 
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
 const mapDispatchToProps = dispatch => ({
   addToCart: item => dispatch(addItem(item))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Product);

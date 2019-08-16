@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
 
 import AddressCard from "./AddressCard/AddressCard";
 import AddressForm from "../../shared-components/AddressForm/AddressForm";
@@ -107,4 +108,8 @@ class Addresses extends Component {
   }
 }
 
-export default Addresses;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Addresses);

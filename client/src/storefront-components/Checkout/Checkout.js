@@ -372,10 +372,11 @@ class Checkout extends Component {
   }
 }
 
-const mapStateToProps = ({ cart }) => ({
+const mapStateToProps = ({ cart, settings }) => ({
   cart: cart.cartItems,
   cartID: cart.cartID,
-  loadingCart: cart.loadingCart
+  loadingCart: cart.loadingCart,
+  storeName: settings.store_name
 });
 
 const mapDispatchToProps = dispatch => ({

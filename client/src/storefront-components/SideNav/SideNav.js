@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import ArrowIcon from "../../shared-components/icons/ArrowIcon/ArrowIcon";
 
@@ -224,4 +225,8 @@ class SideNav extends Component {
   }
 }
 
-export default SideNav;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(SideNav);

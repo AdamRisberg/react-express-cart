@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
 
 import Order from "../../Order/Order";
 
@@ -31,4 +32,8 @@ const Success = props => {
   );
 };
 
-export default Success;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Success);

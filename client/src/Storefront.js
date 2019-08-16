@@ -8,6 +8,7 @@ import scriptLoader from "react-async-script";
 import { HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
+import { fetchSettings } from "./redux/settings/settings.actions";
 
 import Header from "./storefront-components/Header/Header";
 import Footer from "./storefront-components/Footer/Footer";
@@ -50,39 +51,30 @@ class Storefront extends Component {
     user: {},
     loadingUser: true,
     loadingCategories: true,
-    scriptLoaded: false,
-    settings: {}
+    scriptLoaded: false
   };
 
   cancelTokens = {};
 
   componentDidMount() {
+    this.props.fetchSettings();
     this.props.fetchCart();
 
     const token = window.localStorage.getItem("session");
 
     this.cancelTokens.getCatsRequest = api.getCancelTokenSource();
-    this.cancelTokens.getSettingsRequest = api.getCancelTokenSource();
 
-    Promise.all([
-      api.get(
+    api
+      .get(
         "/api/categories",
         { cancelToken: this.cancelTokens.getCatsRequest.token },
         false,
         false
-      ),
-      api.get(
-        "/api/settings/general",
-        { cancelToken: this.cancelTokens.getSettingsRequest.token },
-        false,
-        false
       )
-    ])
-      .then(([cats, settings]) => {
+      .then(res => {
         this.setState({
-          categories: cats.data,
-          loadingCategories: false,
-          settings: settings.data
+          categories: res.data,
+          loadingCategories: false
         });
       })
       .catch(err => {
@@ -335,7 +327,6 @@ class Storefront extends Component {
           showRegister={this.showRegister}
           categories={this.state.categories}
           onHamburgerClick={this.onHamburgerClick}
-          settings={this.state.settings}
         />
         <div className={styles.MainBody}>
           <div className={styles.Content}>
@@ -348,9 +339,6 @@ class Storefront extends Component {
                     render={props => (
                       <Home
                         {...props}
-                        storeName={this.state.settings.store_name}
-                        metaTitle={this.state.settings.meta_title}
-                        metaDescription={this.state.settings.meta_description}
                         categories={this.state.categories}
                         loadingCategories={this.state.loadingCategories}
                       />
@@ -359,11 +347,7 @@ class Storefront extends Component {
                   <Route
                     path="/product/:id"
                     render={props => (
-                      <Product
-                        {...props}
-                        storeName={this.state.settings.store_name}
-                        categories={this.state.categories}
-                      />
+                      <Product {...props} categories={this.state.categories} />
                     )}
                   />
                   <Route
@@ -372,38 +356,20 @@ class Storefront extends Component {
                       this.state.loadingCategories ? null : (
                         <Category
                           {...props}
-                          storeName={this.state.settings.store_name}
                           categories={this.state.categories}
                         />
                       )
                     }
                   />
                   <Route path="/search" component={Products} />
-                  <Route
-                    path="/checkout/cart"
-                    render={props => (
-                      <Cart
-                        {...props}
-                        storeName={this.state.settings.store_name}
-                      />
-                    )}
-                  />
-                  <Route
-                    path="/checkout/success"
-                    render={props => (
-                      <Success
-                        {...props}
-                        storeName={this.state.settings.store_name}
-                      />
-                    )}
-                  />
+                  <Route path="/checkout/cart" component={Cart} />
+                  <Route path="/checkout/success" component={Success} />
                   <Route
                     path="/checkout"
                     render={props =>
                       this.state.loadingUser ? null : (
                         <CheckoutWithScript
                           {...props}
-                          storeName={this.state.settings.store_name}
                           asyncScriptOnLoad={this.handleScriptLoad}
                           loggedIn={this.state.loggedIn}
                           onLogin={this.onLogin}
@@ -421,7 +387,6 @@ class Storefront extends Component {
                       this.state.loadingUser ? null : (
                         <Profile
                           {...props}
-                          storeName={this.state.settings.store_name}
                           refreshUser={this.refreshUser}
                           user={this.state.user}
                         />
@@ -434,7 +399,6 @@ class Storefront extends Component {
                       this.state.loadingUser ? null : (
                         <Orders
                           {...props}
-                          storeName={this.state.settings.store_name}
                           userID={this.state.user.id}
                           loggedIn={this.state.loggedIn}
                         />
@@ -448,7 +412,6 @@ class Storefront extends Component {
                       this.state.loadingUser ? null : (
                         <Addresses
                           {...props}
-                          storeName={this.state.settings.store_name}
                           addAddress={this.addAddress}
                           editAddress={this.editAddress}
                           deleteAddress={this.deleteAddress}
@@ -464,22 +427,13 @@ class Storefront extends Component {
                       this.state.loadingUser ? null : (
                         <Order
                           {...props}
-                          storeName={this.state.settings.store_name}
                           loggedIn={this.state.loggedIn}
                           user={this.state.user}
                         />
                       )
                     }
                   />
-                  <Route
-                    path="/:page"
-                    render={props => (
-                      <Page
-                        {...props}
-                        storeName={this.state.settings.store_name}
-                      />
-                    )}
-                  />
+                  <Route path="/:page" component={Page} />
                 </Switch>
               </Suspense>
             </HelmetProvider>
@@ -507,7 +461,6 @@ class Storefront extends Component {
           closeSideNav={this.closeSideNav}
           showLogin={this.showLogin}
           showRegister={this.showRegister}
-          storeName={this.state.settings.store_name}
         />
       </div>
     );
@@ -515,7 +468,8 @@ class Storefront extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchCart: () => dispatch(fetchCart())
+  fetchCart: () => dispatch(fetchCart()),
+  fetchSettings: () => dispatch(fetchSettings())
 });
 
 export default connect(

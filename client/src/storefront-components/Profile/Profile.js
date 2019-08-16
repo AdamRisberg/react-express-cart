@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { isEmail } from "validator";
+import { connect } from "react-redux";
 import api from "../../api";
+
 import Button from "../Button/Button";
 import Title from "../../shared-components/Title/Title";
 import FlipMove from "react-flip-move";
@@ -342,4 +344,8 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = ({ settings }) => ({
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Profile);

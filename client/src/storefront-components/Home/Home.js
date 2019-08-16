@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
 
 import Category from "../Category/Category";
 
@@ -24,4 +25,10 @@ const Home = ({
   );
 };
 
-export default Home;
+const mapStateToProps = ({ settings }) => ({
+  metaTitle: settings.meta_title,
+  metaDescription: settings.meta_description,
+  storeName: settings.store_name
+});
+
+export default connect(mapStateToProps)(Home);

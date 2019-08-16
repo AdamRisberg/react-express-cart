@@ -71,10 +71,11 @@ function countItems(props) {
   }, 0);
 }
 
-const mapStateToProps = ({ cart }) => {
+const mapStateToProps = ({ cart, settings }) => {
   return {
     cart: cart.cartItems,
-    loadingCart: cart.loadingCart
+    loadingCart: cart.loadingCart,
+    storeName: settings.store_name
   };
 };
 
