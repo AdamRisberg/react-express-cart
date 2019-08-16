@@ -6,6 +6,8 @@ import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import scriptLoader from "react-async-script";
 import { HelmetProvider } from "react-helmet-async";
+import { connect } from "react-redux";
+import { fetchCart } from "./redux/cart/cart-actions";
 
 import Header from "./storefront-components/Header/Header";
 import Footer from "./storefront-components/Footer/Footer";
@@ -44,24 +46,20 @@ class Storefront extends Component {
     showSideNav: false,
     isRegister: false,
     categories: [],
-    cart: [],
-    cartID: "",
     loggedIn: false,
     user: {},
     loadingUser: true,
-    loadingCart: true,
     loadingCategories: true,
     scriptLoaded: false,
-    showCartAdded: false,
-    cartItemAdded: null,
     settings: {}
   };
 
   cancelTokens = {};
 
   componentDidMount() {
+    this.props.fetchCart();
+
     const token = window.localStorage.getItem("session");
-    const cartID = window.localStorage.getItem("cartSession");
 
     this.cancelTokens.getCatsRequest = api.getCancelTokenSource();
     this.cancelTokens.getSettingsRequest = api.getCancelTokenSource();
@@ -123,36 +121,6 @@ class Storefront extends Component {
         });
     } else {
       this.setState(() => ({ loadingUser: false, loggedIn: false }));
-    }
-
-    if (cartID) {
-      this.cancelTokens.getCartRequest = api.getCancelTokenSource();
-
-      api
-        .get(
-          "/api/cart/" + cartID,
-          { cancelToken: this.cancelTokens.getCartRequest.token },
-          false,
-          false
-        )
-        .then(response => {
-          window.localStorage.setItem("cartSession", response.data.cartID);
-          this.setState(() => ({
-            cartID: response.data.cartID,
-            cart: response.data.cart,
-            loadingCart: false
-          }));
-        })
-        .catch(err => {
-          if (api.checkCancel(err)) {
-            return;
-          }
-          window.localStorage.removeItem("cartSession");
-          this.setState(() => ({ loadingCart: false }));
-          console.log(err.response);
-        });
-    } else {
-      this.setState(() => ({ loadingCart: false }));
     }
   }
 
@@ -236,106 +204,6 @@ class Storefront extends Component {
         console.log(err.response);
       });
   };
-
-  addToCart = (add, update) => {
-    this.cancelTokens.addCartPostRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/cart/add",
-        { cartID: this.state.cartID, cartItem: add },
-        { cancelToken: this.cancelTokens.addCartPostRequest.token },
-        false,
-        false
-      )
-      .then(response => {
-        window.localStorage.setItem("cartSession", response.data.cartID);
-        this.setState(() => ({
-          cartID: response.data.cartID,
-          cart: response.data.cart,
-          showCartAdded: !update,
-          cartItemAdded: !update ? add : null
-        }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err.response);
-      });
-  };
-
-  closeCartAdded = () => {
-    this.setState(() => ({ showCartAdded: false, cartItemAdded: null }));
-  };
-
-  removeFromCart = (id, optionsKey) => {
-    this.cancelTokens.removeCartRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/cart/remove",
-        { cartID: this.state.cartID, id, optionsKey },
-        { cancelToken: this.cancelTokens.removeCartRequest.token },
-        false,
-        false
-      )
-      .then(response => {
-        this.setState(() => ({ cart: response.data }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err.response);
-      });
-  };
-
-  clearCart = () => {
-    this.cancelTokens.clearCartRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/cart/clear",
-        { cartID: this.state.cartID },
-        { cancelToken: this.cancelTokens.clearCartRequest.token },
-        false,
-        false
-      )
-      .then(response => {
-        this.setState(() => ({ cart: response.data }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        window.localStorage.removeItem("cartSession");
-        console.log(err.response);
-      });
-  };
-
-  updateCart = (id, optionsKey, quantity) => {
-    const cart = this.state.cart;
-    let cartItem;
-
-    for (let i = 0; i < cart.length; i++) {
-      if (cart[i].productID === id && cart[i].optionsKey === optionsKey) {
-        cartItem = cart[i];
-        break;
-      }
-    }
-
-    const quantityChange = quantity - cartItem.quantity;
-    cartItem.quantity = quantityChange;
-
-    this.addToCart(cartItem, true);
-  };
-
-  getCartSize() {
-    return this.state.cart.reduce((acc, item) => {
-      return acc + item.quantity;
-    }, 0);
-  }
 
   showLogin = e => {
     if (e) e.preventDefault();
@@ -467,7 +335,6 @@ class Storefront extends Component {
           showRegister={this.showRegister}
           categories={this.state.categories}
           onHamburgerClick={this.onHamburgerClick}
-          cartSize={this.getCartSize()}
           settings={this.state.settings}
         />
         <div className={styles.MainBody}>
@@ -496,7 +363,6 @@ class Storefront extends Component {
                         {...props}
                         storeName={this.state.settings.store_name}
                         categories={this.state.categories}
-                        addToCart={this.addToCart}
                       />
                     )}
                   />
@@ -515,17 +381,12 @@ class Storefront extends Component {
                   <Route path="/search" component={Products} />
                   <Route
                     path="/checkout/cart"
-                    render={props =>
-                      this.state.loadingCart ? null : (
-                        <Cart
-                          {...props}
-                          storeName={this.state.settings.store_name}
-                          updateCart={this.updateCart}
-                          removeFromCart={this.removeFromCart}
-                          cart={this.state.cart}
-                        />
-                      )
-                    }
+                    render={props => (
+                      <Cart
+                        {...props}
+                        storeName={this.state.settings.store_name}
+                      />
+                    )}
                   />
                   <Route
                     path="/checkout/success"
@@ -539,18 +400,14 @@ class Storefront extends Component {
                   <Route
                     path="/checkout"
                     render={props =>
-                      this.state.loadingUser ||
-                      this.state.loadingCart ? null : (
+                      this.state.loadingUser ? null : (
                         <CheckoutWithScript
                           {...props}
                           storeName={this.state.settings.store_name}
                           asyncScriptOnLoad={this.handleScriptLoad}
-                          clearCart={this.clearCart}
                           loggedIn={this.state.loggedIn}
                           onLogin={this.onLogin}
                           onRegister={this.onRegister}
-                          cart={this.state.cart}
-                          cartID={this.state.cartID}
                           user={this.state.user}
                           scriptLoaded={this.state.scriptLoaded}
                         />
@@ -638,17 +495,7 @@ class Storefront extends Component {
                 />
               </Modal>
             )}
-            {!this.state.showCartAdded ? null : (
-              <Modal
-                close={this.closeCartAdded}
-                renderContent={close => (
-                  <CartAdded
-                    cartItem={this.state.cartItemAdded}
-                    close={close}
-                  />
-                )}
-              />
-            )}
+            <CartAdded />
           </div>
         </div>
         <Footer />
@@ -667,4 +514,11 @@ class Storefront extends Component {
   }
 }
 
-export default Storefront;
+const mapDispatchToProps = dispatch => ({
+  fetchCart: () => dispatch(fetchCart())
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Storefront);

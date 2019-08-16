@@ -8,13 +8,9 @@ import styles from "./CartItem.module.css";
 
 class CartItem extends Component {
   state = {
-    quantity: 0,
+    quantity: this.props.quantity,
     needsUpdate: false
   };
-
-  componentDidMount() {
-    this.setState({ quantity: this.props.quantity });
-  }
 
   handleChange = e => {
     const quantity = parseInt(e.target.value, 10);
@@ -96,10 +92,7 @@ class CartItem extends Component {
           <Button
             text="Remove"
             onClick={() =>
-              this.props.removeFromCart(
-                this.props.productID,
-                this.props.optionsKey
-              )
+              this.props.removeFromCart(this.props._id, this.props.optionsKey)
             }
             buttonStyle="Cancel"
             float="Right"

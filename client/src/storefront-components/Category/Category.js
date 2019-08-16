@@ -150,8 +150,6 @@ class Category extends Component {
       return <Spinner />;
     }
 
-    console.log(this.props.location);
-
     return (
       <React.Fragment>
         {this.injectMetaData()}

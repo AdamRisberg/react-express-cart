@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import MainNav from "./MainNav/MainNav";
 import AccountNav from "./AccountNav/AccountNav";
 import SearchBox from "./SearchBox/SearchBox";
@@ -36,4 +38,8 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = ({ cart }) => ({
+  cartSize: cart.cartSize
+});
+
+export default connect(mapStateToProps)(Header);

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
   CardNumberElement,
   CardExpiryElement,
-  CardCVCElement,
+  CardCvcElement,
   injectStripe
 } from "react-stripe-elements";
 
@@ -109,7 +109,7 @@ class PaymentForm extends Component {
                 </label>
                 <label className={styles.Label} htmlFor="cvc">
                   CVV
-                  <CardCVCElement
+                  <CardCvcElement
                     onFocus={() => this.onFocus("cvvClass")}
                     onBlur={() => this.onBlur("cvvClass")}
                     placeholder=""

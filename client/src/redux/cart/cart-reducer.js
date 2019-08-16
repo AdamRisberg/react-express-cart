@@ -1,7 +1,9 @@
 import cartActionTypes from "./cart-types";
+import { getCartSize } from "./cart-utils";
 
 const INITIAL_STATE = {
   cartItems: [],
+  cartSize: 0,
   cartID: "",
   loadingCart: true,
   showCartAdded: false,
@@ -14,7 +16,8 @@ const cartReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         cartID: action.payload.cartID,
-        cart: action.payload.cart,
+        cartItems: action.payload.cartItems,
+        cartSize: getCartSize(action.payload.cartItems),
         loadingCart: false
       };
     case cartActionTypes.FETCH_CART_ERROR:
@@ -26,19 +29,22 @@ const cartReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         cartID: action.payload.cartID,
-        cart: action.payload.cart,
+        cartItems: action.payload.cartItems,
+        cartSize: getCartSize(action.payload.cartItems),
         cartItemAdded: action.payload.cartItemAdded,
         showCartAdded: action.payload.showCartAdded
       };
     case cartActionTypes.UPDATE_CART:
       return {
         ...state,
-        cart: action.payload.cart
+        cartItems: action.payload.cartItems,
+        cartSize: getCartSize(action.payload.cartItems)
       };
     case cartActionTypes.CLOSE_CART_ADDED:
       return {
         ...state,
-        showCartAdded: false
+        showCartAdded: false,
+        cartItemAdded: null
       };
     default:
       return state;

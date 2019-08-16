@@ -80,7 +80,7 @@ function remove(req, res) {
   Cart.findById(cartID)
     .then(cart => {
       cart.items = cart.items.filter(item => {
-        return item._id !== id && item.optionsKey !== optionsKey;
+        return item.id !== id || item.optionsKey !== optionsKey;
       });
       return cart.save();
     })

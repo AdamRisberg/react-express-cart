@@ -1,9 +1,9 @@
 import cartActionTypes from "./cart-types";
 import api from "../../api";
 
-export const fetchCartSuccess = (cartID, cart) => ({
+export const fetchCartSuccess = (cartID, cartItems) => ({
   type: cartActionTypes.FETCH_CART_SUCCESS,
-  payload: { cartID, cart }
+  payload: { cartID, cartItems }
 });
 
 export const fetchCartError = () => ({
@@ -18,12 +18,7 @@ export const fetchCart = () => {
       .get("/api/cart/" + cartID, {}, false, false)
       .then(response => {
         window.localStorage.setItem("cartSession", response.data.cartID);
-        dispatch(
-          fetchCartSuccess({
-            cartID: response.data.cartID,
-            cart: response.data.cart
-          })
-        );
+        dispatch(fetchCartSuccess(response.data.cartID, response.data.cart));
       })
       .catch(err => {
         window.localStorage.removeItem("cartSession");
@@ -33,19 +28,19 @@ export const fetchCart = () => {
   };
 };
 
-const itemAdded = (cartID, cart, update, cartItemAdded) => ({
-  type: cartActionTypes.CART_UPDATED,
+const itemAdded = (cartID, cartItems, update, cartItemAdded) => ({
+  type: cartActionTypes.ITEM_ADDED,
   payload: {
     cartID,
-    cart,
+    cartItems,
     showCartAdded: !update,
     cartItemAdded: !update ? cartItemAdded : null
   }
 });
 
-const updateCart = cart => ({
+const updateCart = cartItems => ({
   type: cartActionTypes.UPDATE_CART,
-  payload: { cart }
+  payload: { cartItems }
 });
 
 export const closeCartAdded = () => ({
@@ -87,12 +82,15 @@ export const removeItem = (id, optionsKey) => {
 
 export const updateItem = (id, optionsKey, quantity) => {
   return (dispatch, getState) => {
-    const { cart } = getState().cart;
+    const { cartItems } = getState().cart;
     let cartItem;
 
-    for (let i = 0; i < cart.length; i++) {
-      if (cart[i].productID === id && cart[i].optionsKey === optionsKey) {
-        cartItem = cart[i];
+    for (let i = 0; i < cartItems.length; i++) {
+      if (
+        cartItems[i].productID === id &&
+        cartItems[i].optionsKey === optionsKey
+      ) {
+        cartItem = cartItems[i];
         break;
       }
     }

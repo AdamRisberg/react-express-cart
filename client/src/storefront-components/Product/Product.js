@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import api from "../../api";
+import { connect } from "react-redux";
+import { addItem } from "../../redux/cart/cart-actions";
 
 import ProductOption from "./ProductOption/ProductOption";
 import ProductInfo from "./ProductInfo/ProductInfo";
@@ -169,4 +171,11 @@ class Product extends Component {
   }
 }
 
-export default Product;
+const mapDispatchToProps = dispatch => ({
+  addToCart: item => dispatch(addItem(item))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Product);

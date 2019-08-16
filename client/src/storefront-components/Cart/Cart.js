@@ -1,13 +1,19 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { connect } from "react-redux";
+
+import { updateItem, removeItem } from "../../redux/cart/cart-actions";
 
 import CartItem from "./CartItem/CartItem";
 import Title from "../../shared-components/Title/Title";
 import Button from "../Button/Button";
+import Spinner from "../../shared-components/Spinner/Spinner";
 
 import styles from "./Cart.module.css";
 
 const Cart = props => {
+  if (props.loadingCart) return <Spinner />;
+
   const itemCount = countItems(props);
   const total = calculateTotal(props);
 
@@ -20,7 +26,7 @@ const Cart = props => {
       {props.cart.map(item => {
         return (
           <CartItem
-            key={item.id + item.optionsKey}
+            key={item._id + item.optionsKey}
             removeFromCart={props.removeFromCart}
             updateCart={props.updateCart}
             {...item}
@@ -65,4 +71,20 @@ function countItems(props) {
   }, 0);
 }
 
-export default Cart;
+const mapStateToProps = ({ cart }) => {
+  return {
+    cart: cart.cartItems,
+    loadingCart: cart.loadingCart
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  updateCart: (id, optionsKey, quantity) =>
+    dispatch(updateItem(id, optionsKey, quantity)),
+  removeFromCart: (id, optionsKey) => dispatch(removeItem(id, optionsKey))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);

@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import api from "../../api";
 import { Helmet } from "react-helmet-async";
 import { StripeProvider, Elements } from "react-stripe-elements";
+import { connect } from "react-redux";
+import { clearCart } from "../../redux/cart/cart-actions";
 
 import Login from "../../shared-components/Login/Login";
 import AddressForm from "../../shared-components/AddressForm/AddressForm";
@@ -330,7 +332,7 @@ class Checkout extends Component {
       return <Redirect to="/checkout/cart" />;
     }
 
-    if (!this.props.scriptLoaded) {
+    if (!this.props.scriptLoaded || this.props.loadingCart) {
       return <Spinner />;
     }
 
@@ -370,4 +372,17 @@ class Checkout extends Component {
   }
 }
 
-export default Checkout;
+const mapStateToProps = ({ cart }) => ({
+  cart: cart.cartItems,
+  cartID: cart.cartID,
+  loadingCart: cart.loadingCart
+});
+
+const mapDispatchToProps = dispatch => ({
+  clearCart: () => dispatch(clearCart())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Checkout);
