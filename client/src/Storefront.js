@@ -41,10 +41,7 @@ const Profile = lazy(() => import("./storefront-components/Profile/Profile"));
 
 class Storefront extends Component {
   state = {
-    showLogin: false,
-    showSideNav: false,
-    isRegister: false,
-    scriptLoaded: false
+    showSideNav: false
   };
 
   cancelTokens = {};
@@ -62,10 +59,6 @@ class Storefront extends Component {
         this.cancelTokens[requestKey].cancel();
       });
   }
-
-  handleScriptLoad = () => {
-    this.setState({ scriptLoaded: true });
-  };
 
   addAddress = address => {
     this.cancelTokens.addressPostRequest = api.getCancelTokenSource();
