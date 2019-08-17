@@ -40,7 +40,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loginOpen: false
       };
-    case userActionTypes.SET_USER:
+    case userActionTypes.EDIT_USER_SUCCESS:
       return {
         ...state,
         user: action.payload.user

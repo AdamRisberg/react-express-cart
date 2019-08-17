@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { isEmail } from "validator";
 import { connect } from "react-redux";
-import { setUser } from "../../redux/user/user-actions";
-import api from "../../api";
+import { editUser } from "../../redux/user/user-actions";
 
 import Button from "../Button/Button";
 import Title from "../../shared-components/Title/Title";
@@ -38,19 +37,12 @@ class Profile extends Component {
     this.setState(() => ({ ...defaultState, show: key }));
   };
 
-  sendUpdateRequest(data, apiKey, errorKey, refreshUser) {
-    api
-      .put(`/api/customers/${apiKey}`, data, {}, true, false)
-      .then(res => {
-        if (refreshUser) {
-          this.props.refreshUser(res.data);
-        }
-        this.handleEditClick("")();
-      })
-      .catch(err => {
-        const message = err.response && err.response.data;
-        this.setState({ [errorKey]: message });
-      });
+  sendUpdateRequest(data, propKey, errorKey) {
+    const errorCb = errorMessage => {
+      this.setState({ [errorKey]: errorMessage });
+    };
+
+    this.props.editUser(data, propKey, this.handleEditClick(""), errorCb);
   }
 
   submitNameChange = e => {
@@ -68,7 +60,7 @@ class Profile extends Component {
       customerID: this.props.user.id
     };
 
-    this.sendUpdateRequest(data, "name", "nameErrorMessage", true);
+    this.sendUpdateRequest(data, "name", "nameErrorMessage");
   };
 
   submitEmailChange = e => {
@@ -88,7 +80,7 @@ class Profile extends Component {
 
     const data = { email, customerID: this.props.user.id };
 
-    this.sendUpdateRequest(data, "email", "emailErrorMessage", true);
+    this.sendUpdateRequest(data, "email", "emailErrorMessage");
   };
 
   submitPasswordChange = e => {
@@ -116,7 +108,7 @@ class Profile extends Component {
       customerID: this.props.user.id
     };
 
-    this.sendUpdateRequest(data, "password", "passwordErrorMessage", false);
+    this.sendUpdateRequest(data, "password", "passwordErrorMessage");
   };
 
   renderNamePreview() {
@@ -357,7 +349,8 @@ const mapStateToProps = ({ settings, user }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  refreshUser: user => dispatch(setUser(user))
+  editUser: (data, propKey, cb, errorCb) =>
+    dispatch(editUser(data, propKey, cb, errorCb))
 });
 
 export default connect(

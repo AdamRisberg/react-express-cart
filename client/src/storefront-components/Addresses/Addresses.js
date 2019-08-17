@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { connect } from "react-redux";
+import {
+  addAddress,
+  editAddress,
+  deleteAddress
+} from "../../redux/user/user-actions";
 
 import AddressCard from "./AddressCard/AddressCard";
 import AddressForm from "../../shared-components/AddressForm/AddressForm";
@@ -19,10 +24,14 @@ class Addresses extends Component {
 
   handleOnSubmit = address => {
     if (this.state.edit) {
-      this.props.editAddress(this.state.currentAddress._id, address);
+      this.props.editAddress(
+        this.props.user.id,
+        address,
+        this.state.currentAddress._id
+      );
     } else {
       address.default = true;
-      this.props.addAddress(address);
+      this.props.addAddress(this.props.user.id, address);
     }
 
     this.setState(() => ({ showForm: false }));
@@ -34,7 +43,7 @@ class Addresses extends Component {
   };
 
   setAsDefault = addressID => {
-    this.props.editAddress(addressID, { default: true });
+    this.props.editAddress(this.props.user.id, { default: true }, addressID);
   };
 
   showNewForm = () => {
@@ -66,6 +75,7 @@ class Addresses extends Component {
           setAsDefault={() => this.setAsDefault(address._id)}
           deleteAddress={this.props.deleteAddress}
           address={address}
+          userID={this.props.user.id}
         />
       );
     });
@@ -119,4 +129,15 @@ const mapStateToProps = ({ settings, user }) => ({
   loadingUser: user.loadingUser
 });
 
-export default connect(mapStateToProps)(Addresses);
+const mapDispatchToProps = dispatch => ({
+  addAddress: (userID, address) => dispatch(addAddress(userID, address)),
+  editAddress: (userID, address, addressID) =>
+    dispatch(editAddress(userID, address, addressID)),
+  deleteAddress: (userID, addressID) =>
+    dispatch(deleteAddress(userID, addressID))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Addresses);

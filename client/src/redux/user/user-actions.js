@@ -92,7 +92,67 @@ export const hideLogin = () => ({
   type: userActionTypes.HIDE_LOGIN
 });
 
-export const setUser = user => ({
-  type: userActionTypes.SET_USER,
+export const editUserSuccess = user => ({
+  type: userActionTypes.EDIT_USER_SUCCESS,
   payload: { user }
 });
+
+export const editUser = (data, propKey, cb, errorCb) => {
+  return dispatch => {
+    api
+      .put(`/api/customers/${propKey}`, data, {}, true, false)
+      .then(res => {
+        dispatch(editUserSuccess(res.data));
+        if (cb) cb();
+      })
+      .catch(err => {
+        const message = err.response && err.response.data;
+        if (errorCb) errorCb(message || "");
+      });
+  };
+};
+
+export const addAddress = (userID, address) => {
+  return dispatch => {
+    api
+      .post("/api/addresses", { id: userID, address }, {}, true, false)
+      .then(response => {
+        dispatch(editUserSuccess(response.data));
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
+};
+
+export const editAddress = (userID, address, addressID) => {
+  return dispatch => {
+    api
+      .put(
+        "/api/addresses",
+        { id: userID, address, addressID },
+        {},
+        true,
+        false
+      )
+      .then(response => {
+        dispatch(editUserSuccess(response.data));
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
+};
+
+export const deleteAddress = (userID, addressID) => {
+  return dispatch => {
+    api
+      .post("/api/addresses/remove", { id: userID, addressID }, {}, true, false)
+      .then(response => {
+        dispatch(editUserSuccess(response.data));
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
+};

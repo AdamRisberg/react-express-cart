@@ -11,6 +11,7 @@ const AddressCard = ({
   showEditForm,
   setAsDefault,
   deleteAddress,
+  userID,
   blank
 }) => {
   return blank ? (
@@ -31,7 +32,7 @@ const AddressCard = ({
       <Button text="Edit" onClick={showEditForm} size="Small" />
       <Button
         text="Delete"
-        onClick={() => deleteAddress(address._id)}
+        onClick={() => deleteAddress(userID, address._id)}
         buttonStyle="Cancel"
         size="Small"
       />

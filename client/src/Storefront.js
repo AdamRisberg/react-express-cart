@@ -3,7 +3,6 @@ import "es6-object-assign/auto";
 
 import React, { Component, lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-import api from "./api";
 import { HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
@@ -44,87 +43,12 @@ class Storefront extends Component {
     showSideNav: false
   };
 
-  cancelTokens = {};
-
   componentDidMount() {
     this.props.fetchSettings();
     this.props.fetchCategories();
     this.props.fetchUser();
     this.props.fetchCart();
   }
-
-  componentWillUnmount() {
-    this.cancelTokens &&
-      Object.keys(this.cancelTokens).forEach(requestKey => {
-        this.cancelTokens[requestKey].cancel();
-      });
-  }
-
-  addAddress = address => {
-    this.cancelTokens.addressPostRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/addresses",
-        { id: this.state.user.id, address },
-        { cancelToken: this.cancelTokens.addressPostRequest.token },
-        true,
-        false
-      )
-      .then(response => {
-        this.setState(() => ({ user: response.data }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err.response);
-      });
-  };
-
-  editAddress = (addressID, address) => {
-    this.cancelTokens.addressPutRequest = api.getCancelTokenSource();
-
-    api
-      .put(
-        "/api/addresses",
-        { id: this.state.user.id, address, addressID },
-        { cancelToken: this.cancelTokens.addressPutRequest.token },
-        true,
-        false
-      )
-      .then(response => {
-        this.setState(() => ({ user: response.data }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err.response);
-      });
-  };
-
-  deleteAddress = addressID => {
-    this.cancelTokens.deleteAddressRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/addresses/remove",
-        { id: this.state.user.id, addressID },
-        { cancelToken: this.cancelTokens.deleteAddressRequest.token },
-        true,
-        false
-      )
-      .then(response => {
-        this.setState(() => ({ user: response.data }));
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log(err.response);
-      });
-  };
 
   onHamburgerClick = () => {
     this.setState({ showSideNav: true });
@@ -155,14 +79,7 @@ class Storefront extends Component {
                   <Route
                     exact
                     path="/account/addresses"
-                    render={props => (
-                      <Addresses
-                        {...props}
-                        addAddress={this.addAddress}
-                        editAddress={this.editAddress}
-                        deleteAddress={this.deleteAddress}
-                      />
-                    )}
+                    component={Addresses}
                   />
                   <Route path="/account/order/:id" component={Order} />
                   <Route path="/:page" component={Page} />
