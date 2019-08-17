@@ -42,7 +42,7 @@ const AccountNav = props => {
               _id: "3",
               path: "logout",
               name: "Sign Out",
-              clickHandler: props.onLogout
+              clickHandler: props.logout
             }
           ]}
         />

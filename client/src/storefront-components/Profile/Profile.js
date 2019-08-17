@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { isEmail } from "validator";
 import { connect } from "react-redux";
+import { setUser } from "../../redux/user/user-actions";
 import api from "../../api";
 
 import Button from "../Button/Button";
@@ -355,4 +356,11 @@ const mapStateToProps = ({ settings, user }) => ({
   loadingUser: user.loadingUser
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = dispatch => ({
+  refreshUser: user => dispatch(setUser(user))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Profile);

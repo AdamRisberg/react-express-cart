@@ -4,7 +4,10 @@ import api from "../../api";
 import { Helmet } from "react-helmet-async";
 import { StripeProvider, Elements } from "react-stripe-elements";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { clearCart } from "../../redux/cart/cart-actions";
+import { login, register } from "../../redux/user/user-actions";
+import withStripeScript from "../../hocs/withStripeScript";
 
 import Login from "../../shared-components/Login/Login";
 import AddressForm from "../../shared-components/AddressForm/AddressForm";
@@ -149,8 +152,8 @@ class Checkout extends Component {
             leftTitle={true}
             showLogin={this.onLoginClick}
             showRegister={this.onRegisterClick}
-            onLogin={this.props.onLogin}
-            onRegister={this.props.onRegister}
+            onLogin={this.props.login}
+            onRegister={this.props.register}
           />
         </div>
         <div className={styles.Column50}>
@@ -388,10 +391,15 @@ const mapStateToProps = ({ cart, settings, user }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  clearCart: () => dispatch(clearCart())
+  clearCart: () => dispatch(clearCart()),
+  login: (formData, cb, errorCb) => dispatch(login(formData, cb, errorCb)),
+  register: (formData, cb, errorCb) => dispatch(register(formData, cb, errorCb))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withStripeScript
 )(Checkout);

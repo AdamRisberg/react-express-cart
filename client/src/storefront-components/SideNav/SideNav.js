@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { showLogin, showRegister, logout } from "../../redux/user/user-actions";
 
 import ArrowIcon from "../../shared-components/icons/ArrowIcon/ArrowIcon";
 
@@ -83,7 +84,7 @@ class SideNav extends Component {
                 </Link>
                 <li
                   className={styles.NavLink}
-                  onClick={() => this.onAccountClick(this.props.onLogout)}
+                  onClick={() => this.onAccountClick(this.props.logout)}
                 >
                   Sign Out
                 </li>
@@ -228,4 +229,13 @@ const mapStateToProps = ({ settings, categories, user }) => ({
   loggedIn: !!user.user
 });
 
-export default connect(mapStateToProps)(SideNav);
+const mapDispatchToProps = dispatch => ({
+  showLogin: () => dispatch(showLogin()),
+  showRegister: () => dispatch(showRegister()),
+  logout: () => dispatch(logout())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideNav);

@@ -4,7 +4,6 @@ import "es6-object-assign/auto";
 import React, { Component, lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import api from "./api";
-import scriptLoader from "react-async-script";
 import { HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
@@ -16,10 +15,9 @@ import Header from "./storefront-components/Header/Header";
 import Footer from "./storefront-components/Footer/Footer";
 import Category from "./storefront-components/Category/Category";
 import Products from "./storefront-components/Products/Products";
-import Login from "./shared-components/Login/Login";
+import LoginWithModal from "./storefront-components/LoginWithModal/LoginWithModal";
 import Home from "./storefront-components/Home/Home";
 import SideNav from "./storefront-components/SideNav/SideNav";
-import Modal from "./storefront-components/Modal/Modal";
 import CartAdded from "./storefront-components/CartAdded/CartAdded";
 import Spinner from "./shared-components/Spinner/Spinner";
 
@@ -40,8 +38,6 @@ const Success = lazy(() =>
   import("./storefront-components/Checkout/Success/Success")
 );
 const Profile = lazy(() => import("./storefront-components/Profile/Profile"));
-
-const CheckoutWithScript = scriptLoader("https://js.stripe.com/v3/")(Checkout);
 
 class Storefront extends Component {
   state = {
@@ -69,10 +65,6 @@ class Storefront extends Component {
 
   handleScriptLoad = () => {
     this.setState({ scriptLoaded: true });
-  };
-
-  refreshUser = user => {
-    this.setState(() => ({ user }));
   };
 
   addAddress = address => {
@@ -141,133 +133,18 @@ class Storefront extends Component {
       });
   };
 
-  showLogin = e => {
-    if (e) e.preventDefault();
-    this.setState({ showLogin: true, isRegister: false });
-  };
-
-  showRegister = e => {
-    if (e) e.preventDefault();
-    this.setState({ showLogin: true, isRegister: true });
-  };
-
   onHamburgerClick = () => {
     this.setState({ showSideNav: true });
-  };
-
-  closeLogin = () => {
-    this.setState({ showLogin: false });
   };
 
   closeSideNav = () => {
     this.setState({ showSideNav: false });
   };
 
-  onLogin = (formData, cb, errorCb) => {
-    this.cancelTokens.loginRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/auth/login",
-        formData,
-        { cancelToken: this.cancelTokens.loginRequest.token },
-        false,
-        false
-      )
-      .then(response => {
-        window.localStorage.setItem("session", response.data.token);
-        this.setState(() => ({
-          loggedIn: true,
-          showLogin: false,
-          user: response.data.user
-        }));
-        if (cb) cb();
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        if (errorCb) errorCb();
-        console.log(err.response);
-      });
-  };
-
-  onRegister = (formData, cb, errorCb) => {
-    this.cancelTokens.registerRequest = api.getCancelTokenSource();
-
-    api
-      .post(
-        "/api/auth/register",
-        formData,
-        { cancelToken: this.cancelTokens.registerRequest.token },
-        false,
-        false
-      )
-      .then(response => {
-        window.localStorage.setItem("session", response.data.token);
-        this.setState(() => ({
-          loggedIn: true,
-          showLogin: false,
-          user: response.data.user
-        }));
-        if (cb) cb();
-      })
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        if (errorCb) errorCb();
-        console.log(err.response);
-      });
-  };
-
-  onLogout = e => {
-    if (e && e.preventDefault) e.preventDefault();
-    this.cancelTokens.logoutRequest = api.getCancelTokenSource();
-
-    api
-      .get(
-        "/api/auth/logout",
-        { cancelToken: this.cancelTokens.logoutRequest.token },
-        true,
-        false
-      )
-      .then(() => this.logout())
-      .catch(err => {
-        if (api.checkCancel(err)) {
-          return;
-        }
-        console.log("Error on logout");
-      });
-  };
-
-  logout() {
-    window.localStorage.removeItem("session");
-    this.setState(() => ({ loggedIn: false, user: {} }));
-  }
-
-  renderLogin() {
-    return (
-      <Login
-        isRegister={this.state.isRegister}
-        showRegister={this.showRegister}
-        showLogin={this.showLogin}
-        closeLogin={this.closeLogin}
-        onLogin={this.onLogin}
-        onRegister={this.onRegister}
-      />
-    );
-  }
-
   render() {
     return (
       <div className={styles.Page}>
-        <Header
-          onLogout={this.onLogout}
-          showLogin={this.showLogin}
-          showRegister={this.showRegister}
-          onHamburgerClick={this.onHamburgerClick}
-        />
+        <Header onHamburgerClick={this.onHamburgerClick} />
         <div className={styles.MainBody}>
           <div className={styles.Content}>
             <HelmetProvider>
@@ -279,25 +156,8 @@ class Storefront extends Component {
                   <Route path="/search" component={Products} />
                   <Route path="/checkout/cart" component={Cart} />
                   <Route path="/checkout/success" component={Success} />
-                  <Route
-                    path="/checkout"
-                    render={props => (
-                      <CheckoutWithScript
-                        {...props}
-                        asyncScriptOnLoad={this.handleScriptLoad}
-                        onLogin={this.onLogin}
-                        onRegister={this.onRegister}
-                        scriptLoaded={this.state.scriptLoaded}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path="/account"
-                    render={props => (
-                      <Profile {...props} refreshUser={this.refreshUser} />
-                    )}
-                  />
+                  <Route path="/checkout" component={Checkout} />
+                  <Route exact path="/account" component={Profile} />
                   <Route path="/account/orders" component={Orders} />
                   <Route
                     exact
@@ -316,28 +176,14 @@ class Storefront extends Component {
                 </Switch>
               </Suspense>
             </HelmetProvider>
-            {!this.state.showLogin ? null : (
-              <Modal close={this.closeLogin}>
-                <Login
-                  isRegister={this.state.isRegister}
-                  showRegister={this.showRegister}
-                  showLogin={this.showLogin}
-                  closeLogin={this.closeLogin}
-                  onLogin={this.onLogin}
-                  onRegister={this.onRegister}
-                />
-              </Modal>
-            )}
+            <LoginWithModal />
             <CartAdded />
           </div>
         </div>
         <Footer />
         <SideNav
-          onLogout={this.onLogout}
           show={this.state.showSideNav}
           closeSideNav={this.closeSideNav}
-          showLogin={this.showLogin}
-          showRegister={this.showRegister}
         />
       </div>
     );

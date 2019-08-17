@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { showLogin, showRegister, logout } from "../../redux/user/user-actions";
+
 import MainNav from "./MainNav/MainNav";
 import AccountNav from "./AccountNav/AccountNav";
 import SearchBox from "./SearchBox/SearchBox";
@@ -18,7 +20,7 @@ class Header extends Component {
             <AccountNav
               loadingUser={this.props.loadingUser}
               user={this.props.user}
-              onLogout={this.props.onLogout}
+              logout={this.props.logout}
               showLogin={this.props.showLogin}
               showRegister={this.props.showRegister}
               cartSize={this.props.cartSize}
@@ -45,4 +47,13 @@ const mapStateToProps = ({ cart, settings, categories, user }) => ({
   loadingUser: user.loadingUser
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  showLogin: () => dispatch(showLogin()),
+  showRegister: () => dispatch(showRegister()),
+  logout: () => dispatch(logout())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);
