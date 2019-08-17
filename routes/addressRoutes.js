@@ -9,7 +9,7 @@ const {
 router.use(authorizeCustomer);
 router.use(authorizeAdmin);
 router.use(userExists);
-router.post("/", addressController.getAll);
+router.post("/", addressController.add);
 router.put("/", addressController.update);
 router.post("/remove", addressController.remove);
 

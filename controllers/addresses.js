@@ -1,6 +1,6 @@
 const Customer = require("../models/customer");
 
-function getAll(req, res) {
+function add(req, res) {
   Customer.findById(req.body.id)
     .then(customer => {
       customer.addresses.forEach(address => {
@@ -87,7 +87,7 @@ function remove(req, res) {
 }
 
 module.exports = {
-  getAll,
+  add,
   update,
   remove
 };
