@@ -15,11 +15,7 @@ class SideNav extends Component {
   };
 
   componentDidUpdate() {
-    if (
-      !this.state.cats.categories &&
-      this.props.categories &&
-      this.state.loading
-    ) {
+    if (!this.props.loadingCategories && this.state.loading) {
       const catLookup = this.createCatLookup();
       this.setState({ cats: catLookup, loading: false });
     }
@@ -225,9 +221,11 @@ class SideNav extends Component {
   }
 }
 
-const mapStateToProps = ({ settings, categories }) => ({
+const mapStateToProps = ({ settings, categories, user }) => ({
   storeName: settings.store_name,
-  categories: categories.categories
+  categories: categories.categories,
+  loadingCategories: categories.loadingCategories,
+  loggedIn: !!user.user
 });
 
 export default connect(mapStateToProps)(SideNav);

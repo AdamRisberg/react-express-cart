@@ -45,7 +45,7 @@ class Checkout extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.user.addresses && !prevProps.user.addresses) {
+    if (this.props.user && !prevProps.user) {
       this.loadDefaultAddress();
     }
   }
@@ -60,6 +60,8 @@ class Checkout extends Component {
   };
 
   loadDefaultAddress() {
+    if (!this.props.user) return;
+
     const addresses = this.props.user.addresses;
 
     if (addresses && addresses.length) {
@@ -328,11 +330,15 @@ class Checkout extends Component {
       );
     }
 
-    if (!this.props.cart.length) {
+    if (!this.props.loadingCart && !this.props.cart.length) {
       return <Redirect to="/checkout/cart" />;
     }
 
-    if (!this.props.scriptLoaded || this.props.loadingCart) {
+    if (
+      !this.props.scriptLoaded ||
+      this.props.loadingCart ||
+      this.props.loadingUser
+    ) {
       return <Spinner />;
     }
 
@@ -342,7 +348,7 @@ class Checkout extends Component {
           <Helmet>
             <title>{`Checkout - ${this.props.storeName}`}</title>
           </Helmet>
-          {!this.props.loggedIn && !this.state.showCheckout ? (
+          {!this.props.user && !this.state.showCheckout ? (
             this.renderSignIn()
           ) : (
             <Elements>
@@ -372,11 +378,13 @@ class Checkout extends Component {
   }
 }
 
-const mapStateToProps = ({ cart, settings }) => ({
+const mapStateToProps = ({ cart, settings, user }) => ({
   cart: cart.cartItems,
   cartID: cart.cartID,
   loadingCart: cart.loadingCart,
-  storeName: settings.store_name
+  storeName: settings.store_name,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 const mapDispatchToProps = dispatch => ({

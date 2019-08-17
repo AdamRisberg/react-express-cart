@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
 import { fetchSettings } from "./redux/settings/settings.actions";
 import { fetchCategories } from "./redux/categories/categories-actions";
+import { fetchUser } from "./redux/user/user-actions";
 
 import Header from "./storefront-components/Header/Header";
 import Footer from "./storefront-components/Footer/Footer";
@@ -47,9 +48,6 @@ class Storefront extends Component {
     showLogin: false,
     showSideNav: false,
     isRegister: false,
-    loggedIn: false,
-    user: {},
-    loadingUser: true,
     scriptLoaded: false
   };
 
@@ -58,40 +56,8 @@ class Storefront extends Component {
   componentDidMount() {
     this.props.fetchSettings();
     this.props.fetchCategories();
+    this.props.fetchUser();
     this.props.fetchCart();
-
-    const token = window.localStorage.getItem("session");
-
-    if (token) {
-      this.cancelTokens.tokenLoginRequest = api.getCancelTokenSource();
-
-      api
-        .post(
-          "/api/auth/login",
-          {},
-          { cancelToken: this.cancelTokens.tokenLoginRequest.token },
-          true,
-          false
-        )
-        .then(response => {
-          window.localStorage.setItem("session", response.data.token);
-          this.setState(() => ({
-            loggedIn: true,
-            user: response.data.user,
-            loadingUser: false
-          }));
-        })
-        .catch(err => {
-          if (api.checkCancel(err)) {
-            return;
-          }
-          window.localStorage.removeItem("session");
-          this.setState(() => ({ loadingUser: false, loggedIn: false }));
-          console.log(err.response);
-        });
-    } else {
-      this.setState(() => ({ loadingUser: false, loggedIn: false }));
-    }
   }
 
   componentWillUnmount() {
@@ -297,10 +263,7 @@ class Storefront extends Component {
     return (
       <div className={styles.Page}>
         <Header
-          loggedIn={this.state.loggedIn}
           onLogout={this.onLogout}
-          loadingUser={this.state.loadingUser}
-          user={this.state.user}
           showLogin={this.showLogin}
           showRegister={this.showRegister}
           onHamburgerClick={this.onHamburgerClick}
@@ -318,73 +281,37 @@ class Storefront extends Component {
                   <Route path="/checkout/success" component={Success} />
                   <Route
                     path="/checkout"
-                    render={props =>
-                      this.state.loadingUser ? null : (
-                        <CheckoutWithScript
-                          {...props}
-                          asyncScriptOnLoad={this.handleScriptLoad}
-                          loggedIn={this.state.loggedIn}
-                          onLogin={this.onLogin}
-                          onRegister={this.onRegister}
-                          user={this.state.user}
-                          scriptLoaded={this.state.scriptLoaded}
-                        />
-                      )
-                    }
+                    render={props => (
+                      <CheckoutWithScript
+                        {...props}
+                        asyncScriptOnLoad={this.handleScriptLoad}
+                        onLogin={this.onLogin}
+                        onRegister={this.onRegister}
+                        scriptLoaded={this.state.scriptLoaded}
+                      />
+                    )}
                   />
                   <Route
                     exact
                     path="/account"
-                    render={props =>
-                      this.state.loadingUser ? null : (
-                        <Profile
-                          {...props}
-                          refreshUser={this.refreshUser}
-                          user={this.state.user}
-                        />
-                      )
-                    }
+                    render={props => (
+                      <Profile {...props} refreshUser={this.refreshUser} />
+                    )}
                   />
-                  <Route
-                    path="/account/orders"
-                    render={props =>
-                      this.state.loadingUser ? null : (
-                        <Orders
-                          {...props}
-                          userID={this.state.user.id}
-                          loggedIn={this.state.loggedIn}
-                        />
-                      )
-                    }
-                  />
+                  <Route path="/account/orders" component={Orders} />
                   <Route
                     exact
                     path="/account/addresses"
-                    render={props =>
-                      this.state.loadingUser ? null : (
-                        <Addresses
-                          {...props}
-                          addAddress={this.addAddress}
-                          editAddress={this.editAddress}
-                          deleteAddress={this.deleteAddress}
-                          user={this.state.user}
-                          loggedIn={this.state.loggedIn}
-                        />
-                      )
-                    }
+                    render={props => (
+                      <Addresses
+                        {...props}
+                        addAddress={this.addAddress}
+                        editAddress={this.editAddress}
+                        deleteAddress={this.deleteAddress}
+                      />
+                    )}
                   />
-                  <Route
-                    path="/account/order/:id"
-                    render={props =>
-                      this.state.loadingUser ? null : (
-                        <Order
-                          {...props}
-                          loggedIn={this.state.loggedIn}
-                          user={this.state.user}
-                        />
-                      )
-                    }
-                  />
+                  <Route path="/account/order/:id" component={Order} />
                   <Route path="/:page" component={Page} />
                 </Switch>
               </Suspense>
@@ -406,7 +333,6 @@ class Storefront extends Component {
         </div>
         <Footer />
         <SideNav
-          loggedIn={this.state.loggedIn}
           onLogout={this.onLogout}
           show={this.state.showSideNav}
           closeSideNav={this.closeSideNav}
@@ -421,7 +347,8 @@ class Storefront extends Component {
 const mapDispatchToProps = dispatch => ({
   fetchCart: () => dispatch(fetchCart()),
   fetchSettings: () => dispatch(fetchSettings()),
-  fetchCategories: () => dispatch(fetchCategories())
+  fetchCategories: () => dispatch(fetchCategories()),
+  fetchUser: () => dispatch(fetchUser())
 });
 
 export default connect(

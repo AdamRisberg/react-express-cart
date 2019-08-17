@@ -41,11 +41,11 @@ class Order extends Component {
   }
 
   render() {
-    if (this.state.loading) {
+    if (this.state.loading || this.props.loadingUser) {
       return <Spinner />;
     }
 
-    if ((!this.props.loggedIn && !this.props.checkout) || this.state.error) {
+    if ((!this.props.user && !this.props.checkout) || this.state.error) {
       return <Redirect to="/" />;
     }
 
@@ -62,8 +62,10 @@ class Order extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, user }) => ({
+  storeName: settings.store_name,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 export default connect(mapStateToProps)(Order);

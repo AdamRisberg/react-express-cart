@@ -7,6 +7,7 @@ import api from "../../api";
 import OrderPreview from "./OrderPreview/OrderPreview";
 import WithPagination from "../../shared-components/WithPagination/WithPagination";
 import Title from "../../shared-components/Title/Title";
+import Spinner from "../../shared-components/Spinner/Spinner";
 
 import styles from "./Orders.module.css";
 
@@ -16,12 +17,12 @@ class Orders extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.loggedIn) return;
+    if (!this.props.user) return;
     this.cancelGetRequest = api.getCancelTokenSource();
 
     api
       .get(
-        "/api/orders/years/" + this.props.userID,
+        "/api/orders/years/" + this.props.user.id,
         { cancelToken: this.cancelGetRequest.token },
         true,
         false
@@ -42,11 +43,15 @@ class Orders extends Component {
   }
 
   render() {
-    if (!this.props.loggedIn) {
+    if (!this.props.user && !this.props.loadingUser) {
       return <Redirect to="/" />;
     }
 
-    const fetchUrl = "/api/orders/all/" + this.props.userID + "?page=";
+    if (this.props.loadingUser) {
+      return <Spinner />;
+    }
+
+    const fetchUrl = "/api/orders/all/" + this.props.user.id + "?page=";
     const dateOptions = [];
     const yearOptions = this.state.years.map((year, i) => {
       return <option key={i}>{year}</option>;
@@ -93,8 +98,10 @@ class Orders extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, user }) => ({
+  storeName: settings.store_name,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 export default connect(mapStateToProps)(Orders);

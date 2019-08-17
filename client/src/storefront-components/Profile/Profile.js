@@ -5,6 +5,7 @@ import api from "../../api";
 
 import Button from "../Button/Button";
 import Title from "../../shared-components/Title/Title";
+import Spinner from "../../shared-components/Spinner/Spinner";
 import FlipMove from "react-flip-move";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -319,8 +320,12 @@ class Profile extends Component {
   }
 
   render() {
-    if (!this.props.user.id) {
+    if (!this.props.user && !this.props.loadingUser) {
       return <Redirect to="/" />;
+    }
+
+    if (this.props.loadingUser) {
+      return <Spinner />;
     }
 
     return (
@@ -344,8 +349,10 @@ class Profile extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, user }) => ({
+  storeName: settings.store_name,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 export default connect(mapStateToProps)(Profile);

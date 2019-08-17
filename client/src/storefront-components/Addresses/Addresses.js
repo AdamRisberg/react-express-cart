@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import AddressCard from "./AddressCard/AddressCard";
 import AddressForm from "../../shared-components/AddressForm/AddressForm";
 import Title from "../../shared-components/Title/Title";
+import Spinner from "../../shared-components/Spinner/Spinner";
 
 import styles from "./Addresses.module.css";
 
@@ -71,8 +72,12 @@ class Addresses extends Component {
   }
 
   render() {
-    if (!this.props.loggedIn) {
+    if (!this.props.user && !this.props.loadingUser) {
       return <Redirect to="/" />;
+    }
+
+    if (this.props.loadingUser) {
+      return <Spinner />;
     }
 
     return (
@@ -108,8 +113,10 @@ class Addresses extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => ({
-  storeName: settings.store_name
+const mapStateToProps = ({ settings, user }) => ({
+  storeName: settings.store_name,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 export default connect(mapStateToProps)(Addresses);

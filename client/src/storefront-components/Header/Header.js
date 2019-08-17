@@ -16,7 +16,6 @@ class Header extends Component {
           <div className={styles.HeaderRow}>
             <Brand settings={this.props.settings} />
             <AccountNav
-              loggedIn={this.props.loggedIn}
               loadingUser={this.props.loadingUser}
               user={this.props.user}
               onLogout={this.props.onLogout}
@@ -38,10 +37,12 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ cart, settings, categories }) => ({
+const mapStateToProps = ({ cart, settings, categories, user }) => ({
   cartSize: cart.cartSize,
   settings,
-  categories: categories.categories
+  categories: categories.categories,
+  user: user.user,
+  loadingUser: user.loadingUser
 });
 
 export default connect(mapStateToProps)(Header);

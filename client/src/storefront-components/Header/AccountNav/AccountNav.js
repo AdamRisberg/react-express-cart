@@ -9,7 +9,7 @@ import styles from "./AccountNav.module.css";
 const AccountNav = props => {
   if (props.loadingUser) return null;
 
-  if (!props.loggedIn) {
+  if (!props.user) {
     return (
       <div>
         <nav className={styles.AccountNav}>
