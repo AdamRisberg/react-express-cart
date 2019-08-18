@@ -39,10 +39,6 @@ const Success = lazy(() =>
 const Profile = lazy(() => import("./storefront-components/Profile/Profile"));
 
 class Storefront extends Component {
-  state = {
-    showSideNav: false
-  };
-
   componentDidMount() {
     this.props.fetchSettings();
     this.props.fetchCategories();
@@ -50,18 +46,10 @@ class Storefront extends Component {
     this.props.fetchCart();
   }
 
-  onHamburgerClick = () => {
-    this.setState({ showSideNav: true });
-  };
-
-  closeSideNav = () => {
-    this.setState({ showSideNav: false });
-  };
-
   render() {
     return (
       <div className={styles.Page}>
-        <Header onHamburgerClick={this.onHamburgerClick} />
+        <Header />
         <div className={styles.MainBody}>
           <div className={styles.Content}>
             <HelmetProvider>
@@ -91,10 +79,7 @@ class Storefront extends Component {
           </div>
         </div>
         <Footer />
-        <SideNav
-          show={this.state.showSideNav}
-          closeSideNav={this.closeSideNav}
-        />
+        <SideNav />
       </div>
     );
   }

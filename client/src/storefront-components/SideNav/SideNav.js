@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { showLogin, showRegister, logout } from "../../redux/user/user-actions";
+import { hideSideNav } from "../../redux/ui/ui-actions";
 
 import ArrowIcon from "../../shared-components/icons/ArrowIcon/ArrowIcon";
 
@@ -222,17 +223,19 @@ class SideNav extends Component {
   }
 }
 
-const mapStateToProps = ({ settings, categories, user }) => ({
+const mapStateToProps = ({ settings, categories, user, ui }) => ({
   storeName: settings.store_name,
   categories: categories.categories,
   loadingCategories: categories.loadingCategories,
-  loggedIn: !!user.user
+  loggedIn: !!user.user,
+  show: ui.showSideNav
 });
 
 const mapDispatchToProps = dispatch => ({
   showLogin: () => dispatch(showLogin()),
   showRegister: () => dispatch(showRegister()),
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  closeSideNav: () => dispatch(hideSideNav())
 });
 
 export default connect(

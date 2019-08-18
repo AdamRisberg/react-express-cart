@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { showLogin, showRegister, logout } from "../../redux/user/user-actions";
+import { showSideNav } from "../../redux/ui/ui-actions";
 
 import MainNav from "./MainNav/MainNav";
 import AccountNav from "./AccountNav/AccountNav";
@@ -50,7 +51,8 @@ const mapStateToProps = ({ cart, settings, categories, user }) => ({
 const mapDispatchToProps = dispatch => ({
   showLogin: () => dispatch(showLogin()),
   showRegister: () => dispatch(showRegister()),
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  onHamburgerClick: () => dispatch(showSideNav())
 });
 
 export default connect(
