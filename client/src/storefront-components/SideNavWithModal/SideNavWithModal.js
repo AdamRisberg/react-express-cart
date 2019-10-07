@@ -12,8 +12,8 @@ function SideNavWithModal(props) {
   return (
     <Modal
       close={props.closeSideNav}
-      position="left"
-      altCloseButton
+      modalType="left"
+      buttonType="left"
       renderContent={close => (
         <SideNav
           storeName={props.storeName}

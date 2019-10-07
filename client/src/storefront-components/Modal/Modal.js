@@ -54,15 +54,30 @@ class Modal extends Component {
   }
 
   getContentStyle() {
-    const baseStyle =
-      this.props.position === "left" ? styles.SideContent : styles.Content;
+    const { modalType } = this.props;
+    let baseStyle;
+
+    if (modalType === "left") {
+      baseStyle = styles.SideContent;
+    } else if (modalType === "image") {
+      baseStyle = styles.ImageContent;
+    } else {
+      baseStyle = styles.Content;
+    }
+
     return `${baseStyle} ${this.state.show ? styles.Show : ""}`;
   }
 
   getButtonStyle() {
-    return this.props.altCloseButton
-      ? styles.CloseButtonAlt
-      : styles.CloseButton;
+    const { buttonType } = this.props;
+
+    if (buttonType === "left") {
+      return styles.CloseButtonAlt;
+    } else if (buttonType === "image") {
+      return styles.CloseButtonImage;
+    } else {
+      return styles.CloseButton;
+    }
   }
 
   render() {

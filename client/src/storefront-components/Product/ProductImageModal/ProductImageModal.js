@@ -1,6 +1,7 @@
 import React from "react";
 
 import ImageLoader from "../../../shared-components/ImageLoader/ImageLoader";
+import Modal from "../../Modal/Modal";
 
 import styles from "./ProductImageModal.module.css";
 
@@ -8,12 +9,8 @@ const ProductImageModal = props => {
   let image = props.images[props.selectedIdx] || {};
 
   return (
-    <div
-      className={styles.Modal}
-      onClick={e => handleCloseClick(e, props.closeModal)}
-    >
-      <div className={styles.ModalContent}>
-        <div className={styles.CloseButton} onClick={props.closeModal} />
+    <Modal close={props.closeModal} modalType="image" buttonType="image">
+      <React.Fragment>
         {props.directions.left ? renderLeftButton(props) : null}
         <ImageLoader
           className={styles.ModalImage}
@@ -22,37 +19,31 @@ const ProductImageModal = props => {
           alt={image.alt}
         />
         {props.directions.right ? renderRightButton(props) : null}
-      </div>
-    </div>
+      </React.Fragment>
+    </Modal>
   );
 };
 
 function renderLeftButton(props) {
   return (
-    <div
+    <button
       className={styles.ButtonLeft}
       onClick={() => props.handleImageSelect(props.selectedIdx - 1)}
     >
       <div className={styles.LeftTriangle} />
-    </div>
+    </button>
   );
 }
 
 function renderRightButton(props) {
   return (
-    <div
+    <button
       className={styles.ButtonRight}
       onClick={() => props.handleImageSelect(props.selectedIdx + 1)}
     >
       <div className={styles.RightTriangle} />
-    </div>
+    </button>
   );
-}
-
-function handleCloseClick(e, cb) {
-  if (e.target === e.currentTarget) {
-    cb();
-  }
 }
 
 export default ProductImageModal;
