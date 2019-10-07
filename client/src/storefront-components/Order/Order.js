@@ -14,6 +14,10 @@ class Order extends Component {
   };
 
   componentDidMount() {
+    if (this.props.order) {
+      return this.setState({ loading: false, order: this.props.order });
+    }
+
     this.cancelGetRequest = api.getCancelTokenSource();
 
     const orderID = this.props.orderID || this.props.match.params.id;
@@ -52,9 +56,7 @@ class Order extends Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>{`Order #: ${this.state.order.orderNumber} - ${
-            this.props.storeName
-          }`}</title>
+          <title>{`Order #: ${this.state.order.orderNumber} - ${this.props.storeName}`}</title>
         </Helmet>
         <OrderView order={this.state.order} />
       </React.Fragment>

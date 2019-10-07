@@ -12,8 +12,7 @@ const Success = props => {
     return <Redirect to="/" />;
   }
 
-  const email = props.location.state.email;
-  const orderID = props.location.state.orderID;
+  const { email, orderID, order } = props.location.state;
 
   return (
     <React.Fragment>
@@ -27,7 +26,7 @@ const Success = props => {
         An order comfirmation email has been sent to:
         <span className={styles.Bold}>{email}</span>
       </p>
-      <Order orderID={orderID} checkout />
+      <Order orderID={orderID} order={order} checkout />
     </React.Fragment>
   );
 };

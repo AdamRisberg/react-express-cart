@@ -80,7 +80,7 @@ function createOrder(req, res) {
     .then(_ => order.save())
     .then(savedOrder => {
       sendConfirmationEmail(savedOrder);
-      res.json({ success: true, orderID: order.id });
+      res.json({ success: true, orderID: order.id, order: savedOrder });
     })
     .catch(err => {
       console.log(err);

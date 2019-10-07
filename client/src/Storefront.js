@@ -16,7 +16,7 @@ import Category from "./storefront-components/Category/Category";
 import Products from "./storefront-components/Products/Products";
 import LoginWithModal from "./storefront-components/LoginWithModal/LoginWithModal";
 import Home from "./storefront-components/Home/Home";
-import SideNav from "./storefront-components/SideNav/SideNav";
+import SideNavWithModal from "./storefront-components/SideNavWithModal/SideNavWithModal";
 import CartAdded from "./storefront-components/CartAdded/CartAdded";
 import Spinner from "./shared-components/Spinner/Spinner";
 
@@ -79,7 +79,7 @@ class Storefront extends Component {
           </div>
         </div>
         <Footer />
-        <SideNav />
+        <SideNavWithModal />
       </div>
     );
   }

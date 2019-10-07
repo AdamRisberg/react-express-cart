@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import FocusLock from "react-focus-lock";
 
 import styles from "./Modal.module.css";
 
@@ -9,9 +10,24 @@ class Modal extends Component {
   };
 
   componentDidMount() {
+    this.body = document.querySelector("body");
+    this.scrollbarWidth = this.getScrollbarWidth();
+
+    this.body.style.overflow = "hidden";
+    this.body.style.marginRight = this.scrollbarWidth + "px";
+
     setTimeout(() => {
       this.setState({ show: true });
     }, 0);
+  }
+
+  componentWillUnmount() {
+    this.body.style.overflow = "visible";
+    this.body.style.marginRight = "0px";
+  }
+
+  getScrollbarWidth() {
+    return window.innerWidth - document.documentElement.clientWidth;
   }
 
   onTopLevelClick = e => {
@@ -33,22 +49,37 @@ class Modal extends Component {
     }, 300);
   };
 
+  getModalStyle() {
+    return `${styles.Modal} ${this.state.show ? styles.Show : ""}`;
+  }
+
+  getContentStyle() {
+    const baseStyle =
+      this.props.position === "left" ? styles.SideContent : styles.Content;
+    return `${baseStyle} ${this.state.show ? styles.Show : ""}`;
+  }
+
+  getButtonStyle() {
+    return this.props.altCloseButton
+      ? styles.CloseButtonAlt
+      : styles.CloseButton;
+  }
+
   render() {
     return (
-      <div
-        className={`${styles.Modal} ${this.state.show ? styles.Show : ""}`}
-        onClick={this.onTopLevelClick}
-      >
-        <div
-          style={this.props.style || {}}
-          className={`${styles.Content} ${this.state.show ? styles.Show : ""}`}
-        >
-          <div className={styles.CloseButton} onClick={this.close}>
-            &times;
+      <FocusLock>
+        <div className={this.getModalStyle()} onClick={this.onTopLevelClick}>
+          <div
+            style={this.props.style || {}}
+            className={this.getContentStyle()}
+          >
+            <button className={this.getButtonStyle()} onClick={this.close}>
+              &times;
+            </button>
+            {this.props.children || this.props.renderContent(this.close)}
           </div>
-          {this.props.children || this.props.renderContent(this.close)}
         </div>
-      </div>
+      </FocusLock>
     );
   }
 }

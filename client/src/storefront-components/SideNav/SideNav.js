@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { showLogin, showRegister, logout } from "../../redux/user/user-actions";
-import { hideSideNav } from "../../redux/ui/ui-actions";
 
 import ArrowIcon from "../../shared-components/icons/ArrowIcon/ArrowIcon";
 
@@ -23,7 +20,8 @@ class SideNav extends Component {
     }
   }
 
-  onMenuItemClick = idx => {
+  onMenuItemClick = idx => e => {
+    e.preventDefault();
     const previous = this.state.center;
     const left = [...this.state.left, previous];
     this.setState(() => ({ left: left, center: idx }));
@@ -61,7 +59,7 @@ class SideNav extends Component {
     cb();
   };
 
-  renderTopNav(key, title) {
+  renderTopNav(key, title, tabIndex) {
     if (key === "home") {
       return (
         <React.Fragment>
@@ -73,6 +71,7 @@ class SideNav extends Component {
                   className={styles.NavLink}
                   to="/account/orders"
                   onClick={this.onLinkClick}
+                  tabIndex={tabIndex}
                 >
                   Orders
                 </Link>
@@ -80,12 +79,14 @@ class SideNav extends Component {
                   className={styles.NavLink}
                   to="/account/addresses"
                   onClick={this.onLinkClick}
+                  tabIndex={tabIndex}
                 >
                   Addresses
                 </Link>
                 <li
                   className={styles.NavLink}
                   onClick={() => this.onAccountClick(this.props.logout)}
+                  tabIndex={tabIndex}
                 >
                   Sign Out
                 </li>
@@ -95,12 +96,14 @@ class SideNav extends Component {
                 <li
                   className={styles.NavLink}
                   onClick={() => this.onAccountClick(this.props.showLogin)}
+                  tabIndex={tabIndex}
                 >
                   Sign In
                 </li>
                 <li
                   className={styles.NavLink}
                   onClick={() => this.onAccountClick(this.props.showRegister)}
+                  tabIndex={tabIndex}
                 >
                   Create Account
                 </li>
@@ -114,10 +117,14 @@ class SideNav extends Component {
 
     return (
       <React.Fragment>
-        <div className={styles.BackButton} onClick={this.onBackClick}>
+        <button
+          tabIndex={tabIndex}
+          className={styles.BackButton}
+          onClick={this.onBackClick}
+        >
           <ArrowIcon direction="left" />
           {title}
-        </div>
+        </button>
         <div className={styles.Line} />
       </React.Fragment>
     );
@@ -140,6 +147,7 @@ class SideNav extends Component {
       const prev =
         cats[this.state.left[this.state.left.length - 1]] &&
         cats[this.state.left[this.state.left.length - 1]].title;
+      const tabIndex = position === "Center" ? 0 : -1;
 
       return (
         <div
@@ -148,31 +156,29 @@ class SideNav extends Component {
         >
           {this.renderTopNav(
             key,
-            prev !== "SHOP BY CATEGORY" ? prev : "MAIN MENU"
+            prev !== "SHOP BY CATEGORY" ? prev : "MAIN MENU",
+            tabIndex
           )}
           <div className={styles.NavTitle}>{cats[key].title}</div>
           <ul className={styles.Nav}>
-            {cats[key].categories.map(cat =>
-              cat.subcategories ? (
-                <li
-                  key={cat.id}
-                  className={styles.NavItem}
-                  onClick={() => this.onMenuItemClick(cat.id)}
+            {cats[key].categories.map(cat => (
+              <li key={cat.id}>
+                <Link
+                  className={
+                    cat.subcategories ? styles.NavItem : styles.NavLink
+                  }
+                  to={`/category/${cat.path}`}
+                  onClick={
+                    cat.subcategories
+                      ? this.onMenuItemClick(cat.id)
+                      : this.onLinkClick
+                  }
+                  tabIndex={tabIndex}
                 >
                   {cat.name}
-                </li>
-              ) : (
-                <li key={cat.id}>
-                  <Link
-                    className={styles.NavLink}
-                    to={`/category/${cat.path}`}
-                    onClick={this.onLinkClick}
-                  >
-                    {cat.name}
-                  </Link>
-                </li>
-              )
-            )}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       );
@@ -207,38 +213,11 @@ class SideNav extends Component {
   render() {
     return (
       <React.Fragment>
-        <div
-          className={`${styles.SideNav} ${this.props.show ? styles.Open : ""}`}
-          onClick={this.onClickParent}
-        />
-        <div className={styles.SideNavContent}>
-          <div className={styles.CloseButton} onClick={this.closeNav}>
-            &times;
-          </div>
-          <div className={styles.Brand}>{this.props.storeName}</div>
-          {this.renderCategories()}
-        </div>
+        <div className={styles.Brand}>{this.props.storeName}</div>
+        {this.renderCategories()}
       </React.Fragment>
     );
   }
 }
 
-const mapStateToProps = ({ settings, categories, user, ui }) => ({
-  storeName: settings.store_name,
-  categories: categories.categories,
-  loadingCategories: categories.loadingCategories,
-  loggedIn: !!user.user,
-  show: ui.showSideNav
-});
-
-const mapDispatchToProps = dispatch => ({
-  showLogin: () => dispatch(showLogin()),
-  showRegister: () => dispatch(showRegister()),
-  logout: () => dispatch(logout()),
-  closeSideNav: () => dispatch(hideSideNav())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SideNav);
+export default SideNav;

@@ -206,7 +206,7 @@ class Checkout extends Component {
           billingAddress: this.state.billingAddress,
           shippingAddress: this.state.shippingAddress,
           cartID: this.props.cartID,
-          userID: this.props.user.id,
+          userID: this.props.user && this.props.user.id,
           paymentMethod: cardInfo,
           shippingMethod: this.state.shippingMethod,
           ipAddress: token.card.client_ip,
@@ -229,7 +229,8 @@ class Checkout extends Component {
               this.props.clearCart();
               this.setState(() => ({
                 step: 5,
-                orderID: response.data.orderID
+                orderID: response.data.orderID,
+                order: response.data.order
               }));
             }
           })
@@ -240,7 +241,8 @@ class Checkout extends Component {
             throw new Error();
           });
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e);
         console.log("Error creating payment request.");
         onError(errMessage || "Something went wrong. Please try again later.");
       });
@@ -326,7 +328,8 @@ class Checkout extends Component {
             pathname: "/checkout/success",
             state: {
               email: this.state.billingAddress.email,
-              orderID: this.state.orderID
+              orderID: this.state.orderID,
+              order: this.state.order
             }
           }}
         />
