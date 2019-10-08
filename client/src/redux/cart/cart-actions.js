@@ -14,6 +14,10 @@ export const fetchCart = () => {
   return dispatch => {
     const cartID = window.localStorage.getItem("cartSession");
 
+    if (!cartID) {
+      return dispatch(fetchCartError());
+    }
+
     api
       .get("/api/cart/" + cartID, {}, false, false)
       .then(response => {
@@ -23,7 +27,7 @@ export const fetchCart = () => {
       .catch(err => {
         window.localStorage.removeItem("cartSession");
         dispatch(fetchCartError());
-        console.log(err.response);
+        // console.log(err.response);
       });
   };
 };
