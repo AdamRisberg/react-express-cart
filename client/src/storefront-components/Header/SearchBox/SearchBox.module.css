@@ -1,18 +1,15 @@
 .SearchBox {
-  float: right;
-  width: 30%;
-  padding-top: 5px;
-  margin-bottom: 10px;
-}
-
-.SearchBox::after {
-  content: "";
-  clear: both;
-  display: table;
+  /* padding-top: 5px; */
+  /* margin-bottom: 10px; */
+  flex-grow: 1;
+  max-width: 350px;
+  padding: 5px 0;
+  margin-left: auto;
 }
 
 .SearchInput {
   width: 100%;
+  flex-grow: 1;
   background-color: #eee;
   color: black;
   border: 1px solid #aaa;
@@ -21,7 +18,7 @@
 }
 
 .Wrapper {
-  overflow: hidden;
+  display: flex;
 }
 
 .SearchButton {
@@ -32,7 +29,7 @@
   float: right;
   cursor: pointer;
   position: relative;
-  padding: 0 5px 0 6px;
+  padding: 0 5px 0 4px;
   overflow: hidden;
   color: #eee;
 }
@@ -46,27 +43,8 @@
   box-shadow: inset 0 0 4px #ccc;
 }
 
-
-@media (max-width: 920px) {
-  .SearchBox {
-    width: 300px;
-  }
-}
-
-@media (max-width: 600px) {
-  .SearchBox {
-    width: 60%;
-  }
-}
-
 @media print {
   .SearchBox {
     display: none;
-  }
-}
-
-@media (max-width: 450px) {
-  .SearchBox {
-    width: calc(100% - 80px);
   }
 }

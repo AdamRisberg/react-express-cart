@@ -9,7 +9,10 @@ const NavItem = props => {
   return (
     <li className={hasSubs ? styles.NavItemWithSubs : styles.NavItem}>
       {props.clickHandler ? (
-        <span onClick={props.clickHandler}>{props.name}</span>
+        // <span tabIndex={0} onClick={props.clickHandler}>
+        //   {props.name}
+        // </span>
+        <button onClick={props.clickHandler}>{props.name}</button>
       ) : (
         <Link to={`${props.prefix}/${props.path}`}>{props.name}</Link>
       )}

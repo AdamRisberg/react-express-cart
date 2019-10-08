@@ -1,9 +1,15 @@
 .AccountNav {
   color: #ddd;
-  float: right;
-  width: 50%;
+  display: flex;
   text-align: right;
   font-size: 0.9rem;
+  margin-left: auto;
+}
+
+.AccountNav li {
+  margin-top: 0;
+  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .CartButton {
@@ -13,7 +19,6 @@
   background-color: #fc6;
   border: none;
   cursor: pointer;
-  margin-bottom: 10px;
   position: relative;
   white-space: nowrap;
 }
@@ -24,33 +29,23 @@
 
 @media (max-width: 700px) {
   .AccountNav {
-    width: 110px;
     text-align: center;
   }
 
   .AccountNav li {
     display: none;
   }
-
-  .CartButton {
-    margin-top: 0.25rem;
-    margin-bottom: 0;
-    float: right;
-  }
 }
 
 @media (max-width: 375px) {
-  .AccountNav {
-    width: 100%;
-    float: none;
-  }
-
   .CartButton {
-    margin-top: 10px;
     width: 100%;
     font-size: 0.9rem;
+    padding: 4px 12px;
+  }
 
-    margin-bottom: 10px;
+  .CartLabel {
+    display: none;
   }
 }
 

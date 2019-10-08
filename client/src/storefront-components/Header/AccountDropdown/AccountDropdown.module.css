@@ -1,0 +1,64 @@
+.Dropdown {
+  position: relative;
+  margin-right: 10px;
+}
+
+.DropdownButton {
+  background-color: transparent;
+  color: #ddd;
+  cursor: pointer;
+  border: none;
+  border: 1px solid transparent;
+  padding: 4px 12px;
+}
+
+.DropdownButton:hover {
+  color: #fff;
+  border: 1px solid #aaa;
+}
+
+.DownArrowAfter::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.42rem;
+  padding-bottom: 2px;
+  border-left: 0.28rem solid transparent;
+  border-right: 0.28rem solid transparent;
+  border-top: 0.35rem solid #ccc;
+  border-radius: 2px;
+  cursor: default;
+}
+
+.DropdownContent {
+  position: absolute;
+  top: "100%";
+  display: none;
+  background-color: #fff;
+  color: #000;
+  text-align: left;
+  z-index: 5;
+  border-radius: 0 0 4px 4px;
+  width: 10.71rem;
+  box-shadow: 0 2px 6px #666;
+  padding: 4px 0;
+}
+
+.DropdownContent ul {
+  list-style: none;
+}
+
+.DropdownContent a {
+  display: block;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.DropdownContent a:hover {
+  background-color: #cde;
+}
+
+@media (max-width: 700px) {
+  .Dropdown {
+    display: none;
+  }
+}

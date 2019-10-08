@@ -20,18 +20,27 @@
   cursor: pointer;
 }
 
-.NavItemWithSubs span {
+.NavItem button,
+.NavItemWithSubs button {
+  cursor: pointer;
+  padding: 2px 0;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+}
+
+.NavItemWithSubs button {
   cursor: default;
 }
 
 .NavItemWithSubs::after {
   content: "";
   display: inline-block;
-  margin-left: .42rem;
+  margin-left: 0.42rem;
   padding-bottom: 2px;
-  border-left: .28rem solid transparent;
-  border-right: .28rem solid transparent;
-  border-top: .35rem solid #ccc;
+  border-left: 0.28rem solid transparent;
+  border-right: 0.28rem solid transparent;
+  border-top: 0.35rem solid #ccc;
   border-radius: 2px;
   cursor: default;
 }
@@ -49,9 +58,8 @@
 .NavItemWithSubs:hover .SubBoxRight,
 .NavItemWithSubs:hover .UpArrow {
   visibility: visible;
-  transition-delay: .2s;
+  transition-delay: 0.2s;
 }
-
 
 /* SUBCATEGORY BOXES */
 
@@ -62,7 +70,7 @@
   position: absolute;
   background-color: #fff;
   padding: 5px 0;
-  font-size: .9rem;
+  font-size: 0.9rem;
   z-index: 5;
   border-radius: 0 0 4px 4px;
   width: 10.71rem;
@@ -76,7 +84,7 @@
 .SubBoxRight {
   top: 100%;
   box-shadow: 0 2px 6px #666;
-  margin-top: 2px;
+  /* margin-top: 2px; */
 }
 
 .SecondLevelBox,
@@ -88,7 +96,7 @@
 }
 
 .SubBox {
-  left: -.71rem;
+  left: -0.71rem;
   text-align: left;
 }
 
@@ -98,7 +106,7 @@
 }
 
 .SubBoxRight {
-  right: -.71rem;
+  right: -0.71rem;
   text-align: right;
 }
 
@@ -127,7 +135,7 @@
 .SubItemWithSubs:hover .SecondLevelBox,
 .SubItemWithSubs:hover .SecondLevelBoxRight {
   visibility: visible;
-  transition-delay: .2s;
+  transition-delay: 0.2s;
 }
 
 .SubItemWithSubs:hover .RightArrow {
@@ -142,7 +150,6 @@
   padding: 6px 10px;
 }
 
-
 /* ARROW ICONS */
 
 .UpArrow {
@@ -150,24 +157,23 @@
   position: absolute;
   width: 0;
   height: 0;
-  right: -.14rem;
-  bottom: -.2rem;
-  border-left: .42rem solid transparent;
-  border-right: .42rem solid transparent;
-  border-bottom: .5rem solid #fff;
+  right: -0.14rem;
+  bottom: -0.15rem;
+  border-left: 0.42rem solid transparent;
+  border-right: 0.42rem solid transparent;
+  border-bottom: 0.5rem solid #fff;
   z-index: 4;
 }
 
 .RightArrow {
   float: right;
   margin-top: -1.2rem;
-  margin-right: .5rem;
-  border-top: .28rem solid transparent;
-  border-bottom: .28rem solid transparent;
-  border-left: .35rem solid #999;
+  margin-right: 0.5rem;
+  border-top: 0.28rem solid transparent;
+  border-bottom: 0.28rem solid transparent;
+  border-left: 0.35rem solid #999;
   border-radius: 2px;
 }
-
 
 @media (max-width: 400px) {
   .NavItem,

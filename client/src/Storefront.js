@@ -2,7 +2,7 @@ import "es6-promise/auto";
 import "es6-object-assign/auto";
 
 import React, { Component, lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { fetchCart } from "./redux/cart/cart-actions";
@@ -55,6 +55,7 @@ class Storefront extends Component {
             <HelmetProvider>
               <Suspense fallback={<Spinner />}>
                 <Switch>
+                  <Redirect exact from="/account/logout" to="/" />
                   <Route path="/" exact component={Home} />
                   <Route path="/product/:id" component={Product} />
                   <Route path="/category/:any" component={Category} />

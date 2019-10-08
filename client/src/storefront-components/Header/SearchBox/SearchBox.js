@@ -25,9 +25,6 @@ class SearchBox extends Component {
   render() {
     return (
       <form className={styles.SearchBox} onSubmit={this.handleSearch}>
-        <button className={styles.SearchButton}>
-          <SearchIcon />
-        </button>
         <div className={styles.Wrapper}>
           <input
             aria-label="Search Box"
@@ -35,6 +32,9 @@ class SearchBox extends Component {
             value={this.state.query}
             onChange={this.handleSearchChange}
           />
+          <button className={styles.SearchButton}>
+            <SearchIcon />
+          </button>
         </div>
       </form>
     );

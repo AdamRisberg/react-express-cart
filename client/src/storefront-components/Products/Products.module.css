@@ -2,7 +2,7 @@
   font-weight: 500;
   font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
   text-transform: uppercase;
 }
 
@@ -13,8 +13,8 @@
 
 .ProductsBox {
   margin-bottom: 20px;
-  margin-left: -10px;
-  margin-right: -10px;
+  margin-left: -1%;
+  margin-right: -1%;
   min-height: 1px; /* prevents bug in ie */
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +23,6 @@
 .None {
   margin: 0 10px;
 }
-
 
 @media (max-width: 400px) {
   .None {

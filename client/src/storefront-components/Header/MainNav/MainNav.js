@@ -1,23 +1,23 @@
 import React from "react";
 
-import NavItem from "../NavItem/NavItem";
 import HamburgerIcon from "../../../shared-components/icons/HamburgerIcon/HamburgerIcon";
 
 import styles from "./MainNav.module.css";
 
 const MainNav = props => {
   return (
-    <nav className={styles.MainNav}>
-      {renderMenuItems(props.categories)}
-      <HamburgerIcon onHamburgerClick={props.onHamburgerClick} />
-    </nav>
+    <div className={styles.MainNav}>
+      <button>
+        <HamburgerIcon onHamburgerClick={props.onHamburgerClick} />
+      </button>
+    </div>
   );
 };
 
-function renderMenuItems(items) {
-  return items.map(cat => {
-    return <NavItem key={cat._id} {...cat} prefix="/category" />;
-  });
-}
+// function renderMenuItems(items) {
+//   return items.map(cat => {
+//     return <NavItem key={cat._id} {...cat} prefix="/category" />;
+//   });
+// }
 
 export default MainNav;

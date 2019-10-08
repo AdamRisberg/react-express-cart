@@ -2,25 +2,30 @@
   background-color: #123;
   background: linear-gradient(#123, #234);
   padding-top: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
 }
 
 .HeaderRow {
   max-width: 1140px;
   padding: 0 20px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
 
-.HeaderRow::after {
-  content: "";
-  clear: both;
-  display: table;
+.HeaderRow:nth-of-type(1) {
+  align-items: center;
 }
 
+@media (max-width: 700px) {
+  .HeaderRow:nth-of-type(1) {
+    margin-bottom: 5px;
+  }
+}
 
 @media (max-width: 400px) {
   .Header {
-    padding: 10px 0 5px 0;
+    padding: 10px 0;
   }
 
   .HeaderRow {
