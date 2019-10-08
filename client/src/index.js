@@ -1,3 +1,7 @@
+import "es6-promise/auto";
+import "es6-object-assign/auto";
+import findPoly from "array.prototype.find";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
@@ -10,6 +14,8 @@ import Storefront from "./Storefront";
 import Admin from "./Admin";
 
 import "./index.css";
+
+findPoly.shim();
 
 const App = () => {
   return (

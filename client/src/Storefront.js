@@ -1,6 +1,3 @@
-import "es6-promise/auto";
-import "es6-object-assign/auto";
-
 import React, { Component, lazy, Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";

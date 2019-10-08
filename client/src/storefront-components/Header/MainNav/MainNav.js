@@ -7,8 +7,8 @@ import styles from "./MainNav.module.css";
 const MainNav = props => {
   return (
     <div className={styles.MainNav}>
-      <button>
-        <HamburgerIcon onHamburgerClick={props.onHamburgerClick} />
+      <button onClick={props.onHamburgerClick}>
+        <HamburgerIcon />
       </button>
     </div>
   );
