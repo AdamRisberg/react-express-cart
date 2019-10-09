@@ -10,20 +10,30 @@ class Modal extends Component {
   };
 
   componentDidMount() {
-    this.body = document.querySelector("body");
-    this.scrollbarWidth = this.getScrollbarWidth();
-
-    this.body.style.overflow = "hidden";
-    this.body.style.marginRight = this.scrollbarWidth + "px";
+    this.lockScrollbar(true);
 
     setTimeout(() => {
       this.setState({ show: true });
     }, 0);
   }
 
-  componentWillUnmount() {
-    this.body.style.overflow = "visible";
-    this.body.style.marginRight = "0px";
+  componentWillUnmount() {}
+
+  lockScrollbar(lock) {
+    if (lock) {
+      this.scrollbarWidth = this.getScrollbarWidth();
+      this.scrollY = window.scrollY || window.pageYOffset;
+
+      document.body.style.top = `-${this.scrollY || 0}px`;
+      document.body.style.position = "fixed";
+      document.body.style.paddingRight = `${this.scrollbarWidth}px`;
+    } else {
+      document.body.style.position = "static";
+      document.body.style.top = "";
+      document.body.style.paddingRight = "0px";
+
+      window.scrollTo(0, this.scrollY || 0);
+    }
   }
 
   getScrollbarWidth() {
@@ -38,6 +48,7 @@ class Modal extends Component {
 
   close = redirectUrl => {
     this.setState({ show: false });
+    this.lockScrollbar(false);
 
     if (typeof redirectUrl === "string") {
       this.props.history.push(redirectUrl);
