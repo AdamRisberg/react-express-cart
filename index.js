@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").load();
+  require("dotenv").config();
 }
 
 require("./database");

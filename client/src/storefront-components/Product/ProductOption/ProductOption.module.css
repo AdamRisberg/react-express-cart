@@ -58,16 +58,16 @@
 .TextRadioInput:checked:not(:focus) + .TextRadio {
   background-color: #fff;
   color: #111;
-  border: 2px solid #FF5100;
+  border: 2px solid #ff5100;
 }
 
 .TextRadioInput:checked:not(:focus) + .ColorRadio {
-  border: 2px solid #FF5100;
+  border: 2px solid #ff5100;
 }
 
 .TextRadioInput:hover + .TextRadio,
 .TextRadioInput:hover + .ColorRadio {
-  border: 2px solid #FF5100;
+  border: 2px solid #ff5100;
 }
 
 .TextRadioInput:focus + .TextRadio,

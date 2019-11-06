@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const Order = require("../models/order");
-const addDays = require("date-fns/add_days");
-const addMonths = require("date-fns/add_months");
-const startOfWeek = require("date-fns/start_of_week");
-const startOfMonth = require("date-fns/start_of_month");
-const startOfYear = require("date-fns/start_of_year");
-const endOfToday = require("date-fns/end_of_today");
-const endOfDay = require("date-fns/end_of_day");
+const addDays = require("date-fns/addDays");
+const addMonths = require("date-fns/addMonths");
+const startOfWeek = require("date-fns/startOfWeek");
+const startOfMonth = require("date-fns/startOfMonth");
+const startOfYear = require("date-fns/startOfYear");
+const endOfToday = require("date-fns/endOfToday");
+const endOfDay = require("date-fns/endOfDay");
 const {
   createStatusEmailHTML,
   createStatusEmailText
