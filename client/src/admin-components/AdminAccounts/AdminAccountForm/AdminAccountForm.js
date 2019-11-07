@@ -29,7 +29,7 @@ class AdminAccountForm extends Component {
     if (adminID) {
       this.fetchAdminAccount(adminID);
     } else {
-      this.setState(() => ({ loading: false, admin: null }));
+      this.setState(() => ({ loading: false }));
     }
   }
 
