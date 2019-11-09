@@ -79,8 +79,8 @@ function createTextInput({ _id, inputChange, value, label }) {
 
 function createRadio({ _id, options, inputChange, value, label }) {
   return (
-    <React.Fragment>
-      <div className={styles.Label}>{label}</div>
+    <fieldset className={styles.Label}>
+      <legend>{label}</legend>
       {options.map(option => {
         return (
           <label key={option.label + "l"}>
@@ -98,14 +98,14 @@ function createRadio({ _id, options, inputChange, value, label }) {
           </label>
         );
       })}
-    </React.Fragment>
+    </fieldset>
   );
 }
 
 function createTextRadio({ _id, options, inputChange, value, label }) {
   return (
-    <React.Fragment>
-      <div className={styles.Label}>{label}</div>
+    <fieldset className={styles.Label}>
+      <legend>{label}</legend>
       {options.map(option => {
         return (
           <label key={option.label + "l"} className={styles.TextRadioLabel}>
@@ -123,14 +123,14 @@ function createTextRadio({ _id, options, inputChange, value, label }) {
           </label>
         );
       })}
-    </React.Fragment>
+    </fieldset>
   );
 }
 
 function createColorRadio({ _id, options, inputChange, value, label }) {
   return (
-    <React.Fragment>
-      <div className={styles.Label}>{label}</div>
+    <fieldset className={styles.Label}>
+      <legend>{label}</legend>
       {options.map(option => {
         return (
           <label key={option.label + "l"} className={styles.ColorRadioLabel}>
@@ -153,7 +153,7 @@ function createColorRadio({ _id, options, inputChange, value, label }) {
           </label>
         );
       })}
-    </React.Fragment>
+    </fieldset>
   );
 }
 
