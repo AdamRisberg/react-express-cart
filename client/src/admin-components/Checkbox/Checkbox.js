@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./Checkbox.module.css";
 
-const Checkbox = ({ handleSelect, id, isChecked }) => {
+const Checkbox = ({ handleSelect, id, value, isChecked }) => {
   const checked = isChecked ? "checked" : "";
 
   return (
@@ -10,6 +10,7 @@ const Checkbox = ({ handleSelect, id, isChecked }) => {
       <input
         onChange={handleSelect}
         id={id}
+        value={value}
         className={styles.Checkbox}
         checked={checked}
         type="checkbox"

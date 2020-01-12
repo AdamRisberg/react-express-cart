@@ -43,11 +43,14 @@ class AdminAccounts extends Component {
 
   handleDelete = () => {
     this.cancelDeleteRequest = api.getCancelTokenSource();
+    const selected = Object.keys(this.state.selected).filter(
+      key => this.state.selected[key]
+    );
 
     api
       .post(
         "/api/admin/delete",
-        Object.keys(this.state.selected),
+        selected,
         { cancelToken: this.cancelDeleteRequest.token },
         true,
         true

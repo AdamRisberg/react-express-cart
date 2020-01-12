@@ -45,17 +45,24 @@ class Orders extends Component {
 
   handleDelete = () => {
     this.cancelDeleteRequest = api.getCancelTokenSource();
+    const selected = Object.keys(this.state.selected).filter(
+      key => this.state.selected[key]
+    );
 
     api
       .post(
         "/api/orders/delete",
-        Object.keys(this.state.selected),
+        selected,
         { cancelToken: this.cancelDeleteRequest.token },
         true,
         true
       )
       .then(res => {
-        this.setState(() => ({ refresh: !this.state.refresh }));
+        this.setState(() => ({
+          refresh: !this.state.refresh,
+          selected: {},
+          allSelected: false
+        }));
       })
       .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
   };
@@ -109,9 +116,9 @@ class Orders extends Component {
                     />
                   </td>
                   <td>{order.orderNumber}</td>
-                  <td className={styles.CollapseMedium}>{`${
-                    order.billingAddress.firstName
-                  } ${order.billingAddress.lastName}`}</td>
+                  <td
+                    className={styles.CollapseMedium}
+                  >{`${order.billingAddress.firstName} ${order.billingAddress.lastName}`}</td>
                   <td className={styles.CollapseMedium}>{order.status}</td>
                   <td className={styles.CollapseLarge}>
                     ${order.total.toFixed(2)}
