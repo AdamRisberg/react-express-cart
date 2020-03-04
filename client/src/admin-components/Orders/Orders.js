@@ -1,142 +1,112 @@
-import React, { Component } from "react";
-import api from "../../api";
+import React from "react";
 
 import WithPagination from "../../shared-components/WithPagination/WithPagination";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
+import {
+  Table,
+  Head,
+  HeadRow,
+  HeadCell,
+  Body,
+  Row,
+  Cell,
+  TitleBox
+} from "../AdminTable/AdminTable";
 
-import { formatDateShort, handleAdminRequestErrorFull } from "../../utils";
+import useCheckboxControls from "../../hooks/useCheckboxControls";
+import { formatDateShort } from "../../utils";
 
-import styles from "./Orders.module.css";
+function Orders(props) {
+  const {
+    selected,
+    allSelected,
+    refresh,
+    handleSelect,
+    handleSelectAll,
+    handleDelete,
+    containerRef
+  } = useCheckboxControls("/api/orders/delete", props.flashErrorMessage);
 
-class Orders extends Component {
-  state = {
-    selected: {},
-    allSelected: false,
-    refresh: false
+  const handleEdit = e => {
+    const id = e.currentTarget.dataset.id;
+    props.history.push("/admin/order/" + id);
   };
 
-  componentWillUnmount() {
-    this.cancelDeleteRequest && this.cancelDeleteRequest.cancel();
-    this.cancelPostRequest && this.cancelPostRequest.cancel();
-  }
-
-  handleSelect = e => {
-    const id = e.target.id;
-    const checked = e.target.checked;
-
-    this.setState(() => ({
-      selected: { ...this.state.selected, [id]: checked }
-    }));
-  };
-
-  handleSelectAll = e => {
-    const allSelected = e.target.checked;
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    const selected = {};
-
-    checkboxes.forEach(box => {
-      if (box.id && box.id !== "ALL") {
-        selected[box.id] = allSelected;
-      }
-    });
-    this.setState(() => ({ selected, allSelected }));
-  };
-
-  handleDelete = () => {
-    this.cancelDeleteRequest = api.getCancelTokenSource();
-    const selected = Object.keys(this.state.selected).filter(
-      key => this.state.selected[key]
-    );
-
-    api
-      .post(
-        "/api/orders/delete",
-        selected,
-        { cancelToken: this.cancelDeleteRequest.token },
-        true,
-        true
-      )
-      .then(res => {
-        this.setState(() => ({
-          refresh: !this.state.refresh,
-          selected: {},
-          allSelected: false
-        }));
-      })
-      .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
-  };
-
-  handleEdit = id => () => {
-    this.props.history.push("/admin/order/" + id);
-  };
-
-  render() {
-    return (
-      <WithPagination
-        isAdmin={true}
-        flashErrorMessage={this.props.flashErrorMessage}
-        fetchUrl="/api/orders/all?page="
-        fetchUseSession
-        fetchAdmin
-        refresh={this.state.refresh}
-        renderTitle={() => (
-          <div className={styles.TitleBox}>
-            ORDERS
-            <Button type="delete" onClick={this.handleDelete} />
-          </div>
-        )}
-        renderItems={orders => (
-          <table className={styles.Table}>
-            <thead>
-              <tr>
-                <th>
+  return (
+    <WithPagination
+      isAdmin={true}
+      flashErrorMessage={props.flashErrorMessage}
+      fetchUrl="/api/orders/all?page="
+      fetchUseSession
+      fetchAdmin
+      refresh={refresh}
+      renderTitle={() => (
+        <TitleBox>
+          ORDERS
+          <Button type="delete" onClick={handleDelete} />
+        </TitleBox>
+      )}
+      renderItems={orders => (
+        <Table ref={containerRef}>
+          <Head>
+            <HeadRow>
+              <HeadCell>
+                <Checkbox
+                  id="orders-ALL"
+                  handleSelect={handleSelectAll}
+                  isChecked={allSelected}
+                  data-id="ALL"
+                />
+              </HeadCell>
+              <HeadCell>Order #</HeadCell>
+              <HeadCell collapse="medium">Customer</HeadCell>
+              <HeadCell collapse="medium">Status</HeadCell>
+              <HeadCell collapse="large" align="right">
+                Total
+              </HeadCell>
+              <HeadCell collapse="small" align="right">
+                Date
+              </HeadCell>
+              <HeadCell />
+            </HeadRow>
+          </Head>
+          <Body>
+            {orders.map(order => (
+              <Row key={order._id}>
+                <Cell>
                   <Checkbox
-                    handleSelect={this.handleSelectAll}
-                    isChecked={this.state.allSelected}
-                    id="ALL"
+                    id={order._id}
+                    handleSelect={handleSelect}
+                    isChecked={selected[order._id]}
+                    data-id={order._id}
                   />
-                </th>
-                <th>Order #</th>
-                <th className={styles.CollapseMedium}>Customer</th>
-                <th className={styles.CollapseMedium}>Status</th>
-                <th className={styles.CollapseLarge}>Total</th>
-                <th className={styles.CollapseSmall}>Date</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map(order => (
-                <tr key={order._id}>
-                  <td>
-                    <Checkbox
-                      handleSelect={this.handleSelect}
-                      isChecked={this.state.selected[order._id]}
-                      id={order._id}
-                    />
-                  </td>
-                  <td>{order.orderNumber}</td>
-                  <td
-                    className={styles.CollapseMedium}
-                  >{`${order.billingAddress.firstName} ${order.billingAddress.lastName}`}</td>
-                  <td className={styles.CollapseMedium}>{order.status}</td>
-                  <td className={styles.CollapseLarge}>
-                    ${order.total.toFixed(2)}
-                  </td>
-                  <td className={styles.CollapseSmall}>
-                    {formatDateShort(order.date)}
-                  </td>
-                  <td>
-                    <Button type="view" onClick={this.handleEdit(order._id)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      />
-    );
-  }
+                </Cell>
+                <Cell>{order.orderNumber}</Cell>
+                <Cell collapse="medium">
+                  {`${order.billingAddress.firstName} ${order.billingAddress.lastName}`}
+                </Cell>
+                <Cell collapse="medium">{order.status}</Cell>
+                <Cell collapse="large" align="right">
+                  ${order.total.toFixed(2)}
+                </Cell>
+                <Cell collapse="small" align="right">
+                  {formatDateShort(order.date)}
+                </Cell>
+                <Cell>
+                  <Button
+                    type="view"
+                    data-id={order._id}
+                    onClick={handleEdit}
+                  />
+                </Cell>
+              </Row>
+            ))}
+          </Body>
+        </Table>
+      )}
+    />
+  );
 }
 
 export default Orders;

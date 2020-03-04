@@ -1,161 +1,136 @@
-import React, { Component } from "react";
+import React from "react";
 import api from "../../api";
 import { handleAdminRequestErrorFull } from "../../utils";
 
 import WithPagination from "../../shared-components/WithPagination/WithPagination";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
+import {
+  Table,
+  Head,
+  HeadRow,
+  HeadCell,
+  Body,
+  Row,
+  Cell,
+  TitleBox
+} from "../AdminTable/AdminTable";
+
+import useCheckboxControls from "../../hooks/useCheckboxControls";
 
 import styles from "./Shipping.module.css";
 
-class Shipping extends Component {
-  state = {
-    selected: {},
-    allSelected: false,
-    refresh: false
-  };
+function Shipping(props) {
+  const {
+    selected,
+    allSelected,
+    refresh,
+    handleSelect,
+    handleSelectAll,
+    handleDelete,
+    containerRef
+  } = useCheckboxControls("/api/shipping/delete", props.flashErrorMessage);
 
-  componentWillUnmount() {
-    this.cancelDeleteRequest && this.cancelDeleteRequest.cancel();
-    this.cancelPostRequest && this.cancelPostRequest.cancel();
-  }
+  const cancelPostRequest = React.useRef();
+  React.useEffect(() => {
+    return () => {
+      // eslint-disable-next-line
+      cancelPostRequest.current && cancelPostRequest.current.cancel();
+    };
+  });
 
-  handleSelect = e => {
-    const id = e.target.id;
-    const checked = e.target.checked;
-
-    this.setState(() => ({
-      selected: { ...this.state.selected, [id]: checked }
-    }));
-  };
-
-  handleSelectAll = e => {
-    const allSelected = e.target.checked;
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    const selected = {};
-
-    checkboxes.forEach(box => {
-      if (box.id && box.id !== "ALL") {
-        selected[box.id] = allSelected;
-      }
-    });
-    this.setState(() => ({ selected, allSelected }));
-  };
-
-  handleDelete = () => {
-    this.cancelDeleteRequest = api.getCancelTokenSource();
-    const selected = Object.keys(this.state.selected).filter(
-      key => this.state.selected[key]
-    );
-
-    api
-      .post(
-        "/api/shipping/delete",
-        selected,
-        { cancelToken: this.cancelDeleteRequest.token },
-        true,
-        true
-      )
-      .then(res => {
-        this.setState(() => ({ refresh: !this.state.refresh }));
-      })
-      .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
-  };
-
-  handleAdd = () => {
-    this.cancelPostRequest = api.getCancelTokenSource();
+  const handleAdd = () => {
+    cancelPostRequest.current = api.getCancelTokenSource();
 
     api
       .post(
         "/api/shipping/",
         {},
-        { cancelToken: this.cancelPostRequest.token },
+        { cancelToken: cancelPostRequest.current.token },
         true,
         true
       )
       .then(res => {
-        this.props.history.push("/admin/shipping/" + res.data);
+        props.history.push("/admin/shipping/" + res.data);
       })
-      .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
+      .catch(handleAdminRequestErrorFull(props.flashErrorMessage));
   };
 
-  handleEdit = id => () => {
-    this.props.history.push("/admin/shipping/" + id);
+  const handleEdit = e => {
+    const id = e.currentTarget.dataset.id;
+    props.history.push("/admin/shipping/" + id);
   };
 
-  render() {
-    return (
-      <WithPagination
-        isAdmin={true}
-        flashErrorMessage={this.props.flashErrorMessage}
-        fetchUrl="/api/shipping?page="
-        fetchUseSession
-        fetchAdmin
-        refresh={this.state.refresh}
-        renderTitle={() => (
-          <div className={styles.TitleBox}>
-            SHIPPING
-            <Button type="add" onClick={this.handleAdd} />
-            <Button type="delete" onClick={this.handleDelete} />
-          </div>
-        )}
-        renderItems={shipping => (
-          <table className={styles.Table}>
-            <thead>
-              <tr>
-                <th>
-                  <Checkbox
-                    handleSelect={this.handleSelectAll}
-                    isChecked={this.state.allSelected}
-                    id="ALL"
-                  />
-                </th>
-                <th>Name</th>
-                <th className={styles.CollapseLarge}>Label</th>
-                <th className={styles.CollapseSmall}>Price</th>
-                <th className={styles.Collapse}>Active</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {shipping.map(method => {
-                return (
-                  <tr key={method._id}>
-                    <td>
-                      <Checkbox
-                        handleSelect={this.handleSelect}
-                        isChecked={this.state.selected[method._id]}
-                        id={method._id}
-                      />
-                    </td>
-                    <td>{method.name}</td>
-                    <td className={styles.CollapseLarge}>{method.label}</td>
-                    <td className={styles.CollapseSmall}>
-                      ${method.price.toFixed(2)}
-                    </td>
-                    <td className={styles.Collapse}>
-                      {method.active ? "Yes" : "No"}
-                    </td>
-                    <td>
-                      <Button
-                        type="edit"
-                        onClick={this.handleEdit(method._id)}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-              {!shipping.length ? (
-                <tr>
-                  <td colSpan={6}>No shipping methods found.</td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        )}
-      />
-    );
-  }
+  return (
+    <WithPagination
+      isAdmin={true}
+      flashErrorMessage={props.flashErrorMessage}
+      fetchUrl="/api/shipping?page="
+      fetchUseSession
+      fetchAdmin
+      refresh={refresh}
+      renderTitle={() => (
+        <TitleBox>
+          SHIPPING
+          <Button type="add" onClick={handleAdd} />
+          <Button type="delete" onClick={handleDelete} />
+        </TitleBox>
+      )}
+      renderItems={shipping => (
+        <Table ref={containerRef} className={styles.Table}>
+          <Head>
+            <HeadRow>
+              <HeadCell>
+                <Checkbox
+                  handleSelect={handleSelectAll}
+                  isChecked={allSelected}
+                  id="shipping-ALL"
+                  data-id="ALL"
+                />
+              </HeadCell>
+              <HeadCell>Name</HeadCell>
+              <HeadCell collapse="large">Label</HeadCell>
+              <HeadCell collapse="small">Price</HeadCell>
+              <HeadCell collapse="medium">Active</HeadCell>
+              <HeadCell />
+            </HeadRow>
+          </Head>
+          <Body>
+            {shipping.map(method => {
+              return (
+                <Row key={method._id}>
+                  <Cell>
+                    <Checkbox
+                      handleSelect={handleSelect}
+                      isChecked={selected[method._id]}
+                      id={method._id}
+                      data-id={method._id}
+                    />
+                  </Cell>
+                  <Cell>{method.name}</Cell>
+                  <Cell collapse="large">{method.label}</Cell>
+                  <Cell collapse="small">${method.price.toFixed(2)}</Cell>
+                  <Cell collapse="medium">{method.active ? "Yes" : "No"}</Cell>
+                  <Cell>
+                    <Button
+                      type="edit"
+                      data-id={method._id}
+                      onClick={handleEdit}
+                    />
+                  </Cell>
+                </Row>
+              );
+            })}
+            {!shipping.length ? (
+              <Row>
+                <Cell colSpan={6}>No shipping methods found.</Cell>
+              </Row>
+            ) : null}
+          </Body>
+        </Table>
+      )}
+    />
+  );
 }
 
 export default Shipping;

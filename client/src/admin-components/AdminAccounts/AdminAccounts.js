@@ -1,146 +1,110 @@
-import React, { Component } from "react";
-import api from "../../api";
-import { handleAdminRequestErrorFull } from "../../utils";
+import React from "react";
 
 import WithPagination from "../../shared-components/WithPagination/WithPagination";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
+import {
+  Table,
+  Head,
+  HeadRow,
+  HeadCell,
+  Body,
+  Row,
+  Cell,
+  TitleBox
+} from "../AdminTable/AdminTable";
 
-import styles from "./AdminAccounts.module.css";
+import useCheckboxControls from "../../hooks/useCheckboxControls";
 
-class AdminAccounts extends Component {
-  state = {
-    selected: {},
-    allSelected: false,
-    refresh: false
-  };
+function AdminAccounts(props) {
+  const {
+    selected,
+    allSelected,
+    refresh,
+    handleSelect,
+    handleSelectAll,
+    handleDelete,
+    containerRef
+  } = useCheckboxControls("/api/admin/delete", props.flashErrorMessage);
 
-  componentWillUnmount() {
-    this.cancelDeleteRequest && this.cancelDeleteRequest.cancel();
-  }
-
-  handleSelect = e => {
-    const id = e.target.id;
-    const checked = e.target.checked;
-
-    this.setState(() => ({
-      selected: { ...this.state.selected, [id]: checked }
-    }));
-  };
-
-  handleSelectAll = e => {
-    const allSelected = e.target.checked;
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    const selected = {};
-
-    checkboxes.forEach(box => {
-      if (box.id && box.id !== "ALL") {
-        selected[box.id] = allSelected;
-      }
-    });
-    this.setState(() => ({ selected, allSelected }));
-  };
-
-  handleDelete = () => {
-    this.cancelDeleteRequest = api.getCancelTokenSource();
-    const selected = Object.keys(this.state.selected).filter(
-      key => this.state.selected[key]
-    );
-
-    api
-      .post(
-        "/api/admin/delete",
-        selected,
-        { cancelToken: this.cancelDeleteRequest.token },
-        true,
-        true
-      )
-      .then(res => {
-        this.setState(() => ({ refresh: !this.state.refresh }));
-      })
-      .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
-  };
-
-  handleAdd = () => {
-    if (!this.props.user.allowEdit) {
-      return this.props.flashErrorMessage();
+  const handleAdd = () => {
+    if (!props.user.allowEdit) {
+      return props.flashErrorMessage();
     }
-    this.props.history.push("/admin/admin_account");
+    props.history.push("/admin/admin_account");
   };
 
-  handleEdit = id => () => {
-    this.props.history.push("/admin/admin_account/" + id);
+  const handleEdit = e => {
+    const id = e.currentTarget.dataset.id;
+    props.history.push("/admin/admin_account/" + id);
   };
 
-  render() {
-    return (
-      <WithPagination
-        isAdmin={true}
-        flashErrorMessage={this.props.flashErrorMessage}
-        fetchUrl="/api/admin?page="
-        fetchUseSession
-        fetchAdmin
-        refresh={this.state.refresh}
-        renderTitle={() => (
-          <div className={styles.TitleBox}>
-            ADMIN ACCOUNTS
-            <Button type="add" onClick={this.handleAdd} />
-            <Button type="delete" onClick={this.handleDelete} />
-          </div>
-        )}
-        renderItems={accounts => (
-          <table className={styles.Table}>
-            <thead>
-              <tr>
-                <th>
+  return (
+    <WithPagination
+      isAdmin={true}
+      flashErrorMessage={props.flashErrorMessage}
+      fetchUrl="/api/admin?page="
+      fetchUseSession
+      fetchAdmin
+      refresh={refresh}
+      renderTitle={() => (
+        <TitleBox>
+          ADMIN ACCOUNTS
+          <Button type="add" onClick={handleAdd} />
+          <Button type="delete" onClick={handleDelete} />
+        </TitleBox>
+      )}
+      renderItems={accounts => (
+        <Table ref={containerRef}>
+          <Head>
+            <HeadRow>
+              <HeadCell>
+                <Checkbox
+                  id="accounts-ALL"
+                  handleSelect={handleSelectAll}
+                  isChecked={allSelected}
+                  data-id="ALL"
+                />
+              </HeadCell>
+              <HeadCell>Name</HeadCell>
+              <HeadCell collapse="large">Email</HeadCell>
+              <HeadCell collapse="medium">Active</HeadCell>
+              <HeadCell />
+            </HeadRow>
+          </Head>
+          <Body>
+            {accounts.map(account => (
+              <Row key={account._id}>
+                <Cell>
                   <Checkbox
-                    handleSelect={this.handleSelectAll}
-                    isChecked={this.state.allSelected}
-                    id="ALL"
+                    handleSelect={handleSelect}
+                    isChecked={selected[account._id]}
+                    id={account._id}
+                    data-id={account._id}
                   />
-                </th>
-                <th>Name</th>
-                <th className={styles.CollapseLarge}>Email</th>
-                <th className={styles.Collapse}>Active</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map(account => {
-                return (
-                  <tr key={account._id}>
-                    <td>
-                      <Checkbox
-                        handleSelect={this.handleSelect}
-                        isChecked={this.state.selected[account._id]}
-                        id={account._id}
-                      />
-                    </td>
-                    <td>{`${account.firstName} ${account.lastName}`}</td>
-                    <td className={styles.CollapseLarge}>{account.email}</td>
-                    <td className={styles.Collapse}>
-                      {account.active ? "Yes" : "No"}
-                    </td>
-                    <td>
-                      <Button
-                        type="edit"
-                        onClick={this.handleEdit(account._id)}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-              {!accounts.length ? (
-                <tr>
-                  <td colSpan={6}>No admin accounts found.</td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        )}
-      />
-    );
-  }
+                </Cell>
+                <Cell>{`${account.firstName} ${account.lastName}`}</Cell>
+                <Cell collapse="large">{account.email}</Cell>
+                <Cell collapse="medium">{account.active ? "Yes" : "No"}</Cell>
+                <Cell>
+                  <Button
+                    type="edit"
+                    data-id={account._id}
+                    onClick={handleEdit}
+                  />
+                </Cell>
+              </Row>
+            ))}
+            {!accounts.length ? (
+              <Row>
+                <Cell colSpan={6}>No admin accounts found.</Cell>
+              </Row>
+            ) : null}
+          </Body>
+        </Table>
+      )}
+    />
+  );
 }
 
 export default AdminAccounts;

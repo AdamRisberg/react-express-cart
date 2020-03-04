@@ -1,8 +1,48 @@
-.Table {
+.AdminTable {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
   margin-bottom: 20px;
+}
+
+.AdminTable th,
+.AdminTable td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+.AdminTable td label {
+  margin-bottom: -2px;
+}
+
+.AdminTable th {
+  padding-top: 8px;
+}
+
+.AdminTable th:first-of-type {
+  width: 30px;
+}
+
+.AdminTable th:last-of-type {
+  width: 50px;
+}
+
+.AdminTable thead {
+  border-bottom: 2px solid #ccc;
+  background-color: #eee;
+  background-image: linear-gradient(0deg, #ddd, #f4f4f4 10%, #f4f4f4 90%, #ddd);
+  color: #111;
+  text-transform: uppercase;
+}
+
+.AdminTable tbody tr:hover {
+  background-color: #f4f4f4;
+}
+
+.AdminTable img {
+  width: 50px;
+  display: block;
 }
 
 .TitleBox {
@@ -19,67 +59,32 @@
   box-shadow: none;
 }
 
-.Table th,
-.Table td {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  vertical-align: middle;
+.left {
+  text-align: left;
 }
 
-.Table td label {
-  margin-bottom: -2px;
-}
-
-.Table th {
-  padding-top: 8px;
-}
-
-.Table th:first-of-type {
-  width: 30px;
-}
-
-.Table th:last-of-type {
-  width: 50px;
-}
-
-.Table th:nth-of-type(5),
-.Table th:nth-of-type(6),
-.Table td:nth-of-type(5),
-.Table td:nth-of-type(6) {
+.right {
   text-align: right;
 }
 
-.Table thead {
-  border-bottom: 2px solid #ccc;
-  background-color: #eee;
-  background-image: linear-gradient(0deg, #ddd, #f4f4f4 10%, #f4f4f4 90%, #ddd);
-  color: #111;
-  text-transform: uppercase;
-}
-
-.Table tbody tr:hover {
-  background-color: #f4f4f4;
-}
-
-.Table img {
-  width: 50px;
-  display: block;
+.center {
+  text-align: center;
 }
 
 @media (max-width: 700px) {
-  .CollapseLarge {
+  .collapse-large {
     display: none;
   }
 }
 
 @media (max-width: 600px) {
-  .CollapseMedium {
+  .collapse-medium {
     display: none;
   }
 }
 
 @media (max-width: 400px) {
-  .CollapseSmall {
+  .collapse-small {
     display: none;
   }
 }

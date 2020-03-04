@@ -57,7 +57,11 @@ class Products extends Component {
         true
       )
       .then(res => {
-        this.setState(() => ({ refresh: !this.state.refresh }));
+        this.setState(() => ({
+          refresh: !this.state.refresh,
+          selected: {},
+          allSelected: false
+        }));
       })
       .catch(handleAdminRequestErrorFull(this.props.flashErrorMessage));
   };
