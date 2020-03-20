@@ -1,57 +1,30 @@
 import axios from "axios";
 
 function get(url, options, requireSession, admin) {
-  const token = requireSession ? getToken(admin) : null;
-
-  return axios.get(
-    url,
-    token
-      ? Object.assign(options, {
-          headers: { Authorization: "Bearer " + token }
-        })
-      : options
-  );
+  return axios.get(url, addAuthHeader(options, requireSession, admin));
 }
 
 function put(url, data, options, requireSession, admin) {
-  const token = requireSession ? getToken(admin) : null;
-
-  return axios.put(
-    url,
-    data,
-    token
-      ? Object.assign(options, {
-          headers: { Authorization: "Bearer " + token }
-        })
-      : options
-  );
+  return axios.put(url, data, addAuthHeader(options, requireSession, admin));
 }
 
 function post(url, data, options, requireSession, admin) {
-  const token = requireSession ? getToken(admin) : null;
-
-  return axios.post(
-    url,
-    data,
-    token
-      ? Object.assign(options, {
-          headers: { Authorization: "Bearer " + token }
-        })
-      : options
-  );
+  return axios.post(url, data, addAuthHeader(options, requireSession, admin));
 }
 
 function remove(url, options, requireSession, admin) {
-  const token = requireSession ? getToken(admin) : null;
+  return axios.delete(url, addAuthHeader(options, requireSession, admin));
+}
 
-  return axios.delete(
-    url,
-    token
-      ? Object.assign(options, {
-          headers: { Authorization: "Bearer " + token }
-        })
-      : options
-  );
+function addAuthHeader(options, requireSession, admin) {
+  return Object.assign(options, {
+    headers: { Authorization: createAuthHeader(requireSession, admin) }
+  });
+}
+
+function createAuthHeader(requireSession, admin) {
+  const token = requireSession ? getToken(admin) : null;
+  return token ? `Bearer ${token}` : "";
 }
 
 function getToken(admin) {
