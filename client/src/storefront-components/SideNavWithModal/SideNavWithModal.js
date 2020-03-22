@@ -19,7 +19,7 @@ function SideNavWithModal(props) {
           storeName={props.storeName}
           categories={props.categories}
           loadingCategories={props.loadingCategories}
-          loggedIn={!!props.user}
+          loggedIn={props.loggedIn}
           show={props.showSideNav}
           showLogin={props.showLogin}
           showRegister={props.showRegister}
@@ -46,7 +46,4 @@ const mapDispatchToProps = dispatch => ({
   closeSideNav: () => dispatch(hideSideNav())
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SideNavWithModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SideNavWithModal);
