@@ -9,6 +9,8 @@ class Modal extends Component {
     show: false
   };
 
+  scrollIsLocked = false;
+
   componentDidMount() {
     this.lockScrollbar(true);
 
@@ -17,10 +19,15 @@ class Modal extends Component {
     }, 0);
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    if (this.scrollIsLocked) {
+      this.lockScrollbar(false);
+    }
+  }
 
   lockScrollbar(lock) {
     if (lock) {
+      this.scrollIsLocked = true;
       this.scrollbarWidth = this.getScrollbarWidth();
       this.scrollY = window.scrollY || window.pageYOffset;
 
@@ -28,6 +35,7 @@ class Modal extends Component {
       document.body.style.position = "fixed";
       document.body.style.paddingRight = `${this.scrollbarWidth}px`;
     } else {
+      this.scrollIsLocked = false;
       document.body.style.position = "static";
       document.body.style.top = "";
       document.body.style.paddingRight = "0px";
