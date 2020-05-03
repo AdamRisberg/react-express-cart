@@ -30,6 +30,7 @@ app.use("/api/customers", require("./routes/customerRoutes"));
 app.use("/api/shipping", require("./routes/shippingRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
+app.use("/api/database", require("./routes/databaseRoutes"));
 
 if (process.env.NODE_ENV == "production") {
   app.use(express.static("client/build"));
