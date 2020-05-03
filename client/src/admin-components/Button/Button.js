@@ -4,7 +4,14 @@ import Icons from "../Icons/Icons";
 
 import styles from "./Button.module.css";
 
-const Button = ({ type, onClick, float = "none", children, ...props }) => {
+const Button = ({
+  type,
+  onClick,
+  style = {},
+  float = "none",
+  children,
+  ...props
+}) => {
   let buttonStyle;
   let Icon;
 
@@ -46,6 +53,7 @@ const Button = ({ type, onClick, float = "none", children, ...props }) => {
     <button
       type={buttonType}
       className={`${styles.Button} ${buttonStyle} ${styles[float]}`}
+      style={style}
       onClick={onClick}
       {...props}
     >
