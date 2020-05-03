@@ -13,12 +13,12 @@ function register(req, res) {
     firstName,
     lastName,
     email,
-    password: hash
+    password: hash,
   });
   let errorMessage;
 
   Customer.findOne({ email })
-    .then(foundCustomer => {
+    .then((foundCustomer) => {
       if (foundCustomer) {
         errorMessage = "Email already in use.";
         throw new Error(errorMessage);
@@ -26,23 +26,24 @@ function register(req, res) {
 
       return jwtSign({ id: customer._id }, process.env.JWT_SECRET);
     })
-    .then(token => {
+    .then((token) => {
       customer.token = token;
       return customer.save();
     })
-    .then(savedCustomer => {
+    .then((savedCustomer) => {
       res.json({
         success: true,
         user: {
           id: savedCustomer._id,
           firstName: savedCustomer.firstName,
           lastName: savedCustomer.lastName,
-          email: savedCustomer.email
+          email: savedCustomer.email,
+          addresses: [],
         },
-        token: savedCustomer.token
+        token: savedCustomer.token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err.message);
       res
         .status(400)
@@ -65,8 +66,8 @@ function login(req, res) {
 
 function handleLoginWithToken(token, res) {
   jwtVerify(token, process.env.JWT_SECRET)
-    .then(_ => Customer.findOne({ token }))
-    .then(customer => {
+    .then((_) => Customer.findOne({ token }))
+    .then((customer) => {
       res.json({
         success: true,
         user: {
@@ -74,12 +75,12 @@ function handleLoginWithToken(token, res) {
           firstName: customer.firstName,
           lastName: customer.lastName,
           email: customer.email,
-          addresses: customer.addresses
+          addresses: customer.addresses,
         },
-        token: customer.token
+        token: customer.token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err.message);
       res.status(400).send("Invalid session");
     });
@@ -90,7 +91,7 @@ function handleLoginWithPassword(email, password, res) {
   let customer;
 
   Customer.findOne({ email })
-    .then(foundCustomer => {
+    .then((foundCustomer) => {
       if (!foundCustomer) {
         errorMessage = "Could not find customer";
         throw new Error(errorMessage);
@@ -102,11 +103,11 @@ function handleLoginWithPassword(email, password, res) {
       customer = foundCustomer;
       return jwtSign({ id: customer._id }, process.env.JWT_SECRET);
     })
-    .then(token => {
+    .then((token) => {
       customer.token = token;
       return customer.save();
     })
-    .then(updatedCustomer => {
+    .then((updatedCustomer) => {
       res.json({
         success: true,
         user: {
@@ -114,12 +115,12 @@ function handleLoginWithPassword(email, password, res) {
           firstName: updatedCustomer.firstName,
           lastName: updatedCustomer.lastName,
           email: updatedCustomer.email,
-          addresses: updatedCustomer.addresses
+          addresses: updatedCustomer.addresses,
         },
-        token: updatedCustomer.token
+        token: updatedCustomer.token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err.message);
       return res
         .status(400)
@@ -142,8 +143,8 @@ function adminLogin(req, res) {
 
 function handleAdminLoginWithToken(token, res) {
   jwtVerify(token, process.env.JWT_SECRET)
-    .then(_ => Admin.findOne({ token, active: true }))
-    .then(admin => {
+    .then((_) => Admin.findOne({ token, active: true }))
+    .then((admin) => {
       res.json({
         success: true,
         user: {
@@ -151,12 +152,12 @@ function handleAdminLoginWithToken(token, res) {
           firstName: admin.firstName,
           lastName: admin.lastName,
           email: admin.email,
-          allowEdit: admin.allowEdit
+          allowEdit: admin.allowEdit,
         },
-        token: admin.token
+        token: admin.token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err.message);
       res.status(400).send("Invalid session");
     });
@@ -167,7 +168,7 @@ function handleAdminLoginWithPassword(email, password, res) {
   let admin;
 
   Admin.findOne({ email, active: true })
-    .then(foundAdmin => {
+    .then((foundAdmin) => {
       if (!foundAdmin) {
         errorMessage = "Could not find account";
         throw new Error(errorMessage);
@@ -179,14 +180,14 @@ function handleAdminLoginWithPassword(email, password, res) {
       admin = foundAdmin;
 
       return jwtSign({ id: admin._id }, process.env.JWT_SECRET, {
-        expiresIn: "12h"
+        expiresIn: "12h",
       });
     })
-    .then(token => {
+    .then((token) => {
       admin.token = token;
       return admin.save();
     })
-    .then(updatedAdmin => {
+    .then((updatedAdmin) => {
       res.json({
         success: true,
         user: {
@@ -194,12 +195,12 @@ function handleAdminLoginWithPassword(email, password, res) {
           firstName: updatedAdmin.firstName,
           lastName: updatedAdmin.lastName,
           email: updatedAdmin.email,
-          allowEdit: admin.allowEdit
+          allowEdit: admin.allowEdit,
         },
-        token: updatedAdmin.token
+        token: updatedAdmin.token,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err.message);
       return res
         .status(400)
@@ -238,5 +239,5 @@ module.exports = {
   register,
   adminLogin,
   logout,
-  adminLogout
+  adminLogout,
 };
