@@ -20,6 +20,9 @@ Several environment variables need to be set. For development, create a .env fil
 
 ## Usage
 
-Run "npm install" in both the top level and client directories. Then run "npm run dev" to start both the client and server in development mode. Check the package.json files for other useful scripts.
+Run "npm run setup" in the top level directory. Then run "npm run dev" to start both the client and server in development mode. Check the package.json files for other useful scripts.
 
-Visit the /admin route to adjust settings, add products, etc.
+Visit the /admin route to adjust settings, add products, etc. Default admin login info:
+
+- Email: admin@example.com
+- Password: password
