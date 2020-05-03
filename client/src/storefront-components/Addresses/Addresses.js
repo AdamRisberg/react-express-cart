@@ -137,7 +137,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(deleteAddress(userID, addressID))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Addresses);
+export default connect(mapStateToProps, mapDispatchToProps)(Addresses);

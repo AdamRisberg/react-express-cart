@@ -40,6 +40,7 @@ const AdminAccountForm = lazy(() =>
   import("./admin-components/AdminAccounts/AdminAccountForm/AdminAccountForm")
 );
 const Settings = lazy(() => import("./admin-components/Settings/Settings"));
+const Database = lazy(() => import("./admin-components/Database/Database"));
 
 class Admin extends Component {
   state = {
@@ -377,6 +378,15 @@ class Admin extends Component {
                     />
                   )}
                 />
+                <Route
+                  path="/admin/database"
+                  render={props => (
+                    <Database
+                      {...props}
+                      flashErrorMessage={this.flashErrorMessage}
+                    />
+                  )}
+                />
               </Switch>
             </Suspense>
           </div>
@@ -442,6 +452,10 @@ const categories = [
   {
     name: "Settings",
     path: "/settings"
+  },
+  {
+    name: "Backup / Restore",
+    path: "/database"
   }
 ];
 
