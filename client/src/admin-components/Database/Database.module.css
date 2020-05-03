@@ -1,0 +1,33 @@
+.Database {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.Group {
+  margin-bottom: 50px;
+}
+
+.Database label {
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.Database input {
+  display: block;
+  margin-top: 2px;
+  /* width: 100%; */
+}
+
+.Header {
+  padding-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #111;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.Title {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
