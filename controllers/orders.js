@@ -159,28 +159,16 @@ function getOrderAnalytics(req, res) {
   const dates = {};
   const groupID = {
     year: {
-      $year: {
-        date: "$date",
-        timezone: { $literal: "America/Chicago" }
-      }
+      $year: "$date"
     },
     month: {
-      $month: {
-        date: "$date",
-        timezone: { $literal: "America/Chicago" }
-      }
+      $month: "$date"
     },
     dayOfMonth: {
-      $dayOfMonth: {
-        date: "$date",
-        timezone: { $literal: "America/Chicago" }
-      }
+      $dayOfMonth: "$date"
     },
     dayOfWeek: {
-      $dayOfWeek: {
-        date: "$date",
-        timezone: { $literal: "America/Chicago" }
-      }
+      $dayOfWeek: "$date"
     }
   };
 
@@ -214,8 +202,12 @@ function getOrderAnalytics(req, res) {
       }
     }
   ])
-    .then(results => res.json(results))
-    .catch(console.log);
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
 }
 
 function addHistory(req, res) {
