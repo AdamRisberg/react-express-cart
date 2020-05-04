@@ -396,7 +396,7 @@ class Admin extends Component {
             {"ReactExpressCart ©" + new Date().getFullYear()}
           </div>
           <div className={`${styles.Column50} ${styles.Right}`}>
-            Version 1.0
+            Version 0.1
           </div>
         </footer>
         <AdminSideNav
