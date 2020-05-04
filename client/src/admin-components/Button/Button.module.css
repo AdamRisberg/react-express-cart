@@ -143,3 +143,8 @@
 
 .none {
 }
+
+.Button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
