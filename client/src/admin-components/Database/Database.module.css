@@ -19,6 +19,10 @@
   /* width: 100%; */
 }
 
+.success {
+  margin-top: 20px;
+}
+
 .Header {
   padding-bottom: 10px;
   color: #333;

@@ -14,7 +14,7 @@ function backupDatabase(mongoUri, backupDir) {
       root: backupDir,
       callback: function (err) {
         err ? reject(err) : resolve();
-      },
+      }
     });
   });
 }
@@ -27,7 +27,7 @@ function restoreDatabase(mongoUri, backupDir) {
       drop: true,
       callback: function (err) {
         err ? reject(err) : resolve();
-      },
+      }
     });
   });
 }
@@ -69,15 +69,15 @@ function deleteBackups() {
   const backupDirPath = path.resolve(__dirname, "..", "backup");
 
   return del([backupDirPath], {
-    expandDirectories: true,
+    expandDirectories: true
   });
 }
 
 function deleteCurrentImages(imagesPath) {
   return del([imagesPath, "!**/no-image.jpg"], {
     expandDirectories: {
-      files: ["*.jpg", "*.jpeg", "*.png"],
-    },
+      files: ["*.jpg", "*.jpeg", "*.png"]
+    }
   });
 }
 
@@ -99,7 +99,7 @@ function get(req, res) {
     .then(() => {
       return deleteBackups();
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       res.status(500).send();
     });
@@ -117,7 +117,7 @@ function post(req, res) {
   saveBackupFromForm(req, zipFilePath)
     .then(() => {
       return extract(zipFilePath, {
-        dir: backupDirPath,
+        dir: backupDirPath
       });
     })
     .then(() => {
@@ -139,7 +139,7 @@ function post(req, res) {
     .then(() => {
       res.send();
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       res.status(500).send();
     });
@@ -147,5 +147,5 @@ function post(req, res) {
 
 module.exports = {
   get,
-  post,
+  post
 };
