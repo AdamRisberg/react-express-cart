@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "array.prototype.find": "^2.1.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.2",
     "es6-object-assign": "^1.1.0",
     "es6-promise": "^4.2.8",
