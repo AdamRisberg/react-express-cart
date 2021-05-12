@@ -31,7 +31,7 @@
     "mongodb-restore": "^1.6.2",
     "mongoose": "^5.8.6",
     "mongoose-paginate": "^5.0.3",
-    "nodemailer": "^6.3.1",
+    "nodemailer": "^6.4.16",
     "sharp": "^0.23.2",
     "stripe": "^7.12.0"
   },
